@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.employee.domain.entity;
+package com.errorCode.pandaOffice.e_approval.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -11,12 +11,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-/* 사원 */
-public class Employee {
+/* 전자결재 */
+public class ApprovalDocument {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    /* 사번 */
+    /* 전자 결재 서류 코드 */
     private int id;
-
 }
