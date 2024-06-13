@@ -24,7 +24,7 @@ public class Notice {
     private int id;  // 게시글 코드(PK)
 
     @Column(name = "title")
-    private String title;  // 게시글 제목.
+    private String title;  // 게시글 제목..
 
     @Column(name = "content")
     private String content;  // 게시글 내용
