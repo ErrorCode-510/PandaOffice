@@ -1,9 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity(name="EducationHistory")
 @Table(name="education_history")
@@ -11,8 +8,9 @@ public class EducationHistory {
     @Id
     @Column(name="id")
     private int id;
-    @Column(name="employee_id")
-    private int employeeId;
+    @ManyToOne
+    @JoinColumn(name="employee_id")
+    private Employee employee;
     @Column(name="school_name")
     private String schoolName;
     @Column(name="major")
@@ -21,12 +19,20 @@ public class EducationHistory {
     private String degree;
     protected EducationHistory(){}
 
-    public EducationHistory(int id, int employeeId, String schoolName, String major, String degree) {
+    public EducationHistory(int id, Employee employee, String schoolName, String major, String degree) {
         this.id = id;
-        this.employeeId = employeeId;
+        this.employee = employee;
         this.schoolName = schoolName;
         this.major = major;
         this.degree = degree;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public int getId() {
@@ -37,13 +43,7 @@ public class EducationHistory {
         this.id = id;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public String getSchoolName() {
         return schoolName;

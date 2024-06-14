@@ -1,9 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -13,8 +10,9 @@ public class FamilyMember {
     @Id
     @Column(name="id")
     private int id;
-    @Column(name="employee_id")
-    private int employeeId;
+    @ManyToOne
+    @JoinColumn(name="employee_id")
+    private Employee employee;
     @Column(name="relationship")
     private String relationship;
     @Column(name="name")
@@ -27,14 +25,22 @@ public class FamilyMember {
     private String job;
     protected FamilyMember(){}
 
-    public FamilyMember(int id, int employeeId, String relationship, String name, Date birthDate, String education, String job) {
+    public FamilyMember(int id, Employee employee, String relationship, String name, Date birthDate, String education, String job) {
         this.id = id;
-        this.employeeId = employeeId;
+        this.employee = employee;
         this.relationship = relationship;
         this.name = name;
         this.birthDate = birthDate;
         this.education = education;
         this.job = job;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public int getId() {
@@ -45,13 +51,6 @@ public class FamilyMember {
         this.id = id;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public String getRelationship() {
         return relationship;

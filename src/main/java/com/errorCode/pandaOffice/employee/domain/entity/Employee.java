@@ -1,9 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -21,10 +18,13 @@ public class Employee {
     private String englishName;
     @Column(name="hanja_name")
     private String hanjaName;
-    @Column(name="department_id")
-    private int departmentId;
-    @Column(name = "job_id")
-    private int jobId;
+    @ManyToOne
+    @JoinColumn(name="department_id")
+    private Department department;
+
+    @ManyToOne
+    @JoinColumn(name="job_id")
+    private Job job;
     @Column(name="phone")
     private String phone;
     @Column(name = "personal_id")
@@ -50,13 +50,13 @@ public class Employee {
 
     protected Employee(){}
 
-    public Employee(int employeeId, String name, String englishName, String hanjaName, int departmentId, int jobId, String phone, String personalId, String gender, Date hireDate, Date endDate, String address, String nationality, Date birthDate, String email, String selfIntroduction, String employmentStatus) {
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, Date hireDate, Date endDate, String address, String nationality, Date birthDate, String email, String selfIntroduction, String employmentStatus) {
         this.employeeId = employeeId;
         this.name = name;
         this.englishName = englishName;
         this.hanjaName = hanjaName;
-        this.departmentId = departmentId;
-        this.jobId = jobId;
+        this.department = department;
+        this.job = job;
         this.phone = phone;
         this.personalId = personalId;
         this.gender = gender;
@@ -102,20 +102,20 @@ public class Employee {
         this.hanjaName = hanjaName;
     }
 
-    public int getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public int getJobId() {
-        return jobId;
+    public Job getJob() {
+        return job;
     }
 
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
+    public void setJob(Job job) {
+        this.job = job;
     }
 
     public String getPhone() {

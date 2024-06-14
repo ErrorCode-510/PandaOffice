@@ -1,9 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -13,8 +10,9 @@ public class CareerHistory {
     @Id
     @Column(name="id")
     private int id;
-    @Column(name="employee_id")
-    private int employeeId;
+    @ManyToOne
+    @JoinColumn(name="employee_id")
+    private Employee employee;
     @Column(name="company_name")
     private String companyName;
     @Column(name="department")
@@ -29,9 +27,9 @@ public class CareerHistory {
     private String workDescription;
    protected CareerHistory(){}
 
-    public CareerHistory(int id, int employeeId, String companyName, String department, Date hireDate, Date endDate, String lastPosition, String workDescription) {
+    public CareerHistory(int id, Employee employee, String companyName, String department, Date hireDate, Date endDate, String lastPosition, String workDescription) {
         this.id = id;
-        this.employeeId = employeeId;
+        this.employee = employee;
         this.companyName = companyName;
         this.department = department;
         this.hireDate = hireDate;
@@ -48,12 +46,12 @@ public class CareerHistory {
         this.id = id;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public String getCompanyName() {

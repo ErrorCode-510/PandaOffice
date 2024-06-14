@@ -1,9 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -14,8 +11,9 @@ public class License {
     @Id
     @Column(name="id")
     private int id;
-    @Column(name="employee_id")
-    private int employeeId;
+    @ManyToOne
+    @JoinColumn(name="employee_id")
+    private Employee employee;
     @Column(name="issuing_organization")
     private String issuingOrganization;
     @Column(name="issue_date")
@@ -24,13 +22,7 @@ public class License {
     private String name;
     protected License(){}
 
-    public License(int id, int employeeId, String issuingOrganization, Date issueDate, String name) {
-        this.id = id;
-        this.employeeId = employeeId;
-        this.issuingOrganization = issuingOrganization;
-        this.issueDate = issueDate;
-        this.name = name;
-    }
+
 
     public int getId() {
         return id;
@@ -40,13 +32,6 @@ public class License {
         this.id = id;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
 
     public String getIssuingOrganization() {
         return issuingOrganization;
