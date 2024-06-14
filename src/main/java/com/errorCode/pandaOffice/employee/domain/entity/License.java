@@ -24,37 +24,6 @@ public class License {
 
 
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-    public String getIssuingOrganization() {
-        return issuingOrganization;
-    }
-
-    public void setIssuingOrganization(String issuingOrganization) {
-        this.issuingOrganization = issuingOrganization;
-    }
-
-    public Date getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(Date issueDate) {
-        this.issueDate = issueDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }

@@ -24,27 +24,5 @@ public class EmployeePhoto {
 
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 }

@@ -23,29 +23,7 @@ public class Hobby {
         this.hobby = hobby;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
 
 
-    public String getHobby() {
-        return hobby;
-    }
-
-    public void setHobby(String hobby) {
-        this.hobby = hobby;
-    }
 }

@@ -27,45 +27,5 @@ public class EducationHistory {
         this.degree = degree;
     }
 
-    public Employee getEmployee() {
-        return employee;
-    }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    public String getMajor() {
-        return major;
-    }
-
-    public void setMajor(String major) {
-        this.major = major;
-    }
-
-    public String getDegree() {
-        return degree;
-    }
-
-    public void setDegree(String degree) {
-        this.degree = degree;
-    }
 }
