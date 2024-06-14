@@ -22,8 +22,4 @@ public class License {
     private String name;
     protected License(){}
 
-
-
-
-
 }
