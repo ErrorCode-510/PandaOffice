@@ -20,6 +20,10 @@ public class EmployeePhoto {
         this.path = path;
     }
 
+    public EmployeePhoto() {
+
+    }
+
     public Employee getEmployee() {
         return employee;
     }
