@@ -1,12 +1,3 @@
----
-name: PULL_REQUEST_TEMPLATE
-about: 기능구현 내용 작성
-title: "[기능구현]"
-labels: enhancement
-assignees: ''
-
----
-
 ### 🌈이슈 번호
 - ex) #153
 
