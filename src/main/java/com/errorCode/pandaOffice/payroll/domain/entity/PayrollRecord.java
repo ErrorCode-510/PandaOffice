@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /* 급여 기록 Entity */
 @Entity
@@ -35,5 +36,20 @@ public class PayrollRecord {
     /* 급여명세서 경로 */
     @Column(name = "pay_stub_path")
     private String payStubPath;
+
+    /* 지급 코드 */
+//    @Column(name = "earning_category_id")
+//    private int earningCategoryId;
+    @OneToMany
+    @JoinColumn(name = "earning_category_id")
+    private List<EarningRecord> earningRecordList;
+
+
+    /* 공제 코드 */
+//    @Column(name = "deducation_category_id")
+//    private int deducationCategoryId;
+    @OneToMany
+    @JoinColumn(name = "deducation_category_id")
+    private List<DeductionRecord> deductionRecordList;
 
 }
