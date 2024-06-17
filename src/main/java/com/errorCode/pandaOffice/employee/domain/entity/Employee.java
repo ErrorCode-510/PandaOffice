@@ -3,6 +3,7 @@ package com.errorCode.pandaOffice.employee.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name="Employee")
@@ -34,15 +35,15 @@ public class Employee {
     @Column(name="gender")
     private String gender;
     @Column(name="hire_date")
-    private Date hireDate;
+    private LocalDate hireDate;
     @Column(name="end_Date")
-    private Date endDate;
+    private LocalDate endDate;
     @Column(name="address")
     private String address;
     @Column(name="nationality")
     private String nationality;
     @Column(name="birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
     @Column(name="email")
     private String email;
     @Column(name="self_introduction")
@@ -52,7 +53,7 @@ public class Employee {
 
     protected Employee(){}
 
-    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, Date hireDate, Date endDate, String address, String nationality, Date birthDate, String email, String selfIntroduction, String employmentStatus) {
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus) {
         this.employeeId = employeeId;
         this.name = name;
         this.englishName = englishName;
