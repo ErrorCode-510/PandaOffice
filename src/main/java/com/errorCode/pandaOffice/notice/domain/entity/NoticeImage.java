@@ -1,10 +1,10 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
 
-import jakarta.el.ArrayELResolver;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 // 공지사항(게시글) 이미지
@@ -29,8 +29,16 @@ public class NoticeImage {
     @Column(name = "extention")
     private String extention;  // 게시글 이미지 확장자
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "notice_id")
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_id", nullable = false)
     private Notice notice;  // 게시글 코드(FK)
+
+    public NoticeImage(String path, String name, String extention, Notice notice) {
+        this.path = path;
+        this.name = name;
+        this.extention = extention;
+        this.notice = notice;
+    }
 
 }
