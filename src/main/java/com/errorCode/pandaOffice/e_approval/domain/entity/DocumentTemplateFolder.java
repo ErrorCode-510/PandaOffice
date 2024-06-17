@@ -18,5 +18,6 @@ public class DocumentTemplateFolder {
     @Column(nullable = false)
     private String name;
     /* 상위 폴더 ID */
+    @Column(nullable = true)
     private int refFolderId;
 }

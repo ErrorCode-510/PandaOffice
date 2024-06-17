@@ -1,11 +1,13 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Date;
 
 @Entity(name="FamilyName")
 @Table(name="family_member")
+@Getter
 public class FamilyMember {
     @Id
     @Column(name="id")
