@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.List;
+
 /* 지급 기록 Entity */
 @Entity
 @Table(name = "earning_record")
@@ -20,15 +22,17 @@ public class EarningRecord {
     @Column(name = "id")
     private int id;
 
-    /* 급여 기록 코드 */
-    @ManyToOne
-    @JoinColumn(name = "payroll_record_id", nullable = false)
-    private PayrollRecord payrollRecordId;
-
     /* 지급 항목 코드 */
     @ManyToOne
     @JoinColumn(name = "earning_category_id", nullable = false)
     private EarningCategory earningCategory;
+
+    /* 급여 기록 코드 */
+//    @ManyToOne
+//    @JoinColumn(name = "payroll_record_id", nullable = false)
+//    private PayrollRecord payrollRecordId;
+    @Column(name = "payroll_record_id")
+    private int payrollRecordId;
 
     /* 지급 금액 */
     @Column(name = "amount")
