@@ -13,17 +13,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class LoginDto {
 
-    private final Long memberCode;
-    private final String memberId;
-    private final String memberPassword;
-    private final MemberRole memberRole;
+    private final int employeeId;
+
+    private final String password;
+
 
     public static LoginDto from(Employee member) {
         return new LoginDto(
-                member.getMemberCode(),
-                member.getMemberId(),
-                member.getMemberPassword(),
-                member.getMemberRole()
+                member.getEmployeeId(),
+
+                member.getPassword()
+
         );
     }
 }

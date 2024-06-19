@@ -9,17 +9,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProfileResponse {
 
-    private final String memberId;
-    private final String memberName;
-    private final String memberEmail;
+    private final int employeeId;
+    private final String employeeName;
+
 
 
     public static ProfileResponse from(Employee employee) {
 
         return new ProfileResponse(
-                employee.getMemberId(),
-                employee.getMemberName(),
-                employee.getMemberEmail()
+                employee.getEmployeeId(),
+                employee.getName()
+
         );
     }
 }

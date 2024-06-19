@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class CustomUser extends User {
     private Long memberCode;
-    public CustomUser(Long memberCode, UserDetails userDetails) {
+    public CustomUser(int memberCode, UserDetails userDetails) {
         super(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
-        this.memberCode = memberCode;
+        this.memberCode = (long) memberCode;
     }
 }

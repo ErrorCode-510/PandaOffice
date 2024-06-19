@@ -21,13 +21,13 @@ public class MemberController {
     private final MemberService memberService;
 
     /* 회원 가입 */
-    @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody @Valid MemberSignupRequest memberRequest) {
-
-        memberService.signup(memberRequest);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+//    @PostMapping("/signup")
+//    public ResponseEntity<Void> signup(@RequestBody @Valid MemberSignupRequest memberRequest) {
+//
+//        memberService.signup(memberRequest);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
 
     /* 인증 테스트를 위한 메소드 */
     @GetMapping("/test")
@@ -39,9 +39,9 @@ public class MemberController {
     @GetMapping("/{memberId}")
     @PreAuthorize("#memberId == authentication.principal.username")
 //    @PostAuthorize("returnObject.writer == authentication.principal.username")
-    public ResponseEntity<ProfileResponse> getProfile(@PathVariable String memberId) {
+    public ResponseEntity<ProfileResponse> getProfile(@PathVariable int memberId) {
 
-        ProfileResponse profileResponse = memberService.getProfile(memberId);
+        ProfileResponse profileResponse = memberService.getProfile(Integer.parseInt(String.valueOf(memberId)));
 
         return ResponseEntity.ok(profileResponse);
     }
@@ -50,7 +50,7 @@ public class MemberController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
 
-        memberService.updateRefreshToken(userDetails.getUsername(), null);
+        memberService.updateRefreshToken(Integer.parseInt(userDetails.getUsername()), null);
 
         return ResponseEntity.ok().build();
     }

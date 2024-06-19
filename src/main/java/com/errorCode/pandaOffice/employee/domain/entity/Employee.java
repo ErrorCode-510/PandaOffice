@@ -1,57 +1,80 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-
-import com.errorCode.pandaOffice.employee.domain.type.MemberRole;
-import com.errorCode.pandaOffice.employee.domain.type.MemberStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
-
-@Entity
-@Table(name = "tbl_member")
+import java.time.LocalDate;
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
+@Entity(name="Employee")
+@Table(name="employee")
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberCode;
-    private String memberId;
-    private String memberPassword;
-    private String memberName;
-    private String memberEmail;
-    @Enumerated(value = EnumType.STRING)
-    private MemberRole memberRole = MemberRole.USER;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-    @Enumerated(value = EnumType.STRING)
-    private MemberStatus status = MemberStatus.ACTIVE;
+    @Column(name="employee_id")
+    private int employeeId;
+
+    @Column(name="name")
+    private String name;
+    @Column(name="english_name")
+    private String englishName;
+    @Column(name="hanja_name")
+    private String hanjaName;
+    @ManyToOne
+    @JoinColumn(name="department_id")
+    private Department department;
+
+    @ManyToOne
+    @JoinColumn(name="job_id")
+    private Job job;
+    @Column(name="phone")
+    private String phone;
+    @Column(name = "personal_id")
+    private String personalId;
+    @Column(name="gender")
+    private String gender;
+    @Column(name="hire_date")
+    private LocalDate hireDate;
+    @Column(name="end_Date")
+    private LocalDate endDate;
+    @Column(name="address")
+    private String address;
+    @Column(name="nationality")
+    private String nationality;
+    @Column(name="birth_date")
+    private LocalDate birthDate;
+    @Column(name="email")
+    private String email;
+    @Column(name="self_introduction")
+    private String selfIntroduction;
+    @Column(name="employment_status")
+    private String employmentStatus;
+    @Column(name="password")
+    private String password;
     private String refreshToken;
+    protected Employee(){}
 
-    private Employee(String memberId, String memberPassword, String memberName, String memberEmail) {
-        this.memberId = memberId;
-        this.memberPassword = memberPassword;
-        this.memberName = memberName;
-        this.memberEmail = memberEmail;
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password) {
+        this.employeeId = employeeId;
+        this.name = name;
+        this.englishName = englishName;
+        this.hanjaName = hanjaName;
+        this.department = department;
+        this.job = job;
+        this.phone = phone;
+        this.personalId = personalId;
+        this.gender = gender;
+        this.hireDate = hireDate;
+        this.endDate = endDate;
+        this.address = address;
+        this.nationality = nationality;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.selfIntroduction = selfIntroduction;
+        this.employmentStatus = employmentStatus;
+        this.password = password;
     }
 
-    public static Employee of(String memberId, String memberPassword, String memberName, String memberEmail) {
-        return new Employee(
-                memberId,
-                memberPassword,
-                memberName,
-                memberEmail
-        );
-    }
+
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;

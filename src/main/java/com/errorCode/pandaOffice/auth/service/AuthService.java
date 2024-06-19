@@ -25,19 +25,19 @@ public class AuthService implements UserDetailsService {
     private final MemberService memberService;
 
     @Override
-    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String employeeId) throws UsernameNotFoundException {
 
-        LoginDto loginDto = memberService.findByMemberId(memberId);
+        LoginDto loginDto = memberService.findByMemberId(Integer.parseInt(employeeId));
 
         return User.builder()
-                .username(loginDto.getMemberId())
-                .password(loginDto.getMemberPassword())
-                .roles(loginDto.getMemberRole().name())
+                .username(String.valueOf(loginDto.getEmployeeId()))
+                .password(loginDto.getPassword())
+
                 .build();
     }
 
-    public void updateRefreshToken(String memberId, String refreshToken) {
-        memberService.updateRefreshToken(memberId, refreshToken);
+    public void updateRefreshToken(int employeeId, String refreshToken) {
+        memberService.updateRefreshToken(employeeId, refreshToken);
     }
 
     public TokenDto checkRefreshTokenAndReIssueToken(String refreshToken) {
@@ -45,28 +45,28 @@ public class AuthService implements UserDetailsService {
         LoginDto loginDto = memberService.findByRefreshToken(refreshToken);
         String reIssuedRefreshToken = TokenUtils.createRefreshToken();
         String reIssuedAccessToken = TokenUtils.createAccessToken(getMemberInfo(loginDto));
-        memberService.updateRefreshToken(loginDto.getMemberId(), reIssuedRefreshToken);
+        memberService.updateRefreshToken(Integer.parseInt(String.valueOf(loginDto.getEmployeeId())), reIssuedRefreshToken);
         return TokenDto.of(reIssuedAccessToken, reIssuedRefreshToken);
     }
 
     private Map<String,Object> getMemberInfo(LoginDto loginDto) {
         return Map.of(
-                "memberId", loginDto.getMemberId(),
-                "memberRole", "ROLE_" + loginDto.getMemberRole()
+                "memberId", loginDto.getEmployeeId()
+
         );
     }
 
-    public void saveAuthentication(String memberId) {
+    public void saveAuthentication(int memberId) {
 
         LoginDto loginDto = memberService.findByMemberId(memberId);
 
         UserDetails user = User.builder()
-            .username(loginDto.getMemberId())
-            .password(loginDto.getMemberPassword())
-            .roles(loginDto.getMemberRole().name())
+            .username(String.valueOf(loginDto.getEmployeeId()))
+            .password(loginDto.getPassword())
+
             .build();
 
-        CustomUser customUser = new CustomUser(loginDto.getMemberCode(), user);
+        CustomUser customUser = new CustomUser(loginDto.getEmployeeId(), user);
 
         Authentication authentication
                 = new UsernamePasswordAuthenticationToken(customUser, null, customUser.getAuthorities());

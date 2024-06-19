@@ -35,7 +35,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.info("발급 된 refreshToken : {}", refreshToken);
 
         /* 발급한 refresh token을 DB에 저장해둔다. */
-        authService.updateRefreshToken((String)memberInfo.get("memberId"), refreshToken);
+        authService.updateRefreshToken(Integer.parseInt((String)memberInfo.get("employeeId")), refreshToken);
 
         /* 응답 헤더에 발급 된 토큰을 담는다. */
         response.setHeader("Access-Token", accessToken);
@@ -52,8 +52,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 .collect(Collectors.joining());
 
         return Map.of(
-                "memberId", userDetails.getUsername(),
-                "memberRole", memberRole
+                "employeeId", userDetails.getUsername()
+
         );
 
 

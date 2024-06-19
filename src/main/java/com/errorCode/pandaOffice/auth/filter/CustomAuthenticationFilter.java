@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.auth.filter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,8 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
 
     /* 설정 된 요청이 발생하면 필터의 메소드가 호출 된다. */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException, IOException, ServletException {
 
         /* Request Content Type 확인 */
         if(request.getContentType() == null || !request.getContentType().equals("application/json")) {
@@ -42,18 +44,20 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
         String body = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
 
         /* JSON 문자열을 Java Map 타입으로 변환 */
-        Map<String, String> bodyMap = objectMapper.readValue(body, Map.class);
+        Map<String, String> bodyMap = objectMapper.readValue(body, new TypeReference<Map<String, String>>() {});
 
-        /* key 값을 전달해서 Map에서 id, pwd 꺼내기 */
-        String memberId = bodyMap.get("memberId");
-        String memberPassword = bodyMap.get("memberPassword");
+        /* id와 pwd 추출 */
+        String employeeId = bodyMap.get("memberId");
+        String password = bodyMap.get("memberPassword");
 
-        log.info("CustomAuthenticationFilter memberId : {}", memberId);
-        log.info("CustomAuthenticationFilter memberPassword : {}", memberPassword);
+        log.info("CustomAuthenticationFilter memberId : {}", employeeId);
+        log.info("CustomAuthenticationFilter memberPassword : {}", password);
+        System.out.println("employeeId: " + employeeId);
+        System.out.println("password: " + password);
 
-        /* id와 pwd가 설정 된 인증 토큰 생성 */
+        /* 인증 토큰 생성 */
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(memberId, memberPassword);
+                = new UsernamePasswordAuthenticationToken(employeeId, password);
 
         /* Authentication Manager에게 Authentication Token 전달 */
         return this.getAuthenticationManager().authenticate(authenticationToken);

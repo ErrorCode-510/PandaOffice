@@ -23,30 +23,30 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    public void signup(final MemberSignupRequest memberRequest) {
-
-        final Employee newEmployee = Employee.of(
-                memberRequest.getMemberId(),
-                passwordEncoder.encode(memberRequest.getMemberPassword()),
-                memberRequest.getMemberName(),
-                memberRequest.getMemberEmail()
-        );
-
-        memberRepository.save(newEmployee);
-    }
+//    public void signup(final MemberSignupRequest memberRequest) {
+//
+//        final Employee newEmployee = Employee.of(
+//                memberRequest.getMemberId(),
+//                passwordEncoder.encode(memberRequest.getMemberPassword()),
+//                memberRequest.getMemberName(),
+//                memberRequest.getMemberEmail()
+//        );
+//
+//        memberRepository.save(newEmployee);
+//    }
 
     @Transactional(readOnly = true)
-    public LoginDto findByMemberId(String memberId) {
+    public LoginDto findByMemberId(int employeeId) {
 
-        Employee employee = memberRepository.findByMemberId(memberId)
+        Employee employee = memberRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 아이디가 존재하지 않습니다."));
 
         return LoginDto.from(employee);
     }
 
-    public void updateRefreshToken(String memberId, String refreshToken) {
+    public void updateRefreshToken(int employeeId, String refreshToken) {
 
-        Employee employee = memberRepository.findByMemberId(memberId)
+        Employee employee = memberRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 아이디가 존재하지 않습니다."));
         employee.updateRefreshToken(refreshToken);
 
@@ -61,12 +61,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ProfileResponse getProfile(String memberId) {
+    public ProfileResponse getProfile(int employeeId) {
 
-        Employee employee = memberRepository.findByMemberId(memberId)
+        Employee employee = memberRepository.findByEmployeeId(employeeId)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 아이디가 존재하지 않습니다."));
 
         return ProfileResponse.from(employee);
 
     }
+
+
 }
