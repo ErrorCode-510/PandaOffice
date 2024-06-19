@@ -44,7 +44,7 @@ public class Notice {
     @Column(name = "status", nullable = false, length = 1)
     private char status;  // 공개여부 (Y/N)
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;  // 사원 코드(FK)
 

@@ -2,7 +2,6 @@ package com.errorCode.pandaOffice.notice.service;
 
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import com.errorCode.pandaOffice.notice.domain.repository.NoticeRepository;
-import com.errorCode.pandaOffice.notice.presectation.NoticeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,11 +30,19 @@ public class NoticeService {
         return noticeRepository.findByCategoryAndSubCategory(category, subCategory, pageable);
     }
 
-    // 특정 공지사항 조회 및 조회수 증가
-    // 지정된 ID의 공지사항을 조회하고, 조회수를 1증가시킴
+    // 특정 공지사항 조회
+    // 지정된 ID의 공지사항을 조회
     public Notice getNoticeById(int id) {
         return noticeRepository.findById(id)
-                .orElseThrow(() -> new NoticeNotFoundException("Notice not found with id" + id));
+                .orElseThrow(() -> new com.errorCode.pandaOffice.common.exception.type.NotFoundException("Notice not found with id" + id));
+    }
+
+    // 조회수 증가
+    public void incrementViewCount(int id) {
+        Notice notice = noticeRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Notice not found with id" + id));
+        notice.setViewCount(notice.getViewCount() + 1);
+        noticeRepository.save(notice);
     }
 
     // 공지사항 등록
@@ -48,7 +55,7 @@ public class NoticeService {
 
     // 공지사항 수정 (지정된 ID의 공지사항 수정 / 제목, 내용, 분류, 소분류, 공개여부)
     public Notice updateNotice(int id, Notice updatedNotice) {
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new NoticeNotFoundException("Notice not found with id" + id));
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new com.errorCode.pandaOffice.common.exception.type.NotFoundException("Notice not found with id" + id));
         notice.setTitle(updatedNotice.getTitle());
         notice.setContent(updatedNotice.getContent());
         notice.setCategory(updatedNotice.getCategory());

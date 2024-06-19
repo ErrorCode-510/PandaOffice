@@ -10,10 +10,8 @@ import org.springframework.stereotype.Repository;
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
 
     // 전체 공지사항을 최신순으로 조회
-    Page<Notice> findAllByOrderByPostedDateDesc(Pageable pageable);
+    Page<Notice> findAll(Pageable pageable);
 
-    // 분류와 소분류별 공지사항을 최신순으로 조회
-    Page<Notice> findByCategoryAndSubCategoryOrderByPostedDateDesc(String category, String subCategory, Pageable pageable);
-
+    // 분류와 소분류별 공지사항 조회 (페이징 및 정렬) (최신순으로 조회)
     Page<Notice> findByCategoryAndSubCategory(String category, String subCategory, Pageable pageable);
 }

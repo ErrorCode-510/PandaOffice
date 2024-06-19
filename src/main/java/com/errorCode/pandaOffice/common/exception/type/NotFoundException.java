@@ -1,7 +1,11 @@
 package com.errorCode.pandaOffice.common.exception.type;
+import java.io.Serial;
 
-import lombok.Getter;
-
-@Getter
 public class NotFoundException extends CustomException {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    public NotFoundException(String message) {
+        super(message);
+    }
 }
