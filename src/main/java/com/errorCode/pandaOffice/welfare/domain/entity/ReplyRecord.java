@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 //답변 기록
+//연결관계 어노테이션 설정 필요
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

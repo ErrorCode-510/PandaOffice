@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 
 //설문 문항
+//연결관계 어노테이션 설정 필요
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,7 +22,6 @@ public class SurveyQuestion {
 
     @Column(length = 255)
     private String question; //질문(문항제목)
-
 
     public SurveyQuestion(int id, int surveyId, int questionOrder, String question) {
         this.id = id;

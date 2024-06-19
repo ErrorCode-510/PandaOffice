@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 //설문 카테고리
+//연결관계 어노테이션 설정 필요
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
