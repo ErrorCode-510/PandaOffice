@@ -1,6 +1,7 @@
 package com.errorCode.pandaOffice.attendance.domain.entity;
 
 import com.errorCode.pandaOffice.e_approval.domain.entity.ApprovalDocument;
+
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
