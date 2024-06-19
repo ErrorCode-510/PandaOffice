@@ -2,7 +2,7 @@ package com.errorCode.pandaOffice.common.paging;
 
 import org.springframework.data.domain.Page;
 
-public class Pagenation {
+public class Pagination {
 	
 	public static PagingButtonInfo getPagingButtonInfo(Page<?> page) {
 		
