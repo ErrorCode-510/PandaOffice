@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -25,7 +26,7 @@ public class AttendanceRecord {
     private int id;
 
     /* 근무 기록 날짜 */
-    private Date date;
+    private LocalDate date;
 
     /* 근무 출근 시간 */
     private LocalTime checkInTime;
@@ -42,7 +43,7 @@ public class AttendanceRecord {
     /* 사번 */
     private Employee employee;
 
-    public AttendanceRecord(int id, Date date, LocalTime checkInTime,
+    public AttendanceRecord(int id, LocalDate date, LocalTime checkInTime,
                             LocalTime checkOutTime, LocalTime totalLateTime) {
         this.id = id;
         this.date = date;
