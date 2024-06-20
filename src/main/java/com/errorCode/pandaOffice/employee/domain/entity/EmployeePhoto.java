@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Entity(name="EmployeePhoto")
 @Table(name="employee_photo")
+@Getter
 public class EmployeePhoto {
     @Id
     @ManyToOne

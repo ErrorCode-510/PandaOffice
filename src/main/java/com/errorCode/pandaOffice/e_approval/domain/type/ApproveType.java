@@ -4,5 +4,4 @@ public enum ApproveType {
     WAIT,
     APPROVE,
     REJECTION,
-
 }

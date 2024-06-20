@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name="department")
+@Getter
 public class Department {
     @Id
     @Column(name="id")
