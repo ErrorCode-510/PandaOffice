@@ -175,7 +175,7 @@ public class NoticeService {
         notice.addImage(image);  //  addImage 메소드 사용
         noticeRepository.save(notice);
 
-        return imageUrl;
+//        return imageUrl;
     }
 
     private String getFileExtention(String fileName) {
