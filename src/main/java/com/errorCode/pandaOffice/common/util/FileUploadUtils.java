@@ -1,6 +1,7 @@
 package com.errorCode.pandaOffice.common.util;
 
-import com.errorCode.pandaOffice.common.exception.type.ServerInternalException;
+
+import com.errorCode.pandaOffice.common.exception.ServerInternalException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+import static com.errorCode.pandaOffice.common.exception.type.ExceptionCode.FAIL_TO_DELETE_FILE;
+import static com.errorCode.pandaOffice.common.exception.type.ExceptionCode.FAIL_TO_UPLOAD_FILE;
+
 
 public class FileUploadUtils {
 
@@ -32,7 +37,7 @@ public class FileUploadUtils {
             return replaceFileName;
 
         } catch (IOException e) {
-            throw new ServerInternalException();
+            throw new ServerInternalException(FAIL_TO_UPLOAD_FILE);
         }
     }
 
@@ -43,9 +48,16 @@ public class FileUploadUtils {
             Path filePath = uploadPath.resolve(fileName);
             Files.delete(filePath);
         } catch (IOException e) {
-            throw new ServerInternalException();
+            throw new ServerInternalException(FAIL_TO_DELETE_FILE);
         }
 
     }
 
 }
+
+
+
+
+
+
+

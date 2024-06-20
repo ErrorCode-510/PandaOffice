@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.Date;
-
+@Getter
 @Entity(name="Employee")
 @Table(name="employee")
-@Getter
+
 public class Employee {
 
     @Id
@@ -50,10 +49,12 @@ public class Employee {
     private String selfIntroduction;
     @Column(name="employment_status")
     private String employmentStatus;
-
+    @Column(name="password")
+    private String password;
+    private String refreshToken;
     protected Employee(){}
 
-    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus) {
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password) {
         this.employeeId = employeeId;
         this.name = name;
         this.englishName = englishName;
@@ -71,7 +72,12 @@ public class Employee {
         this.email = email;
         this.selfIntroduction = selfIntroduction;
         this.employmentStatus = employmentStatus;
+        this.password = password;
     }
 
 
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
