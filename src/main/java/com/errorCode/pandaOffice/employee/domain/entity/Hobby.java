@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Entity(name="Hobby")
 @Table(name="hobby")
-@Getter
+
 public class Hobby {
     @Id
     @Column(name="id")

@@ -17,6 +17,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,10 +32,11 @@ import java.util.Arrays;
 
 @RequiredArgsConstructor
 /* 메소드 레벨의 제어를 활성화 하는 어노테이션
-* 메소드 매개변수나 반환 값이 권한 부여를 결정 지을 때 활용
-* */
+ * 메소드 매개변수나 반환 값이 권한 부여를 결정 지을 때 활용
+ * */
 @EnableMethodSecurity
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
@@ -45,7 +47,7 @@ public class SecurityConfig {
 
         return http.
                 /* CSRF 공격 방지는 기본적으로 활성화 되어 있는데 비활성화 처리 */
-                csrf(AbstractHttpConfigurer::disable)
+                        csrf(AbstractHttpConfigurer::disable)
                 /* rest api에서는 세션으로 로그인 상태 관리를 하지 않을 예정이므로 STATELESS 설정 */
                 .sessionManagement(sessionManage -> sessionManage.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 /* formLogin 비활성화 처리 */
@@ -53,7 +55,7 @@ public class SecurityConfig {
                 /* 요청에 대한 권한 체크 */
                 .authorizeHttpRequests(auth -> {
                     /* 클라이언트가 외부 도메인을 요청하는 경우 웹 브라우저에서 자체적으로 사전 요청(preflight)이 일어난다.
-                    * 이 때 OPTIONS 메소드로 서버에 사전 요청을 보내 확인한다. */
+                     * 이 때 OPTIONS 메소드로 서버에 사전 요청을 보내 확인한다. */
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/productimgs/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll();
@@ -75,8 +77,8 @@ public class SecurityConfig {
     }
 
     /* CORS (Cross Origin Resource Sharing) : 교차 출처 자원 공유
-    * 보안 상 웹 브라우저는 다른 도메인에서 서버의 자원을 요청하는 것을 막아 놓았음.
-    * 기본적으로 서버에서 클라이언트를 대상으로 리소스 허용 여부를 결정함. */
+     * 보안 상 웹 브라우저는 다른 도메인에서 서버의 자원을 요청하는 것을 막아 놓았음.
+     * 기본적으로 서버에서 클라이언트를 대상으로 리소스 허용 여부를 결정함. */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -151,3 +153,4 @@ public class SecurityConfig {
 
 
 }
+
