@@ -14,9 +14,6 @@ public class ApprovalLineTemplateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    /* 자동 결재선 ID */
-    private int approvalLineTemplateId;
     /* 결재 순서 */
     @Column(nullable = false, name = "`order`")
     private int order;
