@@ -1,10 +1,10 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
+import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Set;
 
 @Entity(name="Employee")
 @Table(name="employee")
@@ -13,6 +13,7 @@ public class Employee {
 
     @Id
     @Column(name="employee_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeId;
 
     @Column(name="name")
@@ -25,8 +26,8 @@ public class Employee {
     @JoinColumn(name="department_id")
     private Department department;
 
-    @ManyToOne
-    @JoinColumn(name="job_id")
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="job_id", nullable = false)
     private Job job;
     @Column(name="phone")
     private String phone;
@@ -50,6 +51,9 @@ public class Employee {
     private String selfIntroduction;
     @Column(name="employment_status")
     private String employmentStatus;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Notice> notices;
 
     protected Employee(){}
 

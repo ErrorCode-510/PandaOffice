@@ -1,16 +1,14 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 // 공지사항(게시글) 이미지
 @Entity
 @Table(name = "notice_image")
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class NoticeImage {
@@ -18,18 +16,17 @@ public class NoticeImage {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;  // 게시글 이미지 코드(PK)
+    private int imageId;  // 게시글 이미지 코드(PK)
 
-    @Column(name = "path")
+    @Column(name = "path", nullable = false)
     private String path;  // 게시글 이미지 파일경로
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;  // 게시글 이미지 파일이름
 
-    @Column(name = "extention")
+    @Column(name = "extention", nullable = false)
     private String extention;  // 게시글 이미지 확장자
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id", nullable = false)
     private Notice notice;  // 게시글 코드(FK)
@@ -39,6 +36,16 @@ public class NoticeImage {
         this.name = name;
         this.extention = extention;
         this.notice = notice;
+    }
+
+    // 연관 관계 설정 메소드
+    public void setNotice(Notice notice) {
+        this.notice = notice;
+    }
+
+    // 연관 관계 해제 메소드
+    public void removeNotice() {
+        this.notice = null;
     }
 
 }

@@ -8,7 +8,7 @@ spring:
     show-sql: true
     database: mysql
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -19,9 +19,9 @@ spring:
 server:
   port: 8001
 
-#image:
-#  image-url: http://localhost:8001/productimgs/
-#  image-dir: src/main/resources/static/productimgs
+image:
+  image-url: http://localhost:8001/image/
+  image-dir: src/main/resources/static/uploadFiles
 
 jwt:
   secret: asdfjp298pafo1320efqw0udvnh0er0h412r08byfdq9dsvh02143908hfeqwn80fdqs0nfdqs0n412013rq0nqefn08dfas0das730732g86923

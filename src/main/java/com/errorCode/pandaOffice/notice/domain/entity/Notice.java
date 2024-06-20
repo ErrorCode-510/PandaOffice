@@ -1,9 +1,7 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "notice")
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Notice {
@@ -21,7 +20,7 @@ public class Notice {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;  // 게시글 코드(PK)
+    private int noticeId;  // 게시글 코드(PK)
 
     @Column(name = "title", nullable = false)
     private String title;  // 게시글 제목
@@ -44,50 +43,53 @@ public class Notice {
     @Column(name = "status", nullable = false, length = 1)
     private char status;  // 공개여부 (Y/N)
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;  // 사원 코드(FK)
 
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NoticeImage> images = new ArrayList<>();
+    private final List<NoticeImage> images = new ArrayList<>();
+
+    public Notice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, Employee employee, List<NoticeImage> images) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.postedDate = postedDate;
+        this.viewCount = viewCount;
+        this.status = status;
+        this.employee = employee;
+
+        if (images != null) {
+            this.images.addAll(images);
+        }
+    }
 
     //  이미지 추가 메소드
     public void addImage(NoticeImage image) {
         images.add(image);
-        image.setNotice(this);
+        image.setNotice(this);  // 연관관계 설정
+
     }
 
     // 이미지 삭제 메소드
     public void removeImage(NoticeImage image) {
         images.remove(image);
-        image.setNotice(null);
+        image.removeNotice();  // 연관관계 해제
+
     }
 
-    // 조회수 메소드
-    public void setViewCount(int i) {
-    }
+    public void updateNotice(String title, String content, String category, String subCategory, char status, Employee employee, List<NoticeImage> newImages) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.status = status;
+        this.employee = employee;
 
-    // 게시글 수정 작성일 메소드
-    public void setPostedDate(LocalDate now) {
-    }
-
-    // 게시글 수정 제목 메소드
-    public void setTitle(String title) {
-    }
-
-    // 게시글 수정 내용 메소드
-    public void setContent(String content) {
-    }
-
-    // 게시글 수정 분류 메소드
-    public void setCategory(String category) {
-    }
-
-    // 게시글 수정 소분류 메소드
-    public void setSubCategory(String subCategory) {
-    }
-
-    // 게시글 수정 공개여부 메소드
-    public void setStatus(char status) {
+        this.images.clear();
+        if (newImages != null) {
+            this.images.addAll(newImages);
+        }
     }
 }
