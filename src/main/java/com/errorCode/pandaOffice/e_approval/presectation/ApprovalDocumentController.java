@@ -3,29 +3,26 @@ package com.errorCode.pandaOffice.e_approval.presectation;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
-import com.errorCode.pandaOffice.e_approval.domain.entity.ApprovalDocument;
-import com.errorCode.pandaOffice.e_approval.domain.repository.ApprovalDocumentSpecification;
-import com.errorCode.pandaOffice.e_approval.dto.response.ApproveDocumentListResponse;
+import com.errorCode.pandaOffice.e_approval.domain.entity.DocumentTemplate;
+import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateRepository;
+import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentListResponse;
+import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentDetailResponse;
 import com.errorCode.pandaOffice.e_approval.service.ApprovalDocumentService;
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class ApprovalDocumentController {
     private final ApprovalDocumentService approvalDocumentService;
+    private final DocumentTemplateRepository documentTemplateRepository;
 
-    /* 결재 문서 가져오는 메소드 */
+    /* 결재 문서 관리 */
     @GetMapping("/approval-document")
     public ResponseEntity<PagingResponse> getApprovalDocuments(
             /* 기안일 조건 (min) */
@@ -38,8 +35,10 @@ public class ApprovalDocumentController {
             @RequestParam(required = false) final String title,
             /* 기안자 이름 */
             @RequestParam(required = false) final String draftEmployeeName,
-            /* 결재 상태 (APPROVE, PROGRESS, REJECTION) */
-            @RequestParam(required = false) final String status,
+            /* 결재 상태 (0 = 승인, 1 = 진행중, 2 = 반려) */
+            @RequestParam(required = false) final Integer status,
+            /* 현재 페이지 */
+            @RequestParam(required = false) final Integer nowPage,
             /* 한 페이지 서류 량 */
             @RequestParam(required = false) final Integer pageSize
     ) {
@@ -50,13 +49,14 @@ public class ApprovalDocumentController {
          * @param : 검색 조건들. null 이 가능하다
          * @return : 응답을 담은 Page 객체
          * */
-        final Page<ApproveDocumentListResponse> documents = approvalDocumentService.searchDocuments(
+        final Page<ApprovalDocumentListResponse> documents = approvalDocumentService.searchDocuments(
                 startDate,
                 endDate,
                 templateId,
                 title,
                 draftEmployeeName,
                 status,
+                nowPage,
                 pageSize
         );
         final PagingButtonInfo pagingButtonInfo = Pagination.getPagingButtonInfo(documents);
@@ -64,5 +64,23 @@ public class ApprovalDocumentController {
         System.out.println(documents);
 
         return ResponseEntity.ok(pagingResponse);
+    }
+    /**
+     * 문서 상세보기 시 값을 반환해준다.
+     * @author: 편승준
+     * @param : 문서 ID
+     * @return : ApprovalDocumentDetailResponse (미완성)
+     * */
+    @GetMapping("approval-document/{documentId}")
+    public ResponseEntity<ApprovalDocumentDetailResponse> getApprovalDocumentDetail(@PathVariable int documentId){
+        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
+        return ResponseEntity.ok(documentDetailResponse);
+    }
+    @PostMapping("approval-document")
+    public ResponseEntity<Void> createApprovalDocument(@RequestBody CreateApprovalDocumentRequest documentRequest){
+        final DocumentTemplate documentTemplate = documentTemplateRepository.findById(documentRequest.getDocumentTemplateId())
+                .orElseThrow(); /* 익셉션 등록 필요 */
+        final Long documentId = approvalDocumentService.createApprovalDocument(documentRequest);
+        return null;
     }
 }
