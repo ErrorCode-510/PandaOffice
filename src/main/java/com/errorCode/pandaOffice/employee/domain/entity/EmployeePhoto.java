@@ -3,9 +3,10 @@ package com.errorCode.pandaOffice.employee.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+@Getter
 @Entity(name="EmployeePhoto")
 @Table(name="employee_photo")
-@Getter
+
 public class EmployeePhoto {
     @Id
     @ManyToOne

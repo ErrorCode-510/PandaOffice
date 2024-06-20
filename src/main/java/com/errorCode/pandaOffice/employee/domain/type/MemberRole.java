@@ -1,4 +1,5 @@
 package com.errorCode.pandaOffice.employee.domain.type;
 
-public enum template {
+public enum MemberRole {
+    USER, ADMIN
 }
