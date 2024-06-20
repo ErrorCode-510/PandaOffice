@@ -36,8 +36,9 @@ public class RecruitmentService {
 
         if (gender != null && !gender.isEmpty()) {
             /* applicant 엔티티에서 gender 필드를 사용해서 값 출력
-             * 성별 + 이름으로 면접자 검색 */
-            applicants = applicantRepository.findByApplicantGender(getPageable(page), gender, name);
+             * 성별 + 이름으로 면접자 검색
+             * Containing: 해당 값이 포함되어 있는 양옆 모든 값 */
+            applicants = applicantRepository.findByGenderAndNameContaining(getPageable(page), gender, name);
         }
         else if (address != null && !address.isEmpty()) {
 
