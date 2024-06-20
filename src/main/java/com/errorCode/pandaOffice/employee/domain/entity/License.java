@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.Date;
-
+@Getter
 @Entity(name="License")
 @Table(name="license")
 @Getter

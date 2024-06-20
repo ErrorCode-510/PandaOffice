@@ -3,6 +3,7 @@ package com.errorCode.pandaOffice.employee.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+@Getter
 @Entity(name="Hobby")
 @Table(name="hobby")
 @Getter
