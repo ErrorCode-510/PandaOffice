@@ -1,5 +1,42 @@
 ### get 요청 확인
 ### startDate - 기안일(min) endDate - 기안일(max) templateId - 양식 ID title -
 ### 제목 draftEmployeeName - 기안자 이름 status - 결재 상태 pageSize - 한 페이지 서류 갯수
-GET http://localhost:8001/approval-document?draftEmployeeName=홍&pageSize=10
+GET http://localhost:8001/approval-document?pageSize=10
 Content-Type: application/json
+
+### get 요청 확인
+GET http://localhost:8001/approval-document/1
+### POST 요청 확인
+POST http://localhost:8001/approval-document
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="documentRequest"; filename="blob"
+Content-Type: application/json
+
+{
+  "title": "제목 테스트",
+  "documentTemplateId": 1,
+  "employeeId": 3,
+  "document": "document Test",
+  "approvalLineList": [
+    {
+      "order": 1,
+      "employeeId": 1
+    },
+    {
+      "order": 2,
+      "departmentId": 3,
+      "jobId": 3
+    }
+  ]
+}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="attachedFile"; filename="file.txt"
+Content-Type: text/plain
+
+(텍스트 파일 저장 테스트)
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
+GET http://localhost:8001/approval-document/1
+Access-Token: Bearer eyJkYXRlIjoxNzE4OTUxODA5MDY0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTg5NTU0MDl9.U9EIELzl2AYfXtixyTn2-qOko6Y-8hQB8EHSidQk0Vvm399Dh05qFwfh7JlkKbGUvJu3S_qsO8guSCMpdxp-Eg

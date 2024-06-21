@@ -32,7 +32,7 @@ public class DocumentTemplate {
     /* 자동 결재선 ID */
     @ManyToOne
     @JoinColumn(name = "auto_approval_line_id")
-    private AutoApprovalLine autoApprovalLine;
+    private ApprovalLineTemplate approvalLineTemplate;
     /* 수정 가능 여부 */
     @Column(nullable = false)
     private boolean editAbleStatus;
