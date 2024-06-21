@@ -2,8 +2,8 @@ package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import java.time.LocalDate;
+
 @Getter
 @Entity(name="Employee")
 @Table(name="employee")
@@ -74,8 +74,6 @@ public class Employee {
         this.employmentStatus = employmentStatus;
         this.password = password;
     }
-
-
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;

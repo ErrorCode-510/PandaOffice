@@ -22,6 +22,8 @@ public class NoticeRequestDTO {
     private int viewCount;  // 조회수
     private char status;  // 공개여부 (Y/N)
     private int employeeId;  // 사원 코드(FK)
+    private String name;
+    private String job;
     private List<NoticeImageRequestDTO> images = new ArrayList<>();  // 빈 리스트로 초기화
 
 }

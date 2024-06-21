@@ -43,14 +43,13 @@ public class Notice {
     @Column(name = "status", nullable = false, length = 1)
     private char status;  // 공개여부 (Y/N)
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;  // 사원 코드(FK)
+    @Column(name = "employee_id", nullable = false)
+    private int employeeId;  // 사원 코드(FK)
 
-    @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<NoticeImage> images = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoticeImage> images = new ArrayList<>();
 
-    public Notice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, Employee employee, List<NoticeImage> images) {
+    public Notice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, int employeeId, List<NoticeImage> images) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -58,7 +57,7 @@ public class Notice {
         this.postedDate = postedDate;
         this.viewCount = viewCount;
         this.status = status;
-        this.employee = employee;
+        this.employeeId = employeeId;
 
         if (images != null) {
             this.images.addAll(images);
@@ -68,24 +67,20 @@ public class Notice {
     //  이미지 추가 메소드
     public void addImage(NoticeImage image) {
         images.add(image);
-        image.setNotice(this);  // 연관관계 설정
-
     }
 
     // 이미지 삭제 메소드
     public void removeImage(NoticeImage image) {
         images.remove(image);
-        image.removeNotice();  // 연관관계 해제
-
     }
 
-    public void updateNotice(String title, String content, String category, String subCategory, char status, Employee employee, List<NoticeImage> newImages) {
+    public void updateNotice(String title, String content, String category, String subCategory, char status, int employeeId, List<NoticeImage> newImages) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.subCategory = subCategory;
         this.status = status;
-        this.employee = employee;
+        this.employeeId = employeeId;
 
         this.images.clear();
         if (newImages != null) {

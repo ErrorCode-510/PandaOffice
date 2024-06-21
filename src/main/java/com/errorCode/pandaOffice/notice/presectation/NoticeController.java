@@ -1,5 +1,4 @@
 package com.errorCode.pandaOffice.notice.presectation;
-
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import com.errorCode.pandaOffice.notice.dto.request.NoticeImageRequestDTO;
 import com.errorCode.pandaOffice.notice.dto.request.NoticeRequestDTO;
@@ -33,11 +32,11 @@ public class NoticeController {
         return noticeService.getAllNotices(sortedByDateDesc).map(this::convertToResponseDTO);
     }
 
-    // Notice 엔티티 객체를 NoticeResponseDTO 객체로 변환하는 메소드
-    // NoticeResponseDTO 는 공지사항 조회 시 클라이언트에게 반환할 데이터 전송 객체(DTO)
     private NoticeResponseDTO convertToResponseDTO(Notice notice) {
+        // 이미지 URL 의 기본 경로 설정
+        String imageUrlBase = "your-image-url-base/";
 
-        return new NoticeResponseDTO(
+        return new NoticeResponseDTO (
                 notice.getNoticeId(),
                 notice.getTitle(),
                 notice.getContent(),
@@ -46,15 +45,16 @@ public class NoticeController {
                 notice.getPostedDate(),
                 notice.getViewCount(),
                 notice.getStatus(),
-                notice.getEmployee().getEmployeeId(),
-                notice.getEmployee().getName(),
-                notice.getEmployee().getJob().getTitle(),  // 직급 정보 추가
-                // 이미지 정보를 NoticeImageResponseDTO 리스트로 변환
+                notice.getEmployeeId(),
+                "employeeName",
+                "employeeJob",
+
                 notice.getImages().stream().map(image -> new NoticeImageResponseDTO (
                         image.getImageId(),
                         image.getPath(),
                         image.getName(),
-                        image.getExtention()
+                        image.getExtention(),
+                        imageUrlBase + image.getPath()  // imageUrl 필드를 동적으로 생성
                 )).collect(Collectors.toList())
         );
     }
@@ -81,21 +81,18 @@ public class NoticeController {
     // 공지사항 등록
     @PostMapping("")  // ("") = ("/notice")
     public Notice createNotice(@RequestBody NoticeRequestDTO noticeRequestDTO) {
-
         return noticeService.createNotice(noticeRequestDTO);
     }
 
     // 공지사항 수정 (공개여부 Y/N)
     @PutMapping("/{noticeId}")
     public Notice updateNotice(@PathVariable int noticeId, @RequestBody NoticeRequestDTO noticeRequestDTO) {
-
         return noticeService.updateNotice(noticeId,noticeRequestDTO);
     }
 
     // 공지사항 삭제
     @DeleteMapping("/{noticeId}")
     public void deleteNotice(@PathVariable int noticeId) {
-
         noticeService.deleteNotice(noticeId);
     }
 
@@ -112,8 +109,8 @@ public class NoticeController {
                 "uploads/" + noticeId + "/"
         );
 
-//        String imageUrl = noticeService.uploadImage(file, noticeImageRequestDTO);
-        return null;
+        noticeService.uploadImage(file, noticeImageRequestDTO);
+        return ResponseEntity.ok().build();
     }
 
     // 이미지 삭제

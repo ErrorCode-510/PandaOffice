@@ -27,25 +27,10 @@ public class NoticeImage {
     @Column(name = "extention", nullable = false)
     private String extention;  // 게시글 이미지 확장자
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notice_id", nullable = false)
-    private Notice notice;  // 게시글 코드(FK)
-
-    public NoticeImage(String path, String name, String extention, Notice notice) {
+    public NoticeImage(String path, String name, String extention) {
         this.path = path;
         this.name = name;
         this.extention = extention;
-        this.notice = notice;
-    }
-
-    // 연관 관계 설정 메소드
-    public void setNotice(Notice notice) {
-        this.notice = notice;
-    }
-
-    // 연관 관계 해제 메소드
-    public void removeNotice() {
-        this.notice = null;
     }
 
 }
