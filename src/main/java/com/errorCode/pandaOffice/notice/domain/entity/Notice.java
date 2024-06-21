@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.notice.dto.request.CreateNoticeRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -43,26 +44,29 @@ public class Notice {
     @Column(name = "status", nullable = false, length = 1)
     private char status;  // 공개여부 (Y/N)
 
-    @Column(name = "employee_id", nullable = false)
-    private int employeeId;  // 사원 코드(FK)
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    /* DB 컬럼에는 employee_id 로 저장됨
+    * 자바에서는 자동으로 조인해서 해당되는 사원을 가져옴 */
+    private Employee employee;  // 사원 코드(FK)
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NoticeImage> images = new ArrayList<>();
+    private List<NoticeImage> images;
 
-    public Notice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, int employeeId, List<NoticeImage> images) {
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.subCategory = subCategory;
-        this.postedDate = postedDate;
-        this.viewCount = viewCount;
-        this.status = status;
-        this.employeeId = employeeId;
-
-        if (images != null) {
-            this.images.addAll(images);
-        }
+    public static Notice of(Employee employee, List<NoticeImage> imageEntityList, CreateNoticeRequestDTO createNoticeRequestDTO) {
+        Notice newNotice = new Notice();
+        newNotice.title = createNoticeRequestDTO.getTitle();
+        newNotice.content = createNoticeRequestDTO.getContent();
+        newNotice.category = createNoticeRequestDTO.getCategory();
+        newNotice.subCategory = createNoticeRequestDTO.getSubCategory();
+        newNotice.postedDate = LocalDate.now();
+        newNotice.viewCount = 0;
+        newNotice.status = 'Y';
+        newNotice.employee = employee;
+        newNotice.images = imageEntityList;
+        return newNotice;
     }
+
 
     //  이미지 추가 메소드
     public void addImage(NoticeImage image) {
@@ -74,17 +78,4 @@ public class Notice {
         images.remove(image);
     }
 
-    public void updateNotice(String title, String content, String category, String subCategory, char status, int employeeId, List<NoticeImage> newImages) {
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.subCategory = subCategory;
-        this.status = status;
-        this.employeeId = employeeId;
-
-        this.images.clear();
-        if (newImages != null) {
-            this.images.addAll(newImages);
-        }
-    }
 }

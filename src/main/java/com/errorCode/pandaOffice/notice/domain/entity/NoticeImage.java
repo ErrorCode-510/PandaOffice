@@ -24,13 +24,14 @@ public class NoticeImage {
     @Column(name = "name", nullable = false)
     private String name;  // 게시글 이미지 파일이름
 
-    @Column(name = "extention", nullable = false)
-    private String extention;  // 게시글 이미지 확장자
+    @Column(name = "extension", nullable = false)
+    private String extension;  // 게시글 이미지 확장자
 
-    public NoticeImage(String path, String name, String extention) {
-        this.path = path;
-        this.name = name;
-        this.extention = extention;
+    public static NoticeImage of(String name, String path, String contentType) {
+        NoticeImage noticeImage = new NoticeImage();
+        noticeImage.path = path;
+        noticeImage.name = name;
+        noticeImage.extension = contentType;
+        return noticeImage;
     }
-
 }
