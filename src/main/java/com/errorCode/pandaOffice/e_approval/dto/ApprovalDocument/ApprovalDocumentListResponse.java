@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.e_approval.dto.response;
+package com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument;
 
 import com.errorCode.pandaOffice.e_approval.domain.entity.ApprovalDocument;
 import lombok.AccessLevel;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ApproveDocumentListResponse {
+public class ApprovalDocumentListResponse {
     private final int id;
     private final String title;
     private final String templateName;
@@ -17,10 +17,10 @@ public class ApproveDocumentListResponse {
     private final LocalDate approvalDate;
     private final LocalDate lastApprovalDate;
     private final String departmentName;
-    private final String state;
+    private final String status;
 
-    public static ApproveDocumentListResponse from(final ApprovalDocument approvalDocument){
-        return new ApproveDocumentListResponse(
+    public static ApprovalDocumentListResponse from(final ApprovalDocument approvalDocument){
+        return new ApprovalDocumentListResponse(
                 approvalDocument.getId(),
                 approvalDocument.getTitle(),
                 approvalDocument.getDocumentTemplate().getTitle(),
@@ -28,7 +28,7 @@ public class ApproveDocumentListResponse {
                 approvalDocument.getApprovalDate(),
                 approvalDocument.getLastApprovalDate(),
                 approvalDocument.getDepartment().getName(),
-                approvalDocument.getState().getState()
+                approvalDocument.getStatus().getDescription()
         );
     }
 }
