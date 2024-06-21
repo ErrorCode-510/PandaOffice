@@ -19,7 +19,6 @@ import java.util.Date;
 /* 근무 기록 */
 public class AttendanceRecord {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /* 근무 기록 코드 */

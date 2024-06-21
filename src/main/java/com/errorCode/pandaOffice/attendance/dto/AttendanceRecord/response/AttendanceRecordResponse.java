@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceRecordResponse {
+
     /* 근무 기록 코드 */
     private int id;
 

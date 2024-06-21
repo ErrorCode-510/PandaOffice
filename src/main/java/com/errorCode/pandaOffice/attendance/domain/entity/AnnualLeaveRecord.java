@@ -31,7 +31,7 @@ public class AnnualLeaveRecord {
     /* 잔여 연차 */
     private double nowAmount;
 
-    /* 수량 (연차를 얼마나 썼는지, 받았는지에 대한 수량임)*/
+    /* 수량 (연차를 얼마나 썼는지, 받았는지에 대한 수량임) */
     private double amount;
 
     @ManyToOne
@@ -49,7 +49,15 @@ public class AnnualLeaveRecord {
     /* 신청 서류 코드 */
     private ApprovalDocument approvalDocument;
 
-
-
-
+    public AnnualLeaveRecord(int id, LocalDate date, double nowAmount, double amount,
+                             Employee employee, AnnualLeaveCategory annualLeaveCategory,
+                             ApprovalDocument approvalDocument) {
+        this.id = id;
+        this.date = date;
+        this.nowAmount = nowAmount;
+        this.amount = amount;
+        this.employee = employee;
+        this.annualLeaveCategory = annualLeaveCategory;
+        this.approvalDocument = approvalDocument;
+    }
 }
