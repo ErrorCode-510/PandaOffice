@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.Date;
-
+@Getter
 @Entity(name="CareerHistory")
 @Table(name="career_history")
-@Getter
+
 public class CareerHistory {
     @Id
     @Column(name = "id")

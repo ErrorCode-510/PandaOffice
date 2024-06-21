@@ -6,9 +6,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name="job")
-@Getter
+
 public class Job {
     @Id
     @Column(name="id")

@@ -1,6 +1,5 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import jakarta.el.ArrayELResolver;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

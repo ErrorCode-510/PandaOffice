@@ -1,4 +1,5 @@
 package com.errorCode.pandaOffice.common.domain.type;
 
-public enum template {
+public enum StatusType {
+    USABLE, DELETED
 }
