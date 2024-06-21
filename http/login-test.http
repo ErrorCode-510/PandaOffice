@@ -3,8 +3,8 @@ POST localhost:8001/api/v1/members/login
 Content-Type: application/json
 
 {
-  "memberId" : 10040,
-  "memberPassword": 4321
+  "memberId" : 201911027,
+  "memberPassword": "gil555"
 }
 
 ###
