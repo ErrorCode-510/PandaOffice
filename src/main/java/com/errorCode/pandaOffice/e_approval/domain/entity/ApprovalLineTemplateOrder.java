@@ -6,17 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "auto_approval_line_order")
+@Table(name = "approval_line_template_order")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 /* 자동 결재선의 순서 */
-public class AutoApprovalLineOrder {
+public class ApprovalLineTemplateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    /* 자동 결재선 ID */
-    private int autoApprovalId;
     /* 결재 순서 */
     @Column(nullable = false, name = "`order`")
     private int order;
