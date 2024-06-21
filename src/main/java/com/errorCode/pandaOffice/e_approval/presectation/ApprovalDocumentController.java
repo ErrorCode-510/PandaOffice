@@ -89,12 +89,13 @@ public class ApprovalDocumentController {
     @GetMapping("approval-document/{documentId}")
     public ResponseEntity<ApprovalDocumentDetailResponse> getApprovalDocumentDetail(@PathVariable int documentId) {
 
-        System.out.println(TokenUtils.getEmployeeId());
+        System.out.println("조회된 사번: " + TokenUtils.getEmployeeId());
 
 
-        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
-        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
-        return ResponseEntity.ok(documentDetailResponse);
+//        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
+//        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
+//        return ResponseEntity.ok(documentDetailResponse);
+        return null;
     }
 
 
