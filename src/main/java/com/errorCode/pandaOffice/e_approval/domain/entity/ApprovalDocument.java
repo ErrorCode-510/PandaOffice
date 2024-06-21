@@ -69,8 +69,6 @@ public class ApprovalDocument {
         approvalDocument.document = documentRequest.getDocument();
         approvalDocument.attachments = documentAttachedFileList;
         approvalDocument.approvalLineList = approvalLine;
-
-
         return approvalDocument;
     }
 }

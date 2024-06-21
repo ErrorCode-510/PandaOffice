@@ -13,7 +13,6 @@ import java.util.List;
 public class CreateApprovalDocumentRequest {
     private String title;
     private int documentTemplateId;
-    private Integer employeeId;
     private String document;
     private List<CreateApprovalLineRequest> approvalLineList;
 }

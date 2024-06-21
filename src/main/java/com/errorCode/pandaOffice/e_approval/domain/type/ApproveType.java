@@ -11,7 +11,8 @@ public enum ApproveType {
     PRE_APPROVE(4, "선결"),
     ALL_APPROVE(5, "전결"),
     DENY(6, "반려"),
-    PROXY_DENY(7, "반려(代)");
+    PROXY_DENY(7, "반려(代)"),
+    CONFIRM_ONLY(7, "후열");
 
     private final int value;
     private final String description;
