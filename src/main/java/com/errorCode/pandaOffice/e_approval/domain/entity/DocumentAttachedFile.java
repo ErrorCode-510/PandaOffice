@@ -20,6 +20,12 @@ public class DocumentAttachedFile {
     private String path;
     /* 파일 타입 */
     private String type;
-    /* 문서 ID */
-    private int documentId;
+
+    public static DocumentAttachedFile from(String name, String path, String type) {
+        DocumentAttachedFile documentAttachedFile = new DocumentAttachedFile();
+        documentAttachedFile.name = name;
+        documentAttachedFile.path = path;
+        documentAttachedFile.type = type;
+        return documentAttachedFile;
+    }
 }

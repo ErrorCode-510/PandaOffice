@@ -1,0 +1,8 @@
+### GET request to example server
+POST localhost:8001/login
+Content-Type: application/json
+
+{
+  "memberId" : 201911027,
+  "memberPassword": "gil555"
+}
