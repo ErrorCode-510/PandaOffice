@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 import static com.errorCode.pandaOffice.common.exception.type.ExceptionCode.NOT_FOUND_REFRESH_TOKEN;
 
 
@@ -68,6 +70,18 @@ public class MemberService {
 
         return ProfileResponse.from(employee);
 
+    }
+    @Transactional(readOnly = true)
+    public int findId(String name, String email, LocalDate birthDate) {
+        // 이름, 이메일, 생년월일을 기반으로 회원을 조회합니다.
+        Employee employee = memberRepository.findByNameAndEmailAndBirthDate(name, email, birthDate)
+                .orElse(null); // 수정: orElseThrow 대신에 orElse(null)을 사용합니다.
+        System.out.println("실행되고 있니???");
+        if (employee == null) {
+            throw new UsernameNotFoundException("해당 아이디가 존재하지 않습니다.");
+        }
+
+        return employee.getEmployeeId(); // 회원 아이디를 반환합니다.
     }
 
 
