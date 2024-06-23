@@ -10,4 +10,5 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
     /* 1. 면접자 성별 + 이름 검색 */
     Page<Applicant> findByGenderAndNameContaining(Pageable pageable, String gender, String name);
 
+    Page<Applicant> findByaddressAndNameContaining(Pageable pageable, String address, String name);
 }

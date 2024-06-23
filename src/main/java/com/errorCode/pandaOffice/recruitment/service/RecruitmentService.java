@@ -32,18 +32,16 @@ public class RecruitmentService {
         /* 해당 조건문에서 나온 값 담기 */
         Page<Applicant> applicants = null;
 
-        System.out.println("asdf" + applicantRepository.findAll());
-
         if (gender != null && !gender.isEmpty()) {
             /* applicant 엔티티에서 gender 필드를 사용해서 값 출력
-             * 성별 + 이름으로 면접자 검색
              * Containing: 해당 값이 포함되어 있는 양옆 모든 값 */
+            /* 성별 + 이름 검색 */
             applicants = applicantRepository.findByGenderAndNameContaining(getPageable(page), gender, name);
-        }
-        else if (address != null && !address.isEmpty()) {
-
+        } else if (address != null && !address.isEmpty()) {
+            /* 주소 + 이름 검색 */
+            applicants = applicantRepository.findByaddressAndNameContaining(getPageable(page), address, name);
         } else if (age != null &&  age > 0) {
-
+//            applicants = applicantRepository.findByAgeAnd
         }
         else {
 

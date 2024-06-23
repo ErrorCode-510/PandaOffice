@@ -30,12 +30,15 @@ public class RecruitmentController {
             /* defaultValue: 요청 값으로 page 값이 넘어오지 않을 경우 디폴트 값 1 설정 */
             @RequestParam(defaultValue = "1") final Integer page,
             /* required = false: 파라미터로 반드시 넘어올 필요는 없다. 디폴트: true */
+            /* 성별 검색 */
             @RequestParam(required = false) final String gender,
+            /* 주소 검색 */
             @RequestParam(required = false) final String address,
+            /* 나이 검색 */
             @RequestParam(required = false) final Integer age,
+            /* 이름 검색( 이름은 있을 수 있고 없을 수 있음 ) */
             @RequestParam(required = false) final String name
     ) {
-        System.out.println(2142346567);
         /* 모든 데이터를 받아온 후 엔티티 타입을 DTO 타입으로 변환 후 받을거고, 페이징처리 하겠다. */
         final Page<ApplicantResponse> applicants = recruitmentService.getAllApplicant(page, gender, address, age, name);
         final PagingButtonInfo pagingButtonInfo = Pagination.getPagingButtonInfo(applicants);
