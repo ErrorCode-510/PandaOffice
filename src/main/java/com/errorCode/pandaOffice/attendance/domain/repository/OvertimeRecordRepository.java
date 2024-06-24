@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface OvertimeRecordRepository extends JpaRepository<OvertimeRecord, Integer> {
 
-    List<OvertimeRecord> findByEmployeeId(int employeeId);
+    List<OvertimeRecord> findByEmployee_EmployeeId(int employeeId);
 
 }
