@@ -143,10 +143,11 @@ public class ApprovalDocumentController {
 
     /**
      * 아직 결재처리 되지 않은 서류를 삭제할 수 있다.
-     * 서비스
+     * @param documentId 서류의 ID
      */
-    @DeleteMapping
-    public ResponseEntity<Void> deleteApprovalDocument() {
+    @DeleteMapping("approval-document?{documentId}")
+    public ResponseEntity<Void> deleteApprovalDocument(@PathVariable int documentId) {
+        approvalDocumentService.deleteApprovalDocument(documentId);
         return null;
     }
 }

@@ -184,11 +184,11 @@ public class ApprovalDocumentService {
                         .findFirst()
                         .orElse(null);
                 /* 결재자의 정보 확인 */
-                if (currentLine.getEmployee() != currentEmployee) try {
-                    throw new Exception();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+//                if (currentLine.getEmployee() != currentEmployee) try {
+//                    throw new Exception();
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
                 /* 현재 라인 승인으로 처리 */
                 currentLine.processApproval(ApproveType.APPROVE, documentRequest.getComment());
                 /* 다음 라인이 null 이 아닐 경우 */
@@ -271,10 +271,11 @@ public class ApprovalDocumentService {
                         .orElse(null);
                 /* 승인처리 되지 않은 모든 대기, 예정 리스트 (현재 라인 제외) */
                 List<ApprovalLine> pendingAndScheduledList = approvalLineList.stream()
-                        .filter(line -> line.getStatus() == ApproveType.PENDING
-                                || line.getStatus() == ApproveType.SCHEDULED
-                                && line.getOrder() == currentLine.getOrder())
+                        .filter(line -> (line.getStatus() == ApproveType.PENDING
+                                || line.getStatus() == ApproveType.SCHEDULED)
+                                && line.getOrder() != currentLine.getOrder())
                         .toList();
+                System.out.println("test" + approvalLineList.get(0).getStatus() + ApproveType.PENDING);
                 /* 전결 처리 */
                 currentLine.processApproval(ApproveType.ALL_APPROVE, documentRequest.getComment());
                 /* 대기, 예정 상태의 리스트를 모두 후열처리 */
@@ -306,5 +307,21 @@ public class ApprovalDocumentService {
                 break;
             }
         }
+    }
+
+    public void deleteApprovalDocument(int documentId) {
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+        ApprovalDocument document = approvalDocumentRepository.findById(documentId).orElse(null);
+        if (employee != document.getDraftEmployee()) {
+            throw new RuntimeException("기안자 정보가 일치하지 않습니다.");
+        }
+        if (document == null) {
+            throw new RuntimeException("서류가 존재하지 않습니다.");
+        }
+        if (document.getApprovalLineList().get(0).getStatus() != ApproveType.PENDING){
+            throw new RuntimeException("결재된 서류는 수정할 수 없습니다.");
+        }
+        approvalDocumentRepository.deleteById(documentId);
     }
 }
