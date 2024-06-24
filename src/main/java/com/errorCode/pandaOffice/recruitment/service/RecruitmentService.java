@@ -111,21 +111,21 @@ public class RecruitmentService {
     }
 
     /* 5. 면접자 정보 수정 */
-//    @Transactional
-//    public void modify(Integer id, ApplicantCreateRequest applicantCreateRequest) {
-//        Optional<Applicant>applicantOptional = applicantRepository.findById(id);
-//        if (applicantOptional.isPresent()) {
-//            Applicant applicant = applicantOptional.get();
-//            applicant.modify(
-//                    applicantCreateRequest.getName(),
-//                    applicantCreateRequest.getBirthDate(),
-//                    applicantCreateRequest.getGender(),
-//                    applicantCreateRequest.getPhone(),
-//                    applicantCreateRequest.getAddress(),
-//                    applicantCreateRequest.getEmail()
-//            );
-//        }
-//    }
+    @Transactional
+    public void modify(Integer id, ApplicantCreateRequest applicantCreateRequest) {
+        Optional<Applicant>applicantOptional = applicantRepository.findById(id);
+        if (applicantOptional.isPresent()) {
+            Applicant applicant = applicantOptional.get();
+            applicant.modify(
+                    applicantCreateRequest.getName(),
+                    applicantCreateRequest.getBirthDate(),
+                    applicantCreateRequest.getGender(),
+                    applicantCreateRequest.getPhone(),
+                    applicantCreateRequest.getAddress(),
+                    applicantCreateRequest.getEmail()
+            );
+        }
+    }
 
     /* 6. 면접자 삭제 */
 //    public void remove(Integer id) {

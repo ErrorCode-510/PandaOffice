@@ -80,14 +80,14 @@ public class RecruitmentController {
     }
 
     /* 5. 면접자 수정 */
-//    @PutMapping("applicant/{id}")
-//    public ResponseEntity<Void> applicantUpdate(
-//            @PathVariable Integer id,
-//            @RequestBody ApplicantCreateRequest applicantCreateRequest
-//    ) {
-//        recruitmentService.modify(id, applicantCreateRequest);
-//        return ResponseEntity.created(URI.create("recruitment/applicant/" + id)).build();
-//    }
+    @PutMapping("applicant/{id}")
+    public ResponseEntity<Void> applicantUpdate(
+            @PathVariable Integer id,
+            @RequestBody ApplicantCreateRequest applicantCreateRequest
+    ) {
+        recruitmentService.modify(id, applicantCreateRequest);
+        return ResponseEntity.created(URI.create("recruitment/applicant/" + id)).build();
+    }
 
     /* 6. 면접자 삭제 */
 //    @DeleteMapping("applicant/{id}")
