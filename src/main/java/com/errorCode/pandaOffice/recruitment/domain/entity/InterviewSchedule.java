@@ -45,7 +45,7 @@ public class InterviewSchedule {
     /* 면접관 1 */
     @ManyToOne
     @JoinColumn(name = "interviewer_id")
-    private Employee employee1;
+    private Employee employee;
 
     /* 면접관 1 */
     @ManyToOne
