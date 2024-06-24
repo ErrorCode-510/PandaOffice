@@ -15,7 +15,10 @@ import com.errorCode.pandaOffice.attendance.dto.OvertimeRecord.response.OverTime
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,9 +33,25 @@ public class AttendanceService {
 
     private final AnnualLeaveCategoryRepository annualLeaveCategoryRepository;
 
+    /* 0. 현재 날짜의 주 계산식 메소드 */
+    public void currentWeek() {
+
+        // 현재 날짜 가져오기
+        LocalDate currentDate = LocalDate.now();
+
+        // 현재 날짜의 주를 가져오기 위해 WeekFields 설정 (한국 기준)
+        WeekFields weekFields = WeekFields.of(Locale.KOREA);
+        int weekNumber = currentDate.get(weekFields.weekOfMonth());
+
+        // 결과 출력
+        System.out.println("현재 날짜: " + currentDate);
+        System.out.println("이번 달의 몇 번째 주인지: " + weekNumber);
+
+    }
+
     /* 1. 사원의 아이디를 기준으로 모든 근태 기록을 보여주는 기능 */
     public List<AttendanceRecordResponse> getAttendanceRecord(int employeeId) {
-        List<AttendanceRecord> attendanceRecords = attendanceRecordRepository.findByEmployeeId(employeeId);
+        List<AttendanceRecord> attendanceRecords = attendanceRecordRepository.findByEmployee_EmployeeId(employeeId);
 
         return attendanceRecords.stream()
                 .map(attendanceRecord -> new AttendanceRecordResponse(
@@ -46,7 +65,7 @@ public class AttendanceService {
 
     /* 2. 사원의 아이디를 기준으로 모든 연장 근무 기록을 보여주는 기능 */
     public List<OverTimeRecordResponse> getOvertimeRecord(int employeeId) {
-        List<OvertimeRecord> overtimeRecords = overtimeRecordRepository.findByEmployeeId(employeeId);
+        List<OvertimeRecord> overtimeRecords = overtimeRecordRepository.findByEmployee_EmployeeId(employeeId);
 
         return overtimeRecords.stream()
                 .map(overtimeRecord -> new OverTimeRecordResponse(
@@ -60,7 +79,7 @@ public class AttendanceService {
 
     /* 3. 사원의 아이디를 기준으로 연차 기록을 가져온다. */
     public List<AnnualLeaveRecordResponse> getAnnualLeaveRecord(int employeeId) {
-        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployeeId(employeeId);
+        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployee_EmployeeId(employeeId);
 
         return annualLeaveRecords.stream()
                 .map(annualLeaveRecord -> new AnnualLeaveRecordResponse(
@@ -73,17 +92,19 @@ public class AttendanceService {
     }
 
 
-    /* 4. 사원의 아이디를 기준으로 연차 기록 카테고리를 가져온다. */
-    public List<AnnualLeaveCategoryResponse> getAnnualLeaveCategory(int employeeId) {
-        List<AnnualLeaveCategory> annualLeaveCategories = annualLeaveCategoryRepository.findByEmployeeId(employeeId);
+    /* 4. 사원의 아이디를 기준으로 연차 기록 카테고리를 가져온다.
+    * 연차 기록도 동시에 가져와야한다.*/
+//    public List<AnnualLeaveCategoryResponse> getAnnualLeaveCategory(int employeeId) {
+//        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployee_EmployeeId(employeeId);
+//
+//        List<AnnualLeaveCategory> annualLeaveCategories = annualLeaveRecords.findByAnnualLeaveCategory_
+//
+//
+//    }
 
-        return annualLeaveCategories.stream()
-                .map(annualLeaveCategory -> new AnnualLeaveCategoryResponse(
-                        annualLeaveCategory.getId(),
-                        annualLeaveCategory.getName()
-                ))
-                .collect(Collectors.toList());
-    }
+
+
+
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ1.내 근태 현황 페이지(Attendance Status)의 기능들 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
