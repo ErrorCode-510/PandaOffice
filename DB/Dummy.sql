@@ -22,24 +22,27 @@ INSERT INTO `employee` (
     `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
     `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
     `employment_status`, `annual_salary`
-) VALUES (
-             201911027, '$2a$10$ZPYfwW9sssWjFldokxW2DOJvq0o.6NPBIqrOo/oNl2Xl4/RVNTySy', '홍길동', 'Hong Gil Dong', '洪吉童', 11,
-             0400, '010-1234-5678', '800101-1234567', '남', '2019-01-15', NULL,
-             '서울특별시 강남구', '대한민국', '1980-01-01', 'honggildong@example.com', '안녕하세요, 홍길동입니다.',
-             '재직', 45000000
-         ); -- 비밀번호 gil555
+) VALUES
+      (201511001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김민수', 'Kim Min Su', '金民洙', 11, 0600, '010-1000-1001', '880101-1234561', '남', '2015-01-01', NULL, '서울특별시 강남구', '대한민국', '1988-01-01', 'minsu.kim@example.com', NULL, '재직', 35000000),
+      (201511002, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '박지영', 'Park Ji Young', '朴智英', 11, 0500, '010-1000-1002', '880202-1234562', '여', '2015-02-01', NULL, '서울특별시 서초구', '대한민국', '1988-02-02', 'jiyoung.park@example.com', NULL, '재직', 37000000),
+      (201511003, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '이철수', 'Lee Chul Su', '李哲洙', 11, 0400, '010-1000-1003', '880303-1234563', '남', '2015-03-01', NULL, '서울특별시 동작구', '대한민국', '1988-03-03', 'chulsu.lee@example.com', NULL, '재직', 36000000),
+      (201511004, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '최영희', 'Choi Young Hee', '崔英熙', 11, 0300, '010-1000-1004', '880404-1234564', '여', '2015-04-01', NULL, '서울특별시 강북구', '대한민국', '1988-04-04', 'younghee.choi@example.com', NULL, '재직', 38000000),
+      (201512001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김영수', 'Kim Young Su', '金英洙', 12, 0600, '010-2000-1001', '880505-2234561', '남', '2015-05-01', NULL, '부산광역시 해운대구', '대한민국', '1988-05-05', 'youngsu.kim@example.com', NULL, '재직', 35000000),
+      (201512002, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '박수현', 'Park Su Hyun', '朴秀賢', 12, 0500, '010-2000-1002', '880606-2234562', '여', '2015-06-01', NULL, '부산광역시 해운대구', '대한민국', '1988-06-06', 'suhyun.park@example.com', NULL, '재직', 37000000),
+      (201512003, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '이준혁', 'Lee Jun Hyuk', '李俊赫', 12, 0400, '010-2000-1003', '880707-2234563', '남', '2015-07-01', NULL, '부산광역시 해운대구', '대한민국', '1988-07-07', 'junhyuk.lee@example.com', NULL, '재직', 36000000),
+      (201513001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '정미경', 'Jung Mi Kyung', '鄭美京', 13, 0600, '010-3000-1001', '880808-3234561', '여', '2015-08-01', NULL, '인천광역시 남동구', '대한민국', '1988-08-08', 'mikyoung.jung@example.com', NULL, '재직', 35000000),
+      (201513002, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '한지민', 'Han Ji Min', '韓智敏', 13, 0500, '010-3000-1002', '880909-3234562', '여', '2015-09-01', NULL, '인천광역시 남동구', '대한민국', '1988-09-09', 'jimin.han@example.com', NULL, '재직', 37000000),
+      (201513003, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김진수', 'Kim Jin Su', '金進洙', 13, 0400, '010-3000-1003', '881010-3234563', '남', '2015-10-01', NULL, '인천광역시 남동구', '대한민국', '1988-10-10', 'jinsu.kim@example.com', NULL, '재직', 36000000),
+      (201514001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '박영수', 'Park Young Su', '朴英洙', 14, 0600, '010-4000-1001', '881111-4234561', '남', '2015-11-01', NULL, '대구광역시 수성구', '대한민국', '1988-11-11', 'youngsu.park@example.com', NULL, '재직', 35000000),
+      (201514002, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '이수현', 'Lee Su Hyun', '李秀賢', 14, 0500, '010-4000-1002', '881212-4234562', '여', '2015-12-01', NULL, '대구광역시 수성구', '대한민국', '1988-12-12', 'suhyun.lee@example.com', NULL, '재직', 37000000),
+      (201514003, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '정준호', 'Jung Jun Ho', '鄭俊浩', 14, 0400, '010-4000-1003', '881313-4234563', '남', '2015-12-15', NULL, '대구광역시 수성구', '대한민국', '1988-12-13', 'junho.jung@example.com', NULL, '재직', 36000000),
+      (201515001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '한수진', 'Han Su Jin', '韓秀珍', 15, 0600, '010-5000-1001', '881414-5234561', '여', '2015-12-18', NULL, '광주광역시 북구', '대한민국', '1988-12-14', 'sujin.han@example.com', NULL, '재직', 35000000),
+      (201515002, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '최현우', 'Choi Hyun Woo', '崔賢宇', 15, 0500, '010-5000-1002', '881515-5234562', '남', '2015-12-20', NULL, '광주광역시 북구', '대한민국', '1988-12-15', 'hyunwoo.choi@example.com', NULL, '재직', 37000000),
+      (201515003, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '오준석', 'Oh Jun Seok', '吳俊錫', 15, 0400, '010-5000-1003', '881616-5234563', '남', '2015-12-22', NULL, '광주광역시 북구', '대한민국', '1988-12-16', 'junseok.oh@example.com', NULL, '재직', 36000000),
+      (201511005, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '유지현', 'Yoo Ji Hyun', '柳智賢', 11, 0300, '010-1000-1005', '880505-1234565', '여', '2015-12-24', NULL, '서울특별시 강서구', '대한민국', '1988-12-05', 'jihyun.yoo@example.com', NULL, '재직', 38000000),
+      (201512004, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '문준호', 'Moon Jun Ho', '文俊浩', 12, 0300, '010-2000-1004', '880606-2234564', '남', '2015-12-26', NULL, '부산광역시 해운대구', '대한민국', '1988-12-06', 'junho.moon@example.com', NULL, '재직', 38000000),
+      (201513004, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '장지수', 'Jang Ji Su', '張智洙', 13, 0300, '010-3000-1004', '880707-3234564', '여', '2015-12-28', NULL, '인천광역시 남동구', '대한민국', '1988-12-07', 'jisu.jang@example.com', NULL, '재직', 38000000);
 
-INSERT INTO `employee` (
-    `employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
-    `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
-    `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
-    `employment_status`, `annual_salary`
-) VALUES (
-             201712001, '$2a$10$JbsFtkMHroQOVpGK3Q8Vy.Th8adJeqk4KPUbOM3Hae8pxahU0ceoe', '김철수', 'Kim Chul Soo', '金哲洙', 12,
-             0100, '010-2345-6789', '810202-2345678', '남', '2017-03-12', NULL,
-             '부산광역시 해운대구', '대한민국', '1981-02-02', 'chulsoo.kim@example.com', NULL,
-             '재직', 60000000
-         ); -- 비밀번호 su2017
 
 INSERT INTO `employee` (
     `employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
