@@ -59,13 +59,13 @@ public class RecruitmentController {
     }
 
     /* 3. 면접자 등록 */
-//    @PostMapping("/applicant/regist")
-//    public ResponseEntity<Void> registApplicant(
-//            @RequestBody ApplicantCreateRequest applicantRequest
-//    ) {
-//        final Integer applicantId = recruitmentService.registApplicant(applicantRequest);
-//        return ResponseEntity.created(URI.create("recruitment/applicant/" + applicantId)).build();
-//    }
+    @PostMapping("/applicant/regist")
+    public ResponseEntity<Void> registApplicant(
+            @RequestBody ApplicantCreateRequest applicantRequest
+    ) {
+        final Integer applicantId = recruitmentService.registApplicant(applicantRequest);
+        return ResponseEntity.created(URI.create("recruitment/applicant/" + applicantId)).build();
+    }
 
     /* 4. 면접자 상세 조회 */
 //    @GetMapping("/applicant/{id}")

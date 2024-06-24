@@ -80,21 +80,21 @@ public class RecruitmentService {
     }
 
     /* 3. 면접자 등록 */
-//    public Integer registApplicant(ApplicantCreateRequest applicantRequest) {
-//
-//        final Applicant newApplicant = Applicant.of(
-//                applicantRequest.getName(),
-//                applicantRequest.getBirthDate(),
-//                applicantRequest.getGender(),
-//                applicantRequest.getPhone(),
-//                applicantRequest.getAddress(),
-//                applicantRequest.getEmail()
-//        );
-//
-//        Applicant applicant = applicantRepository.save(newApplicant);
-//
-//        return applicant.getId();
-//    }
+    public Integer registApplicant(ApplicantCreateRequest applicantRequest) {
+
+        final Applicant newApplicant = Applicant.of(
+                applicantRequest.getName(),
+                applicantRequest.getBirthDate(),
+                applicantRequest.getGender(),
+                applicantRequest.getPhone(),
+                applicantRequest.getAddress(),
+                applicantRequest.getEmail()
+        );
+
+        Applicant applicant = applicantRepository.save(newApplicant);
+
+        return applicant.getId();
+    }
 
     /* 4. 면접자 상세 조회 */
 //    @Transactional(readOnly = true)
