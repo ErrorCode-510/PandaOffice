@@ -1,12 +1,14 @@
 package com.errorCode.pandaOffice.recruitment.dto.request;
 
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
 import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,6 +19,9 @@ public class InterviewScheduleCreateRequest {
 
     /* 일정명 */
     private final String name;
+
+    /* 메모 */
+    private final String memo;
 
     /* 일정 시작일 */
     private final LocalDate startDate;
@@ -38,4 +43,7 @@ public class InterviewScheduleCreateRequest {
 
     /* 면접관 3 */
     private final Employee employee3;
+
+    /* 면접자들 */
+    private final List<Applicant> applicantIdList;
 }

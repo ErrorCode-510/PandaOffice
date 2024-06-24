@@ -51,15 +51,23 @@ public class RecruitmentService {
 
         Page<Applicant> applicants = null;
 
-        /* 성별 + 이름 검색 */
-        if (gender != null && !gender.isEmpty()) {
+        /* 성별 + 이름 조회 */
+        if (gender != null && !gender.isEmpty() && name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByGenderAndNameContaining(getPageable(page), gender, name);
         }
-        /* 주소 + 이름 검색 */
-        else if (address != null && !address.isEmpty()) {
+        /* 성별 조회 */
+        else if (gender != null && !gender.isEmpty()) {
+            applicants = applicantRepository.findByGender(getPageable(page), gender);
+        }
+        /* 주소 + 이름 조회 */
+        else if (address != null && !address.isEmpty() && name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByAddressAndNameContaining(getPageable(page), address, name);
         }
-        /* 이름 검색 */
+        /* 주소 */
+        else if (address != null && !address.isEmpty()) {
+            applicants = applicantRepository.findByAddress(getPageable(page), address);
+        }
+        /* 이름 조회 */
         else if (name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByNameContaining(getPageable(page), name);
         }
@@ -152,13 +160,15 @@ public class RecruitmentService {
     public Integer registInterviewSchedule(InterviewScheduleCreateRequest interviewScheduleRequest) {
         final InterviewSchedule newInterviewSchedule = InterviewSchedule.of(
                 interviewScheduleRequest.getName(),
+                interviewScheduleRequest.getMemo(),
                 interviewScheduleRequest.getStartDate(),
                 interviewScheduleRequest.getEndDate(),
                 interviewScheduleRequest.getStartTime(),
                 interviewScheduleRequest.getPlace(),
                 interviewScheduleRequest.getEmployee(),
                 interviewScheduleRequest.getEmployee2(),
-                interviewScheduleRequest.getEmployee3()
+                interviewScheduleRequest.getEmployee3(),
+                interviewScheduleRequest.getApplicantIdList()
         );
         final InterviewSchedule interviewSchedule = interviewScheduleRepository.save(newInterviewSchedule);
         return interviewSchedule.getId();

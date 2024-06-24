@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "interview_schedule")
@@ -24,6 +24,10 @@ public class InterviewSchedule {
     /* 일정명 */
     @Column(nullable = false)
     private String name;
+
+    /* 메모 */
+    @Column
+    private String memo;
 
     /* 일정 시작일 */
     @Column(nullable = false)
@@ -57,11 +61,17 @@ public class InterviewSchedule {
     @JoinColumn(name = "interviewer_id3")
     private Employee employee3;
 
+    /* 면접자 */
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "interview_schedule_id")
+    private List<Applicant> applicantsList;
+
     public InterviewSchedule(
-            String name, LocalDate startDate, LocalDate endDate, LocalTime startTime,
-            Place place, Employee employee, Employee employee2, Employee employee3
+            String name, String memo, LocalDate startDate, LocalDate endDate, LocalTime startTime,
+            Place place, Employee employee, Employee employee2, Employee employee3, List<Applicant> applicantsList
     ) {
         this.name = name;
+        this.memo = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.startTime = startTime;
@@ -69,21 +79,25 @@ public class InterviewSchedule {
         this.employee = employee;
         this.employee2 = employee2;
         this.employee3 = employee3;
+        this.applicantsList = applicantsList;
     }
 
     public static InterviewSchedule of(
-            final String name, final LocalDate startDate, final LocalDate endDate, final LocalTime startTime,
-            final Place place, final Employee employee, final Employee employee2, final Employee employee3
+            final String name, final String memo, final LocalDate startDate, final LocalDate endDate, final LocalTime startTime,
+            final Place place, final Employee employee, final Employee employee2, final Employee employee3,
+            final List<Applicant> applicantsList
     ) {
         return new InterviewSchedule(
                 name,
+                memo,
                 startDate,
                 endDate,
                 startTime,
                 place,
                 employee,
                 employee2,
-                employee3
+                employee3,
+                applicantsList
         );
     }
 }

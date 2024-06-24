@@ -43,11 +43,6 @@ public class Applicant {
     @Column(nullable = false, unique = true)
     private String email;
 
-    /* 면접 일정 */
-    @ManyToOne
-    @JoinColumn(name = "interview_schedule_id")
-    private InterviewSchedule interviewSchedule;
-
     public Applicant(String name, LocalDate birthDate, String gender, String phone, String address, String email) {
         this.name = name;
         this.birthDate = birthDate;
@@ -57,6 +52,7 @@ public class Applicant {
         this.email = email;
     }
 
+    /* 엔티티로 면접자 등록 */
     public void modify(String name, LocalDate birthDate, String gender, String phone, String address, String email) {
         this.name = name;
         this.birthDate = birthDate;

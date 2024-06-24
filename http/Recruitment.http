@@ -1,20 +1,34 @@
 ### 면접자 전체 조회
-GET http://localhost:8001/recruitment/applicant
+GET http://localhost:8001/recruitment/applicant?page=5
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjA1OTUwMzgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDk1NTB9.YNTKI3JxwnWvZbdiW2BAsji5KMp7oM09d8YMVQQ7xK3TYacfs0uhx2clm65vdWGO19x_Hf_RLRmg-A3a2wa6aw
 
-### 면접자 성별 + 이름 검색
-GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남&name=길
+### 면접자 성별 + 이름 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남&name=우현
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjA1OTUwMzgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDk1NTB9.YNTKI3JxwnWvZbdiW2BAsji5KMp7oM09d8YMVQQ7xK3TYacfs0uhx2clm65vdWGO19x_Hf_RLRmg-A3a2wa6aw
 
-### 면접자 주소 + 이름 검색
-GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도&name=최
+### 면접자 성별 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjA1OTUwMzgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDk1NTB9.YNTKI3JxwnWvZbdiW2BAsji5KMp7oM09d8YMVQQ7xK3TYacfs0uhx2clm65vdWGO19x_Hf_RLRmg-A3a2wa6aw
+
+### 면접자 주소 + 이름 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도&name=빈
+Access-Token: Bearer eyJkYXRlIjoxNzE5MTk5MjQ3NzM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDI4NDd9.7BrhFUIi_WhdetZNjXBw7_9klxmRucSdoVCRxdbfIORlcmQHDFc9WG-5Af8NYesTdxtqHdlbSyF4qpxeUHY2bQ
+
+### 면접자 주소 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도
+Access-Token: Bearer eyJkYXRlIjoxNzE5MTk5MjQ3NzM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDI4NDd9.7BrhFUIi_WhdetZNjXBw7_9klxmRucSdoVCRxdbfIORlcmQHDFc9WG-5Af8NYesTdxtqHdlbSyF4qpxeUHY2bQ
 
 ### 면접자 이름 검색
-GET http://localhost:8001/recruitment/applicant/search?page=1&name=홍
+GET http://localhost:8001/recruitment/applicant/search?page=1&name=우현
+Access-Token: Bearer eyJkYXRlIjoxNzE5MTk5MjQ3NzM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDI4NDd9.7BrhFUIi_WhdetZNjXBw7_9klxmRucSdoVCRxdbfIORlcmQHDFc9WG-5Af8NYesTdxtqHdlbSyF4qpxeUHY2bQ
 
 ### 면접자 조건 x 전체 조회
 GET http://localhost:8001/recruitment/applicant/search
+Access-Token: Bearer eyJkYXRlIjoxNzE5MTk5MjQ3NzM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDI4NDd9.7BrhFUIi_WhdetZNjXBw7_9klxmRucSdoVCRxdbfIORlcmQHDFc9WG-5Af8NYesTdxtqHdlbSyF4qpxeUHY2bQ
 
 ### 면접자 등록
 POST http://localhost:8001/recruitment/applicant/regist
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjA1OTUwMzgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDk1NTB9.YNTKI3JxwnWvZbdiW2BAsji5KMp7oM09d8YMVQQ7xK3TYacfs0uhx2clm65vdWGO19x_Hf_RLRmg-A3a2wa6aw
 Content-Type: application/json
 
 {
@@ -28,9 +42,11 @@ Content-Type: application/json
 
 ### 면접자 상세 조회
 GET http://localhost:8001/recruitment/applicant/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjAxNjE4MTY3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDUyMTh9.QSeX6yCnmKy9cWJ9uDzgOnIXj9Rc-RZ0DYtPUu6fOsidUmXTUJ1OfoqHpnyugyfTiZ_NnBrJkkNipcPWAPz78Q
 
 ### 면접자 수정
-PUT http://localhost:8001/recruitment/applicant/1
+PUT http://localhost:8001/recruitment/applicant/41
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjA1OTUwMzgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDk1NTB9.YNTKI3JxwnWvZbdiW2BAsji5KMp7oM09d8YMVQQ7xK3TYacfs0uhx2clm65vdWGO19x_Hf_RLRmg-A3a2wa6aw
 Content-Type: application/json
 
 {
@@ -43,13 +59,16 @@ Content-Type: application/json
 }
 
 ### 면접자 삭제
-DELETE http://localhost:8001/recruitment/applicant/1
+DELETE http://localhost:8001/recruitment/applicant/41
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjA1OTUwMzgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDk1NTB9.YNTKI3JxwnWvZbdiW2BAsji5KMp7oM09d8YMVQQ7xK3TYacfs0uhx2clm65vdWGO19x_Hf_RLRmg-A3a2wa6aw
 
 ### 면접일정 상세 조회
 GET http://localhost:8001/recruitment/interview-schedule/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MTk5MjQ3NzM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDI4NDd9.7BrhFUIi_WhdetZNjXBw7_9klxmRucSdoVCRxdbfIORlcmQHDFc9WG-5Af8NYesTdxtqHdlbSyF4qpxeUHY2bQ
 
 ### 면접일정 등록
 POST http://localhost:8001/recruitment/interview-schedule/regist
+Access-Token: Bearer eyJkYXRlIjoxNzE5MTk5MjQ3NzM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTkyMDI4NDd9.7BrhFUIi_WhdetZNjXBw7_9klxmRucSdoVCRxdbfIORlcmQHDFc9WG-5Af8NYesTdxtqHdlbSyF4qpxeUHY2bQ
 Content-Type: application/json
 
 {
@@ -63,7 +82,8 @@ Content-Type: application/json
   },
   "employee": {
     "name": ""
-  }
+  },
+  "applicantIdList": [1, 2, 3]
 }
 
 ### 면접일정 수정/삭제
