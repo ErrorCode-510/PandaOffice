@@ -128,9 +128,9 @@ public class RecruitmentService {
     }
 
     /* 6. 면접자 삭제 */
-//    public void remove(Integer id) {
-//        applicantRepository.deleteById((id));
-//    }
+    public void remove(Integer id) {
+        applicantRepository.deleteById((id));
+    }
 
     /* 7. 면접장소 전체 조회 */
 //    @Transactional(readOnly = true)

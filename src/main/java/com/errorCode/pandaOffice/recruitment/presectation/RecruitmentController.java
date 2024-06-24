@@ -90,11 +90,11 @@ public class RecruitmentController {
     }
 
     /* 6. 면접자 삭제 */
-//    @DeleteMapping("applicant/{id}")
-//    public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
-//        recruitmentService.remove(id);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("applicant/{id}")
+    public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
+        recruitmentService.remove(id);
+        return ResponseEntity.noContent().build();
+    }
 
     /* 7. 면접장소 전체 조회 */
 //    @GetMapping("/place")
