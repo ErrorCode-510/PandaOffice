@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+
 @Entity
 @Table(name = "interview_schedule")
 @Getter
