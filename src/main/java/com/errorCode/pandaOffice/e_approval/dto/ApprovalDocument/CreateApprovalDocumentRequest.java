@@ -1,18 +1,19 @@
 package com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument;
 
 import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalLine.CreateApprovalLineRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
 
-@Setter
+@RequiredArgsConstructor
 @Getter
 @ToString
 public class CreateApprovalDocumentRequest {
-    private String title;
-    private int documentTemplateId;
-    private String document;
-    private List<CreateApprovalLineRequest> approvalLineList;
+    private final String title;
+    private final int documentTemplateId;
+    private final String document;
+    private final List<CreateApprovalLineRequest> approvalLineList;
 }
