@@ -33,7 +33,7 @@ public class AttendanceController {
         return null;
     }
 
-    @GetMapping("attendance")
+    @GetMapping("overtime")
     public ResponseEntity<OverTimeRecordResponse> getOvertimeRecord(@RequestParam int employeeId) {
 
         /* 3. 서비스 객체의 getOvertimeRecord 메소드에 사번을 전달하여 근태 기록 가져오기 */
@@ -43,7 +43,7 @@ public class AttendanceController {
 
     }
 
-    @GetMapping("attendance")
+    @GetMapping("annualleave")
     public ResponseEntity<AnnualLeaveRecord> getAnnualLeaveRecord(@RequestParam int employeeId) {
 
         /* 3. 서비스 객체의 getOvertimeRecord 메소드에 사번을 전달하여 근태 기록 가져오기 */
@@ -53,15 +53,6 @@ public class AttendanceController {
 
     }
 
-    @GetMapping("attendance")
-    public ResponseEntity<AnnualLeaveCategory> getAnnualLeaveCategory(@RequestParam int employeeId) {
-
-        /* 3. 서비스 객체의 getOvertimeRecord 메소드에 사번을 전달하여 근태 기록 가져오기 */
-        List<AnnualLeaveCategoryResponse> annualLeaveCategoryResponses = attendanceService.getAnnualLeaveCategory(employeeId);
-
-        return null;
-
-    }
 
 
 }
