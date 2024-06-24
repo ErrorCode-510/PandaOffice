@@ -80,97 +80,97 @@ public class RecruitmentService {
     }
 
     /* 3. 면접자 등록 */
-    public Integer registApplicant(ApplicantCreateRequest applicantRequest) {
-
-        final Applicant newApplicant = Applicant.of(
-                applicantRequest.getName(),
-                applicantRequest.getBirthDate(),
-                applicantRequest.getGender(),
-                applicantRequest.getPhone(),
-                applicantRequest.getAddress(),
-                applicantRequest.getEmail()
-        );
-
-        Applicant applicant = applicantRepository.save(newApplicant);
-
-        return applicant.getId();
-    }
+//    public Integer registApplicant(ApplicantCreateRequest applicantRequest) {
+//
+//        final Applicant newApplicant = Applicant.of(
+//                applicantRequest.getName(),
+//                applicantRequest.getBirthDate(),
+//                applicantRequest.getGender(),
+//                applicantRequest.getPhone(),
+//                applicantRequest.getAddress(),
+//                applicantRequest.getEmail()
+//        );
+//
+//        Applicant applicant = applicantRepository.save(newApplicant);
+//
+//        return applicant.getId();
+//    }
 
     /* 4. 면접자 상세 조회 */
-    @Transactional(readOnly = true)
-    public ApplicantResponse getApplicantById(Integer id) {
-        Optional<Applicant> applicantOptional = applicantRepository.findById(id);
-
-        /* isPresent: Optional에서 제공하는 메소드, 객체가 비어있지 않으면 true 반환
-        * if: 객체가 비어있다면 true 반환 */
-        if (!applicantOptional.isPresent()) {
-            return null;
-        }
-        Applicant applicant = applicantOptional.get();
-        return ApplicantResponse.from(applicant);
-    }
+//    @Transactional(readOnly = true)
+//    public ApplicantResponse getApplicantById(Integer id) {
+//        Optional<Applicant> applicantOptional = applicantRepository.findById(id);
+//
+//        /* isPresent: Optional에서 제공하는 메소드, 객체가 비어있지 않으면 true 반환
+//        * if: 객체가 비어있다면 true 반환 */
+//        if (!applicantOptional.isPresent()) {
+//            return null;
+//        }
+//        Applicant applicant = applicantOptional.get();
+//        return ApplicantResponse.from(applicant);
+//    }
 
     /* 5. 면접자 정보 수정 */
-    @Transactional
-    public void modify(Integer id, ApplicantCreateRequest applicantCreateRequest) {
-        Optional<Applicant>applicantOptional = applicantRepository.findById(id);
-        if (applicantOptional.isPresent()) {
-            Applicant applicant = applicantOptional.get();
-            applicant.modify(
-                    applicantCreateRequest.getName(),
-                    applicantCreateRequest.getBirthDate(),
-                    applicantCreateRequest.getGender(),
-                    applicantCreateRequest.getPhone(),
-                    applicantCreateRequest.getAddress(),
-                    applicantCreateRequest.getEmail()
-            );
-        }
-    }
+//    @Transactional
+//    public void modify(Integer id, ApplicantCreateRequest applicantCreateRequest) {
+//        Optional<Applicant>applicantOptional = applicantRepository.findById(id);
+//        if (applicantOptional.isPresent()) {
+//            Applicant applicant = applicantOptional.get();
+//            applicant.modify(
+//                    applicantCreateRequest.getName(),
+//                    applicantCreateRequest.getBirthDate(),
+//                    applicantCreateRequest.getGender(),
+//                    applicantCreateRequest.getPhone(),
+//                    applicantCreateRequest.getAddress(),
+//                    applicantCreateRequest.getEmail()
+//            );
+//        }
+//    }
 
     /* 6. 면접자 삭제 */
-    public void remove(Integer id) {
-        applicantRepository.deleteById((id));
-    }
+//    public void remove(Integer id) {
+//        applicantRepository.deleteById((id));
+//    }
 
     /* 7. 면접장소 전체 조회 */
-    @Transactional(readOnly = true)
-    public List<PlaceResponse> getAllPlace() {
-        List<Place> places = placeRepository.findAll();
-
-        List<PlaceResponse> placeResponses = places.stream()
-                .map(PlaceResponse::from)
-                .collect(Collectors.toList());
-
-        return placeResponses;
-    }
+//    @Transactional(readOnly = true)
+//    public List<PlaceResponse> getAllPlace() {
+//        List<Place> places = placeRepository.findAll();
+//
+//        List<PlaceResponse> placeResponses = places.stream()
+//                .map(PlaceResponse::from)
+//                .collect(Collectors.toList());
+//
+//        return placeResponses;
+//    }
 
     /* 8. 면접일정 상세 조회
     * 프론트에서 면접관은 몇명인지 보여주는 기능 필요 */
-    @Transactional(readOnly = true)
-    public InterviewScheduleResponse getInterviewScheduleById(Integer id) {
-        Optional<InterviewSchedule> interviewScheduleOptional = interviewScheduleRepository.findById(id);
-        if (!interviewScheduleOptional.isPresent()) {
-            return null;
-        }
-        InterviewSchedule interviewSchedule = interviewScheduleOptional.get();
-        return InterviewScheduleResponse.from(interviewSchedule);
-    }
+//    @Transactional(readOnly = true)
+//    public InterviewScheduleResponse getInterviewScheduleById(Integer id) {
+//        Optional<InterviewSchedule> interviewScheduleOptional = interviewScheduleRepository.findById(id);
+//        if (!interviewScheduleOptional.isPresent()) {
+//            return null;
+//        }
+//        InterviewSchedule interviewSchedule = interviewScheduleOptional.get();
+//        return InterviewScheduleResponse.from(interviewSchedule);
+//    }
 
     /* 9. 면접일정 등록 */
-    public Integer registInterviewSchedule(InterviewScheduleCreateRequest interviewScheduleRequest) {
-        final InterviewSchedule newInterviewSchedule = InterviewSchedule.of(
-                interviewScheduleRequest.getName(),
-                interviewScheduleRequest.getMemo(),
-                interviewScheduleRequest.getStartDate(),
-                interviewScheduleRequest.getEndDate(),
-                interviewScheduleRequest.getStartTime(),
-                interviewScheduleRequest.getPlace(),
-                interviewScheduleRequest.getEmployee(),
-                interviewScheduleRequest.getEmployee2(),
-                interviewScheduleRequest.getEmployee3(),
-                interviewScheduleRequest.getApplicantIdList()
-        );
-        final InterviewSchedule interviewSchedule = interviewScheduleRepository.save(newInterviewSchedule);
-        return interviewSchedule.getId();
-    }
+//    public Integer registInterviewSchedule(InterviewScheduleCreateRequest interviewScheduleRequest) {
+//        final InterviewSchedule newInterviewSchedule = InterviewSchedule.of(
+//                interviewScheduleRequest.getName(),
+//                interviewScheduleRequest.getMemo(),
+//                interviewScheduleRequest.getStartDate(),
+//                interviewScheduleRequest.getEndDate(),
+//                interviewScheduleRequest.getStartTime(),
+//                interviewScheduleRequest.getPlace(),
+//                interviewScheduleRequest.getEmployee(),
+//                interviewScheduleRequest.getEmployee2(),
+//                interviewScheduleRequest.getEmployee3(),
+//                interviewScheduleRequest.getApplicantIdList()
+//        );
+//        final InterviewSchedule interviewSchedule = interviewScheduleRepository.save(newInterviewSchedule);
+//        return interviewSchedule.getId();
+//    }
 }

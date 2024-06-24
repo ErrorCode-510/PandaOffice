@@ -59,64 +59,64 @@ public class RecruitmentController {
     }
 
     /* 3. 면접자 등록 */
-    @PostMapping("/applicant/regist")
-    public ResponseEntity<Void> registApplicant(
-            @RequestBody ApplicantCreateRequest applicantRequest
-    ) {
-        final Integer applicantId = recruitmentService.registApplicant(applicantRequest);
-        return ResponseEntity.created(URI.create("recruitment/applicant/" + applicantId)).build();
-    }
+//    @PostMapping("/applicant/regist")
+//    public ResponseEntity<Void> registApplicant(
+//            @RequestBody ApplicantCreateRequest applicantRequest
+//    ) {
+//        final Integer applicantId = recruitmentService.registApplicant(applicantRequest);
+//        return ResponseEntity.created(URI.create("recruitment/applicant/" + applicantId)).build();
+//    }
 
     /* 4. 면접자 상세 조회 */
-    @GetMapping("/applicant/{id}")
-    public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Integer id) {
-        ApplicantResponse applicantResponse = recruitmentService.getApplicantById(id);
-
-        /* 해당 ID의 면접자가 없을 경우 404 에러 반환 */
-        if (applicantResponse == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(applicantResponse);
-    }
+//    @GetMapping("/applicant/{id}")
+//    public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Integer id) {
+//        ApplicantResponse applicantResponse = recruitmentService.getApplicantById(id);
+//
+//        /* 해당 ID의 면접자가 없을 경우 404 에러 반환 */
+//        if (applicantResponse == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(applicantResponse);
+//    }
 
     /* 5. 면접자 수정 */
-    @PutMapping("applicant/{id}")
-    public ResponseEntity<Void> applicantUpdate(
-            @PathVariable Integer id,
-            @RequestBody ApplicantCreateRequest applicantCreateRequest
-    ) {
-        recruitmentService.modify(id, applicantCreateRequest);
-        return ResponseEntity.created(URI.create("recruitment/applicant/" + id)).build();
-    }
+//    @PutMapping("applicant/{id}")
+//    public ResponseEntity<Void> applicantUpdate(
+//            @PathVariable Integer id,
+//            @RequestBody ApplicantCreateRequest applicantCreateRequest
+//    ) {
+//        recruitmentService.modify(id, applicantCreateRequest);
+//        return ResponseEntity.created(URI.create("recruitment/applicant/" + id)).build();
+//    }
 
     /* 6. 면접자 삭제 */
-    @DeleteMapping("applicant/{id}")
-    public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
-        recruitmentService.remove(id);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("applicant/{id}")
+//    public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
+//        recruitmentService.remove(id);
+//        return ResponseEntity.noContent().build();
+//    }
 
     /* 7. 면접장소 전체 조회 */
-    @GetMapping("/place")
-    public ResponseEntity<List<PlaceResponse>> getAllPlace() {
-        final List<PlaceResponse> placeResponses = recruitmentService.getAllPlace();
-        return ResponseEntity.ok(placeResponses);
-    }
+//    @GetMapping("/place")
+//    public ResponseEntity<List<PlaceResponse>> getAllPlace() {
+//        final List<PlaceResponse> placeResponses = recruitmentService.getAllPlace();
+//        return ResponseEntity.ok(placeResponses);
+//    }
 
     /* 8. 면접일정 상세 조회 */
-    @GetMapping("interview-schedule/{id}")
-    public ResponseEntity<InterviewScheduleResponse> detailInterviewSchedule(@PathVariable Integer id) {
-        InterviewScheduleResponse interviewScheduleResponse = recruitmentService.getInterviewScheduleById(id);
-        return ResponseEntity.ok(interviewScheduleResponse);
-    }
+//    @GetMapping("interview-schedule/{id}")
+//    public ResponseEntity<InterviewScheduleResponse> detailInterviewSchedule(@PathVariable Integer id) {
+//        InterviewScheduleResponse interviewScheduleResponse = recruitmentService.getInterviewScheduleById(id);
+//        return ResponseEntity.ok(interviewScheduleResponse);
+//    }
 
     /* 9. 면접일정 등록 */
-    @PostMapping("/interview-schedule/regist")
-    public ResponseEntity<Void> registInterviewSchedule(
-            @RequestBody InterviewScheduleCreateRequest interviewScheduleRequest
-    ) {
-        final Integer interviewScheduleId = recruitmentService.registInterviewSchedule(interviewScheduleRequest);
-        return ResponseEntity.created(URI.create("/recruitment/interview-schedule/" + interviewScheduleId)).build();
-    }
+//    @PostMapping("/interview-schedule/regist")
+//    public ResponseEntity<Void> registInterviewSchedule(
+//            @RequestBody InterviewScheduleCreateRequest interviewScheduleRequest
+//    ) {
+//        final Integer interviewScheduleId = recruitmentService.registInterviewSchedule(interviewScheduleRequest);
+//        return ResponseEntity.created(URI.create("/recruitment/interview-schedule/" + interviewScheduleId)).build();
+//    }
 
 }
