@@ -80,6 +80,7 @@ public class RecruitmentService {
     }
 
     /* 3. 면접자 등록 */
+    @Transactional
     public Integer registApplicant(ApplicantCreateRequest applicantRequest) {
 
         final Applicant newApplicant = Applicant.of(
@@ -133,16 +134,20 @@ public class RecruitmentService {
     }
 
     /* 7. 면접장소 전체 조회 */
-//    @Transactional(readOnly = true)
-//    public List<PlaceResponse> getAllPlace() {
-//        List<Place> places = placeRepository.findAll();
-//
-//        List<PlaceResponse> placeResponses = places.stream()
-//                .map(PlaceResponse::from)
-//                .collect(Collectors.toList());
-//
-//        return placeResponses;
-//    }
+    @Transactional(readOnly = true)
+    public List<PlaceResponse> getAllPlace() {
+        List<Place> places = placeRepository.findAll();
+
+        for (Place place : places) {
+            System.out.println("place = " + place);
+        }
+
+        List<PlaceResponse> placeResponses = places.stream()
+                .map(PlaceResponse::from)
+                .collect(Collectors.toList());
+
+        return placeResponses;
+    }
 
     /* 8. 면접일정 상세 조회
     * 프론트에서 면접관은 몇명인지 보여주는 기능 필요 */

@@ -97,11 +97,11 @@ public class RecruitmentController {
     }
 
     /* 7. 면접장소 전체 조회 */
-//    @GetMapping("/place")
-//    public ResponseEntity<List<PlaceResponse>> getAllPlace() {
-//        final List<PlaceResponse> placeResponses = recruitmentService.getAllPlace();
-//        return ResponseEntity.ok(placeResponses);
-//    }
+    @GetMapping("/place")
+    public ResponseEntity<List<PlaceResponse>> getAllPlace() {
+        final List<PlaceResponse> placeResponses = recruitmentService.getAllPlace();
+        return ResponseEntity.ok(placeResponses);
+    }
 
     /* 8. 면접일정 상세 조회 */
 //    @GetMapping("interview-schedule/{id}")
