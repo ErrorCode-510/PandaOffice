@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ public class Applicant {
     /* 면접자 코드 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     /* 면접자 이름 */
     @Column(nullable = false)
@@ -46,4 +47,40 @@ public class Applicant {
     @ManyToOne
     @JoinColumn(name = "interview_schedule_id")
     private InterviewSchedule interviewSchedule;
+
+    public Applicant(String name, LocalDate birthDate, String gender, String phone, String address, String email) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
+    }
+
+    public void modify(String name, LocalDate birthDate, String gender, String phone, String address, String email) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
+    }
+
+    public static Applicant of (
+            final String name,
+            final LocalDate birthDate,
+            final String gender,
+            final String phone,
+            final String address,
+            final String email
+    ) {
+        return new Applicant(
+                name,
+                birthDate,
+                gender,
+                phone,
+                address,
+                email
+        );
+    }
 }

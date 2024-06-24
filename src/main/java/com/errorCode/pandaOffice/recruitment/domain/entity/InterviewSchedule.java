@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,7 +19,7 @@ public class InterviewSchedule {
     /* 면접 일정 코드 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     /* 일정명 */
     @Column(nullable = false)
@@ -46,13 +47,43 @@ public class InterviewSchedule {
     @JoinColumn(name = "interviewer_id")
     private Employee employee;
 
-    /* 면접관 1 */
+    /* 면접관 2 */
     @ManyToOne
     @JoinColumn(name = "interviewer_id2")
     private Employee employee2;
 
-    /* 면접관 1 */
+    /* 면접관 3 */
     @ManyToOne
     @JoinColumn(name = "interviewer_id3")
     private Employee employee3;
+
+    public InterviewSchedule(
+            String name, LocalDate startDate, LocalDate endDate, LocalTime startTime,
+            Place place, Employee employee, Employee employee2, Employee employee3
+    ) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.place = place;
+        this.employee = employee;
+        this.employee2 = employee2;
+        this.employee3 = employee3;
+    }
+
+    public static InterviewSchedule of(
+            final String name, final LocalDate startDate, final LocalDate endDate, final LocalTime startTime,
+            final Place place, final Employee employee, final Employee employee2, final Employee employee3
+    ) {
+        return new InterviewSchedule(
+                name,
+                startDate,
+                endDate,
+                startTime,
+                place,
+                employee,
+                employee2,
+                employee3
+        );
+    }
 }

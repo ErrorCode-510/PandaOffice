@@ -1,1 +1,52 @@
-GET http://localhost:8001/recruitment/applicant?page=1&gender=남&name=길
+### 면접자 전체 조회
+GET http://localhost:8001/recruitment/applicant
+
+### 면접자 성별 + 이름 검색
+GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남&name=길
+
+### 면접자 주소 + 이름 검색
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도&name=최
+
+### 면접자 이름 검색
+GET http://localhost:8001/recruitment/applicant/search?page=1&name=홍
+
+### 면접자 조건 x 전체 조회
+GET http://localhost:8001/recruitment/applicant/search
+
+### 면접자 등록
+POST http://localhost:8001/recruitment/applicant/regist
+Content-Type: application/json
+
+{
+  "name": "성우현",
+  "birthDate": "1996-09-04",
+  "gender": "남",
+  "phone": "010-4714-7268",
+  "address": "서울특별시",
+  "email": "sunguh0904@gmail.com"
+}
+
+### 면접자 상세 조회
+GET http://localhost:8001/recruitment/applicant/1
+
+### 면접자 수정
+PUT http://localhost:8001/recruitment/applicant/1
+Content-Type: application/json
+
+{
+  "name": "백다빈",
+  "birthDate": "2000-08-02",
+  "gender": "여",
+  "phone": "010-1234-5678",
+  "address": "강원도",
+  "email": "baekdb0802@gmail.com"
+}
+
+### 면접자 삭제
+DELETE http://localhost:8001/recruitment/applicant/1
+
+### 면접일정 상세 조회
+GET http://localhost:8001/recruitment/interview-schedule/1
+
+### 면접일정 등록
+### 면접일정 수정/삭제
