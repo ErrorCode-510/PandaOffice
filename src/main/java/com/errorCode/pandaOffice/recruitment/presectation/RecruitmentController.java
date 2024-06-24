@@ -68,16 +68,16 @@ public class RecruitmentController {
     }
 
     /* 4. 면접자 상세 조회 */
-//    @GetMapping("/applicant/{id}")
-//    public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Integer id) {
-//        ApplicantResponse applicantResponse = recruitmentService.getApplicantById(id);
-//
-//        /* 해당 ID의 면접자가 없을 경우 404 에러 반환 */
-//        if (applicantResponse == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(applicantResponse);
-//    }
+    @GetMapping("/applicant/{id}")
+    public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Integer id) {
+        ApplicantResponse applicantResponse = recruitmentService.getApplicantById(id);
+
+        /* 해당 ID의 면접자가 없을 경우 404 에러 반환 */
+        if (applicantResponse == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(applicantResponse);
+    }
 
     /* 5. 면접자 수정 */
 //    @PutMapping("applicant/{id}")

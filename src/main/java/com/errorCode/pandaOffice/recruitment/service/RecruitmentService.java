@@ -97,18 +97,18 @@ public class RecruitmentService {
     }
 
     /* 4. 면접자 상세 조회 */
-//    @Transactional(readOnly = true)
-//    public ApplicantResponse getApplicantById(Integer id) {
-//        Optional<Applicant> applicantOptional = applicantRepository.findById(id);
-//
-//        /* isPresent: Optional에서 제공하는 메소드, 객체가 비어있지 않으면 true 반환
-//        * if: 객체가 비어있다면 true 반환 */
-//        if (!applicantOptional.isPresent()) {
-//            return null;
-//        }
-//        Applicant applicant = applicantOptional.get();
-//        return ApplicantResponse.from(applicant);
-//    }
+    @Transactional(readOnly = true)
+    public ApplicantResponse getApplicantById(Integer id) {
+        Optional<Applicant> applicantOptional = applicantRepository.findById(id);
+
+        /* isPresent: Optional에서 제공하는 메소드, 객체가 비어있지 않으면 true 반환
+        * if: 객체가 비어있다면 true 반환 */
+        if (!applicantOptional.isPresent()) {
+            return null;
+        }
+        Applicant applicant = applicantOptional.get();
+        return ApplicantResponse.from(applicant);
+    }
 
     /* 5. 면접자 정보 수정 */
 //    @Transactional
