@@ -63,13 +63,13 @@ public class RecruitmentController {
     public ResponseEntity<Void> registApplicant(
             @RequestBody ApplicantCreateRequest applicantRequest
     ) {
-        final Long applicantId = recruitmentService.registApplicant(applicantRequest);
+        final Integer applicantId = recruitmentService.registApplicant(applicantRequest);
         return ResponseEntity.created(URI.create("recruitment/applicant/" + applicantId)).build();
     }
 
     /* 4. 면접자 상세 조회 */
     @GetMapping("/applicant/{id}")
-    public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Long id) {
+    public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Integer id) {
         ApplicantResponse applicantResponse = recruitmentService.getApplicantById(id);
 
         /* 해당 ID의 면접자가 없을 경우 404 에러 반환 */
@@ -82,7 +82,7 @@ public class RecruitmentController {
     /* 5. 면접자 수정 */
     @PutMapping("applicant/{id}")
     public ResponseEntity<Void> applicantUpdate(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @RequestBody ApplicantCreateRequest applicantCreateRequest
     ) {
         recruitmentService.modify(id, applicantCreateRequest);
@@ -91,7 +91,7 @@ public class RecruitmentController {
 
     /* 6. 면접자 삭제 */
     @DeleteMapping("applicant/{id}")
-    public ResponseEntity<Void> deleteApplicant(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
         recruitmentService.remove(id);
         return ResponseEntity.noContent().build();
     }
@@ -105,7 +105,7 @@ public class RecruitmentController {
 
     /* 8. 면접일정 상세 조회 */
     @GetMapping("interview-schedule/{id}")
-    public ResponseEntity<InterviewScheduleResponse> detailInterviewSchedule(@PathVariable Long id) {
+    public ResponseEntity<InterviewScheduleResponse> detailInterviewSchedule(@PathVariable Integer id) {
         InterviewScheduleResponse interviewScheduleResponse = recruitmentService.getInterviewScheduleById(id);
         return ResponseEntity.ok(interviewScheduleResponse);
     }
@@ -115,8 +115,8 @@ public class RecruitmentController {
     public ResponseEntity<Void> registInterviewSchedule(
             @RequestBody InterviewScheduleCreateRequest interviewScheduleRequest
     ) {
-        final Long interviewScheduleId = recruitmentService.registInterviewSchedule(interviewScheduleRequest);
-        return null;
+        final Integer interviewScheduleId = recruitmentService.registInterviewSchedule(interviewScheduleRequest);
+        return ResponseEntity.created(URI.create("/recruitment/interview-schedule/" + interviewScheduleId)).build();
     }
 
 }

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class ApplicantResponse {
 
     /* 면접자 코드 */
-    private final Long id;
+    private final int id;
 
     /* 면접자 이름 */
     private final String name;

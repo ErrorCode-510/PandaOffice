@@ -17,7 +17,7 @@ public class Applicant {
     /* 면접자 코드 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     /* 면접자 이름 */
     @Column(nullable = false)

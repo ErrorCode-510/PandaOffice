@@ -49,4 +49,21 @@ DELETE http://localhost:8001/recruitment/applicant/1
 GET http://localhost:8001/recruitment/interview-schedule/1
 
 ### 면접일정 등록
+POST http://localhost:8001/recruitment/interview-schedule/regist
+Content-Type: application/json
+
+{
+  "name": "면접",
+  "startDate": "2024-06-24",
+  "endDate": "2024-06-24",
+  "startTime": "13:00",
+  "place": {
+    "name": "면접1실",
+    "position": "판다오피스 7층 8번"
+  },
+  "employee": {
+    "name": ""
+  }
+}
+
 ### 면접일정 수정/삭제

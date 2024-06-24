@@ -72,7 +72,7 @@ public class RecruitmentService {
     }
 
     /* 3. 면접자 등록 */
-    public Long registApplicant(ApplicantCreateRequest applicantRequest) {
+    public Integer registApplicant(ApplicantCreateRequest applicantRequest) {
 
         final Applicant newApplicant = Applicant.of(
                 applicantRequest.getName(),
@@ -90,7 +90,7 @@ public class RecruitmentService {
 
     /* 4. 면접자 상세 조회 */
     @Transactional(readOnly = true)
-    public ApplicantResponse getApplicantById(Long id) {
+    public ApplicantResponse getApplicantById(Integer id) {
         Optional<Applicant> applicantOptional = applicantRepository.findById(id);
 
         /* isPresent: Optional에서 제공하는 메소드, 객체가 비어있지 않으면 true 반환
@@ -104,7 +104,7 @@ public class RecruitmentService {
 
     /* 5. 면접자 정보 수정 */
     @Transactional
-    public void modify(Long id, ApplicantCreateRequest applicantCreateRequest) {
+    public void modify(Integer id, ApplicantCreateRequest applicantCreateRequest) {
         Optional<Applicant>applicantOptional = applicantRepository.findById(id);
         if (applicantOptional.isPresent()) {
             Applicant applicant = applicantOptional.get();
@@ -120,7 +120,7 @@ public class RecruitmentService {
     }
 
     /* 6. 면접자 삭제 */
-    public void remove(Long id) {
+    public void remove(Integer id) {
         applicantRepository.deleteById((id));
     }
 
@@ -139,7 +139,7 @@ public class RecruitmentService {
     /* 8. 면접일정 상세 조회
     * 프론트에서 면접관은 몇명인지 보여주는 기능 필요 */
     @Transactional(readOnly = true)
-    public InterviewScheduleResponse getInterviewScheduleById(Long id) {
+    public InterviewScheduleResponse getInterviewScheduleById(Integer id) {
         Optional<InterviewSchedule> interviewScheduleOptional = interviewScheduleRepository.findById(id);
         if (!interviewScheduleOptional.isPresent()) {
             return null;
@@ -148,7 +148,8 @@ public class RecruitmentService {
         return InterviewScheduleResponse.from(interviewSchedule);
     }
 
-    public Long registInterviewSchedule(InterviewScheduleCreateRequest interviewScheduleRequest) {
+    /* 9. 면접일정 등록 */
+    public Integer registInterviewSchedule(InterviewScheduleCreateRequest interviewScheduleRequest) {
         final InterviewSchedule newInterviewSchedule = InterviewSchedule.of(
                 interviewScheduleRequest.getName(),
                 interviewScheduleRequest.getStartDate(),
@@ -160,6 +161,6 @@ public class RecruitmentService {
                 interviewScheduleRequest.getEmployee3()
         );
         final InterviewSchedule interviewSchedule = interviewScheduleRepository.save(newInterviewSchedule);
-        return null;
+        return interviewSchedule.getId();
     }
 }

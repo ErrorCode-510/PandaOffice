@@ -19,7 +19,7 @@ public class InterviewSchedule {
     /* 면접 일정 코드 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     /* 일정명 */
     @Column(nullable = false)
