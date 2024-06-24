@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Table(name = "approval_line")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 /* 기안된 결재 서류의 결재선 */
 public class ApprovalLine {
     @Id
@@ -31,6 +33,7 @@ public class ApprovalLine {
     /* 결재 상태 */
     @Column(nullable = false)
     private ApproveType status = ApproveType.SCHEDULED;
+    private String comment;
 
 
     public static ApprovalLine of(CreateApprovalLineRequest request, Employee employee) {
@@ -41,5 +44,17 @@ public class ApprovalLine {
             approvalLine.status = ApproveType.PENDING;
         }
         return approvalLine;
+    }
+
+    public void processApproval(ApproveType type) {
+        this.status = type;
+    }
+
+    public void changeEmployee(Employee currentEmployee) {
+        this.employee = currentEmployee;
+    }
+
+    public void setApprovalComment(String comment) {
+        this.comment = comment;
     }
 }

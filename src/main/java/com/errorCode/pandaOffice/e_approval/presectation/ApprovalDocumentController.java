@@ -88,14 +88,9 @@ public class ApprovalDocumentController {
      */
     @GetMapping("approval-document/{documentId}")
     public ResponseEntity<ApprovalDocumentDetailResponse> getApprovalDocumentDetail(@PathVariable int documentId) {
-
-        System.out.println("조회된 사번: " + TokenUtils.getEmployeeId());
-
-
-//        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
-//        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
-//        return ResponseEntity.ok(documentDetailResponse);
-        return null;
+        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
+        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
+        return ResponseEntity.ok(documentDetailResponse);
     }
 
 
@@ -130,18 +125,25 @@ public class ApprovalDocumentController {
      * <p>
      * 결재 처리 종류에 따라 수정되는 사항이 달라진다.
      * </p>
-     *
+     * @param documentRequest 결재선 및 결재 서류 처리에 필요한 request
+     *                        <Ul>
+     *                          <li><code>documentId</code>문서 ID(NotNull)</li>
+     *                          <li><code>approvalLineId</code>결재선 ID</li>
+     *                          <li><code>type</code>결재 분류 (1~9)</li>
+     *                          <li><code>date</code>결재일 (자동으로 초기화)</li>
+     *                          <li><code>comment</code>결재와 함께 오는 코멘트</li>
+     *                        </Ul>
      * @author
      */
     @PutMapping("approval-document")
     public ResponseEntity<Void> updateApprovalDocument(@RequestBody UpdateApprovalDocumentRequest documentRequest) {
-
-//        approvalDocumentService.updateApprovalDocument(documentRequest);
+        approvalDocumentService.updateApprovalDocument(documentRequest);
         return ResponseEntity.noContent().build();
     }
 
     /**
      * 아직 결재처리 되지 않은 서류를 삭제할 수 있다.
+     * 서비스
      */
     @DeleteMapping
     public ResponseEntity<Void> deleteApprovalDocument() {
