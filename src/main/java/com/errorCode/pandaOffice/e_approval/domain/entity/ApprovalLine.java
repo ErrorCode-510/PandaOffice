@@ -46,15 +46,16 @@ public class ApprovalLine {
         return approvalLine;
     }
 
-    public void processApproval(ApproveType type) {
+    public void processApproval(ApproveType type, String comment) {
         this.status = type;
+        this.comment = comment == null ? type.getDescription() + "처리 되었습니다." : comment;
     }
 
     public void changeEmployee(Employee currentEmployee) {
         this.employee = currentEmployee;
     }
 
-    public void setApprovalComment(String comment) {
-        this.comment = comment;
+    public void changeStatus(ApproveType approveType) {
+        this.status = approveType;
     }
 }

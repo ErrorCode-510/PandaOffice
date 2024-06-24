@@ -190,15 +190,11 @@ public class ApprovalDocumentService {
                     throw new RuntimeException(e);
                 }
                 /* 현재 라인 승인으로 처리 */
-                currentLine.processApproval(ApproveType.APPROVE);
-                /* 코멘트 있을경우 할당 */
-                if(documentRequest.getComment() != null){
-                    currentLine.setApprovalComment(documentRequest.getComment());
-                }
+                currentLine.processApproval(ApproveType.APPROVE, documentRequest.getComment());
                 /* 다음 라인이 null 이 아닐 경우 */
                 if (nextLine != null) {
                     /* 예정 -> 대기로 변경 */
-                    nextLine.processApproval(ApproveType.PENDING);
+                    nextLine.changeStatus(ApproveType.PENDING);
                 } else {
                     /* null 일 경우 결재 서류 상태를 진행 -> 승인으로 변경 */
                     document.processApproval(ApprovalStatus.IN_PROGRESS);
@@ -221,15 +217,11 @@ public class ApprovalDocumentService {
                 /* 현재 결재 라인의 결재자를 로그인된 사원으로 변경 (대결권) */
                 currentLine.changeEmployee(currentEmployee);
                 /* 상태를 대결로 변경 */
-                currentLine.processApproval(ApproveType.DELEGATED_APPROVE);
-                /* 코멘트 있을경우 할당 */
-                if(documentRequest.getComment() != null){
-                    currentLine.setApprovalComment(documentRequest.getComment());
-                }
+                currentLine.processApproval(ApproveType.DELEGATED_APPROVE, documentRequest.getComment());
                 /* 다음 라인이 null 이 아닐 경우 */
                 if (nextLine != null) {
                     /* 예정 -> 대기로 변경 */
-                    nextLine.processApproval(ApproveType.PENDING);
+                    nextLine.changeStatus(ApproveType.PENDING);
                 } else {
                     /* null 일 경우 결재 서류 상태를 진행 -> 승인으로 변경 */
                     document.processApproval(ApprovalStatus.IN_PROGRESS);
@@ -256,13 +248,13 @@ public class ApprovalDocumentService {
                         .findFirst()
                         .orElse(null);
                 /* 선결하려는 결재 라인 선결처리 */
-                currentLine.processApproval(ApproveType.APPROVE.PRE_APPROVE);
+                currentLine.processApproval(ApproveType.APPROVE.PRE_APPROVE, documentRequest.getComment());
                 /* 대기, 예정중인 결재선 모두 후열처리 */
-                pendingAndScheduledList.forEach(line-> line.processApproval(ApproveType.CONFIRM_ONLY));
+                pendingAndScheduledList.forEach(line-> line.changeStatus(ApproveType.CONFIRM_ONLY));
                 /* 다음 라인이 null 이 아닐 경우 */
                 if (nextLine != null) {
                     /* 예정 -> 대기로 변경 */
-                    nextLine.processApproval(ApproveType.PENDING);
+                    nextLine.changeStatus(ApproveType.PENDING);
                 } else {
                     /* null 일 경우 결재 서류 상태를 진행 -> 승인으로 변경 */
                     document.processApproval(ApprovalStatus.IN_PROGRESS);
@@ -272,6 +264,7 @@ public class ApprovalDocumentService {
             }
             /* 전결 처리 과정 */
             case 5: {
+                /* 전결처리 할 결재선 */
                 ApprovalLine currentLine =  approvalLineList.stream()
                         .filter(line -> line.getEmployee() == currentEmployee)
                         .findFirst()
@@ -282,6 +275,35 @@ public class ApprovalDocumentService {
                                 || line.getStatus() == ApproveType.SCHEDULED
                                 && line.getOrder() == currentLine.getOrder())
                         .toList();
+                /* 전결 처리 */
+                currentLine.processApproval(ApproveType.ALL_APPROVE, documentRequest.getComment());
+                /* 대기, 예정 상태의 리스트를 모두 후열처리 */
+                pendingAndScheduledList.forEach(line-> line.changeStatus(ApproveType.CONFIRM_ONLY));
+                /* 결재 상태를 승인으로 변경 */
+                document.processApproval(ApprovalStatus.IN_PROGRESS);
+                approvalDocumentRepository.save(document);
+                break;
+            }
+            case 6: {
+                /* 반려처리 할 결재선 */
+                ApprovalLine currentLine = approvalLineList.stream()
+                        .filter(line -> line.getId() == documentRequest.getApprovalLineId())
+                        .findFirst()
+                        .orElse(null);
+                /* 이후의 결재선 */
+                List<ApprovalLine> afterLineList = approvalLineList.stream()
+                        .filter(line->line.getOrder() > currentLine.getOrder())
+                        .toList();
+
+                /* 결재선 반려처리 */
+                currentLine.processApproval(ApproveType.DENY, documentRequest.getComment());
+                /* 결재 서류 반려처리 */
+                document.processApproval(ApprovalStatus.DENY);
+                /* 이후 결재선 null 값 처리 */
+                afterLineList.forEach(line-> line.changeStatus(ApproveType.DENY_AFTER));
+
+                approvalDocumentRepository.save(document);
+                break;
             }
         }
     }
