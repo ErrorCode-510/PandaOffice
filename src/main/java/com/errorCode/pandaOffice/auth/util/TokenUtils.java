@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.auth.util;
 
+import com.errorCode.pandaOffice.auth.type.CustomUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +8,8 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -30,7 +33,16 @@ public class TokenUtils {
                 .build()
                 .parseClaimsJws(accessToken)
                 .getBody()
-                .get("memberId").toString();
+                .get("employeeId").toString();
+    }
+
+    public static int getEmployeeId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("No authenticated user found.");
+        }
+        CustomUser customUser = (CustomUser) authentication.getPrincipal();
+        return customUser.getEmployeeId();
     }
 
     @Value("${jwt.secret}")

@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "auto_approval_line_folder")
+@Table(name = "approval_line_template_folder")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-/* 자동 결재선의 폴더 */
-public class AutoApprovalLineFolder {
+/* 결재선 템플릿의 폴더 */
+public class ApprovalLineTemplateFolder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,5 +18,4 @@ public class AutoApprovalLineFolder {
     @Column(nullable = false)
     private String name;
     /* 상위 폴더 */
-    private int refFolderId;
-}
+    private int refFolderId;}
