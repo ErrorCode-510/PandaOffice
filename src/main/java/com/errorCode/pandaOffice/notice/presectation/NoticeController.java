@@ -72,14 +72,13 @@ public class NoticeController {
     // 공지사항 등록
     @PostMapping("/regist")
     public ResponseEntity<Void> createNotice(
-            @RequestPart @Valid final NoticeRequestDTO noticeRequestDTO,
-            @RequestPart final MultipartFile noticeImg
+            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
     ) {
         if (noticeRequestDTO.getEmployeeId() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Integer noticeId = noticeService.createNotice(noticeRequestDTO, noticeImg);
+        final Integer noticeId = noticeService.createNotice(noticeRequestDTO);
 
         return ResponseEntity.created(URI.create("/notice/regist/" + noticeId)).build();
     }
@@ -101,11 +100,5 @@ public class NoticeController {
         noticeService.deleteNotice(noticeId);
 
         return ResponseEntity.noContent().build();
-    }
-
-    // 이미지 삭제
-    @DeleteMapping("/image")
-    public void removeImage(@RequestParam int imageId, @RequestParam int noticeId) {
-        noticeService.removeImage(noticeId, imageId);
     }
 }

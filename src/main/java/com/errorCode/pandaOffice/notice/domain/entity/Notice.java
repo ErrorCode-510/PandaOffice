@@ -49,29 +49,10 @@ public class Notice {
     @JoinColumn(name = "employee_id")
     private Employee employee;  // 사원 코드(FK)
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NoticeImage> images = new ArrayList<>();
-
-    // Notice 객체 생성 메소드
-//    public static Notice of(
-//            Employee employee, List<NoticeImage> imageEntityList, NoticeRequestDTO noticeRequestDTO
-//    ) {
-//        Notice newNotice = new Notice();
-//        newNotice.title = noticeRequestDTO.getTitle();
-//        newNotice.content = noticeRequestDTO.getContent();
-//        newNotice.category = noticeRequestDTO.getCategory();
-//        newNotice.subCategory = noticeRequestDTO.getSubCategory();
-//        newNotice.postedDate = LocalDate.now();
-//        newNotice.viewCount = 0;
-//        newNotice.status = 'Y';
-//        newNotice.employee = employee;
-//        return newNotice;
-//    }
-
     public Notice(
             String title, String content, String category,
             String subCategory, LocalDate postedDate, int viewCount, char status,
-            Employee employee, List<NoticeImage> images
+            Employee employee
     ) {
         this.title = title;
         this.content = content;
@@ -81,12 +62,11 @@ public class Notice {
         this.viewCount = viewCount;
         this.status = status;
         this.employee = employee;
-        this.images = images;
     }
 
     public static Notice of (
             final String title, final String content, final String category, final String subCategory, final LocalDate postedDate,
-            final int viewCount, final char status, final Employee employee, final List<NoticeImage> images
+            final int viewCount, final char status, final Employee employee
     ) {
         return new Notice (
                 title,
@@ -96,20 +76,8 @@ public class Notice {
                 postedDate,
                 viewCount,
                 status,
-                employee,
-                images
+                employee
         );
-    }
-
-    // 이미지 추가 메소드
-    public void addImage(NoticeImage image) {
-        images.add(image);
-        image.setNotice(this);
-    }
-
-    // 이미지 삭제 메소드
-    public void removeImage(NoticeImage image) {
-        images.remove(image);
     }
 
     // 공지사항 업데이트 메소드
@@ -120,10 +88,4 @@ public class Notice {
         this.subCategory = subCategory;
     }
 
-    // 이미지 리스트 업데이트 메소드
-    public void updateImages(List<NoticeImage> imageEntityList) {
-        this.images.clear();
-        this.images.addAll(imageEntityList);
-        imageEntityList.forEach(image -> image.setNotice(this));
-    }
 }
