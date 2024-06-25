@@ -64,7 +64,7 @@ Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 면접장소 전체 조회
 GET http://localhost:8001/recruitment/place
-Access-Token: Bearer eyJkYXRlIjoxNzE5MjkzNDEwMTI3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyOTcwMTB9.cByp1OvBNcO-bI_vy-z-gKl0WWp1xJhxyG2C83Z3Ae2tauZ0ZN0np3No6AZpDZyzwzyRo2-7YmO-S4Q3vrYMvw
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mjk3NjIwNDQzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzMDEyMjB9.v2NeCpGrviIf6C4rpov9GUBS_HvG5FHllAhr0bbP6Ux9CsA71lKEppYAesLAbRGFMRxwQKnOJOiOPdJAhxw5iA
 
 ### 면접일정 등록
 POST http://localhost:8001/recruitment/interview-schedule/regist
@@ -103,8 +103,8 @@ Content-Type: application/json
   ]
 }
 
-### 면접일정 수정/삭제
-
 ### 면접일정 상세 조회
-#GET http://localhost:8001/recruitment/interview-schedule/1
-#Access-Token: Bearer eyJkYXRlIjoxNzE5MjExMTQzNzQ0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyMTQ3NDN9.t7UP54dnFmduj3MKtWTRLlv6O7SZHt2xhAzzDGr0ETeLePzlVNNnR5Qlu5lmDsTq2pCMLJIjXAT-7cp2st2-5A
+GET http://localhost:8001/recruitment/interview-schedule/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mjk3NjIwNDQzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzMDEyMjB9.v2NeCpGrviIf6C4rpov9GUBS_HvG5FHllAhr0bbP6Ux9CsA71lKEppYAesLAbRGFMRxwQKnOJOiOPdJAhxw5iA
+
+### 면접일정 수정/삭제
