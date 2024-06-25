@@ -1,4 +1,4 @@
 package com.errorCode.pandaOffice.welfare.service;
 
-public class Service {
+public class SurveyService {
 }
