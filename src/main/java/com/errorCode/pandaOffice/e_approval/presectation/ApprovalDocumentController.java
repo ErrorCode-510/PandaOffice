@@ -29,7 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApprovalDocumentController {
     private final ApprovalDocumentService approvalDocumentService;
-    private final DocumentTemplateRepository documentTemplateRepository;
 
     /**
      * 결재 문서를 검색하는 api
@@ -59,7 +58,7 @@ public class ApprovalDocumentController {
             @RequestParam(required = false) final Integer status,
             @RequestParam(required = false) final Integer nowPage,
             @RequestParam(required = false) final Integer pageSize
-    ) throws Exception {
+    ) {
         final Page<ApprovalDocumentListResponse> documents = approvalDocumentService.searchDocuments(
                 startDate,
                 endDate,
@@ -113,11 +112,9 @@ public class ApprovalDocumentController {
     public ResponseEntity<Void> createApprovalDocument(
             @RequestPart final CreateApprovalDocumentRequest documentRequest,
             @RequestPart(required = false) final List<MultipartFile> attachedFile) {
-        final DocumentTemplate documentTemplate = documentTemplateRepository.findById(documentRequest.getDocumentTemplateId())
-                .orElseThrow(); /* 익셉션 등록 필요 */
         final int documentId = approvalDocumentService.createApprovalDocument(documentRequest, attachedFile);
         /* 상태코드 201, 문자열 URI 로 반환, ResponseEntity 빌드 */
-        return ResponseEntity.created(URI.create("/approval-document" + documentId)).build();
+        return ResponseEntity.created(URI.create("/approval-document/" + documentId)).build();
     }
 
     /**
@@ -145,9 +142,9 @@ public class ApprovalDocumentController {
      * 아직 결재처리 되지 않은 서류를 삭제할 수 있다.
      * @param documentId 서류의 ID
      */
-    @DeleteMapping("approval-document?{documentId}")
+    @DeleteMapping("approval-document/{documentId}")
     public ResponseEntity<Void> deleteApprovalDocument(@PathVariable int documentId) {
         approvalDocumentService.deleteApprovalDocument(documentId);
-        return null;
+        return ResponseEntity.noContent().build();
     }
 }

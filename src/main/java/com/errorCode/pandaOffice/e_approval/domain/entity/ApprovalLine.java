@@ -1,7 +1,6 @@
 package com.errorCode.pandaOffice.e_approval.domain.entity;
 
 import com.errorCode.pandaOffice.e_approval.domain.type.ApproveType;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalLine.CreateApprovalLineRequest;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -36,11 +35,11 @@ public class ApprovalLine {
     private String comment;
 
 
-    public static ApprovalLine of(CreateApprovalLineRequest request, Employee employee) {
+    public static ApprovalLine of(int order, Employee employee) {
         ApprovalLine approvalLine = new ApprovalLine();
-        approvalLine.order = request.getOrder();
+        approvalLine.order = order;
         approvalLine.employee = employee;
-        if(request.getOrder() == 1){
+        if(order == 1){
             approvalLine.status = ApproveType.PENDING;
         }
         return approvalLine;
