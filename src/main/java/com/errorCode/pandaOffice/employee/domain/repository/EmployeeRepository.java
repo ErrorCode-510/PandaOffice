@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-    Optional<Object> findFirstByDepartmentIdAndJobIdOrderByEmployeeIdAsc(Integer departmentId, Integer jobId);
+    Optional<Employee> findFirstByDepartment_IdAndJob_IdOrderByHireDateDesc(Integer departmentId, Integer jobId);
 }
