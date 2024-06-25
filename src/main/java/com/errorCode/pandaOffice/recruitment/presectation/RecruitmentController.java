@@ -3,10 +3,9 @@ package com.errorCode.pandaOffice.recruitment.presectation;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
-import com.errorCode.pandaOffice.recruitment.dto.request.ApplicantCreateRequest;
+import com.errorCode.pandaOffice.recruitment.dto.request.ApplicantRequest;
 import com.errorCode.pandaOffice.recruitment.dto.request.InterviewScheduleCreateRequest;
 import com.errorCode.pandaOffice.recruitment.dto.response.ApplicantResponse;
-import com.errorCode.pandaOffice.recruitment.dto.response.InterviewScheduleResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
 import com.errorCode.pandaOffice.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +60,7 @@ public class RecruitmentController {
     /* 3. 면접자 등록 */
     @PostMapping("/applicant/regist")
     public ResponseEntity<Void> registApplicant(
-            @RequestBody ApplicantCreateRequest applicantRequest
+            @RequestBody ApplicantRequest applicantRequest
     ) {
         final Integer applicantId = recruitmentService.registApplicant(applicantRequest);
         return ResponseEntity.created(URI.create("recruitment/applicant/" + applicantId)).build();
@@ -83,9 +82,9 @@ public class RecruitmentController {
     @PutMapping("applicant/{id}")
     public ResponseEntity<Void> applicantUpdate(
             @PathVariable Integer id,
-            @RequestBody ApplicantCreateRequest applicantCreateRequest
+            @RequestBody ApplicantRequest applicantRequest
     ) {
-        recruitmentService.modify(id, applicantCreateRequest);
+        recruitmentService.modify(id, applicantRequest);
         return ResponseEntity.created(URI.create("recruitment/applicant/" + id)).build();
     }
 
@@ -103,20 +102,20 @@ public class RecruitmentController {
         return ResponseEntity.ok(placeResponses);
     }
 
-    /* 8. 면접일정 상세 조회 */
+    /* 8. 면접일정 등록 */
+    @PostMapping("/interview-schedule/regist")
+    public ResponseEntity<Void> registInterviewSchedule(
+            @RequestBody InterviewScheduleCreateRequest request
+    ) {
+        final Integer id = recruitmentService.registInterviewSchedule(request);
+        return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
+    }
+
+    /* 9. 면접일정 상세 조회 */
 //    @GetMapping("interview-schedule/{id}")
 //    public ResponseEntity<InterviewScheduleResponse> detailInterviewSchedule(@PathVariable Integer id) {
 //        InterviewScheduleResponse interviewScheduleResponse = recruitmentService.getInterviewScheduleById(id);
 //        return ResponseEntity.ok(interviewScheduleResponse);
-//    }
-
-    /* 9. 면접일정 등록 */
-//    @PostMapping("/interview-schedule/regist")
-//    public ResponseEntity<Void> registInterviewSchedule(
-//            @RequestBody InterviewScheduleCreateRequest interviewScheduleRequest
-//    ) {
-//        final Integer interviewScheduleId = recruitmentService.registInterviewSchedule(interviewScheduleRequest);
-//        return ResponseEntity.created(URI.create("/recruitment/interview-schedule/" + interviewScheduleId)).build();
 //    }
 
 }

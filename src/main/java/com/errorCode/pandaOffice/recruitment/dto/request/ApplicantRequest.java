@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor
-public class ApplicantCreateRequest {
+public class ApplicantRequest {
 
     /* 면접자 코드 */
     private final int id;
