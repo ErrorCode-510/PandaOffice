@@ -1,132 +1,213 @@
 package com.errorCode.pandaOffice.notice.service;
-import com.errorCode.pandaOffice.auth.util.TokenUtils;
-import com.errorCode.pandaOffice.common.util.FileUploadUtils;
-import com.errorCode.pandaOffice.e_approval.domain.entity.DocumentAttachedFile;
+
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import com.errorCode.pandaOffice.notice.domain.entity.NoticeImage;
-import com.errorCode.pandaOffice.notice.domain.repository.NoticeImageRepository;
 import com.errorCode.pandaOffice.notice.domain.repository.NoticeRepository;
-import com.errorCode.pandaOffice.notice.dto.request.CreateNoticeRequestDTO;
+import com.errorCode.pandaOffice.notice.dto.request.NoticeRequestDTO;
+import com.errorCode.pandaOffice.notice.dto.response.NoticeResponseDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
-
+// 공지사항 서비스 클래스
 @Service
-@RequiredArgsConstructor    // 생성자 생략 가능
+@RequiredArgsConstructor
+@Transactional
 public class NoticeService {
 
-    @Value("${image.image-dir}")
-    private String uploadDir;
-
     @Value("${image.image-url}")
-    private String uploadUrl;
+    private String IMAGE_URL;
+
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
 
     private final NoticeRepository noticeRepository;
-    private final NoticeImageRepository noticeImageRepository;
     private final EmployeeRepository employeeRepository;
 
-    @Value("${image.image-dir}")
-    private String IMAGE_DIR; // = "src/main/resources/static/uploadFiles"
-
-    /* 공지사항 등록 메소드 */
-    public int createNotice(CreateNoticeRequestDTO createNoticeRequestDTO, List<MultipartFile> imageList) {
-        /* 현재 로그인한 사원의 사번 토큰에서 가져오기 */
-        int employeeId = TokenUtils.getEmployeeId();
-        /* 가져온 사번으로 DB 에서 사원 엔티티 가져오기 */
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow();
-        /* 사진 관리 */
-        /* 파일 저장 로직. 파일을 저장하고 원본명, 경로, 타입을 가진 엔티티 리스트를 반환한다. */
-        List<NoticeImage> imageEntityList = new ArrayList<>();
-        /* 넘어온 이미지가 있을 경우 */
-        if (imageList != null) {
-            /* 반복문 실행 */
-            imageList.forEach(file -> {
-                /* 저장할 경로 생성 로직. 우선 랜덤한 이름 생성 */
-                String randomName = UUID.randomUUID().toString().replace("-", "");
-                /* saveFile(저장할 경로, 저장할 이름, 저장할 파일)*/
-                String path = FileUploadUtils.saveFile(IMAGE_DIR, randomName, file);
-                /* 파일의 확장자 가져옴 */
-                String extension = file.getContentType();
-                /* 저장 확장자가 jpg 나 png 아닐 경우 오류 빌생시키기 */
-//                if(!extension.equals("jpg? png?")){
-//                    throw new Exception();
-//                }
-                /* 저장된 파일을 찾을 수 있게 DB 에 파일의 정보 저장 */
-                imageEntityList.add(NoticeImage.of(file.getName(), path, extension));
-            });
-        }
-        /* 공부해야될거 of, from 메소드 (생성자 역할)
-        * repository 의 find, save 메소드
-        * 영속성 전이(CasCade)
-        * 사진 저장 과정
-        *   1. 사진 리스트를 @RequestPart 로 받아옴
-        *   2. 리스트를 정해진 경로에 저장 (yml)
-        *   3. 파일에 대한 정보를 저장 (사진을 다시 찾을 수 있는 단서)
-        *   4. 저장된 경로 DB 에 저장할 수 있게 entity 로 변환
-        *   5. 영속성 전이를 통하여 저장(공지사항 안에 사진 리스트를 넣어버리고 통째로 저장)
-        * */
-        Notice newNotice = Notice.of(employee, imageEntityList, createNoticeRequestDTO);
-
-        /* noticeRepository.save(저장할객체) -> 객체를 DB에 저장해주는 메소드 */
-        noticeRepository.save(newNotice);
-
-        return newNotice.getNoticeId();
+    // 페이징 정보를 반환하는 메소드
+    private Pageable getPageable(final Integer page) {
+        return PageRequest.of(page - 1, 10, Sort.by("noticeId").descending());
     }
+
     // 전체 공지사항 조회 (페이징 및 정렬) (최신순으로 조회)
-    public Page<Notice> getAllNotices(Pageable pageable) {
-        return noticeRepository.findAll(pageable);
+    @Transactional(readOnly = true)
+    public Page<NoticeResponseDTO> getAllNotices(final int page) {
+        Page<Notice> notices = noticeRepository.findAll(getPageable(page));
+        return notices.map(notice -> NoticeResponseDTO.from(notice, IMAGE_URL));
     }
 
     // 분류와 소분류별 공지사항 조회 (페이징 및 정렬) (최신순으로 조회)
-    public Page<Notice> getNoticesByCategory(String category, String subCategory, Pageable pageable) {
-        return noticeRepository.findByCategoryAndSubCategory(category, subCategory, pageable);
+    @Transactional(readOnly = true)
+    public Page<NoticeResponseDTO> getNoticesByCategory(final String category, final String subCategory, final Integer page) {
+        Page<Notice> notices = noticeRepository.findByCategoryAndSubCategory(category, subCategory, getPageable(page));
+        return notices.map(notice -> NoticeResponseDTO.from(notice, IMAGE_URL));
     }
 
     // 특정 공지사항 조회
-    public Notice getNoticeById(int noticeId) {
-        return noticeRepository.findById(noticeId).orElse(null);
+    @Transactional(readOnly = true)
+    public NoticeResponseDTO getNoticeById(final int noticeId) {
+        Optional<Notice> noticeOptional = noticeRepository.findById(noticeId);
+        return noticeOptional.map(notice -> NoticeResponseDTO.from(notice, IMAGE_URL)).orElse(null);
     }
 
     // 조회수 증가
-    @Transactional
     public void incrementViewCount(int noticeId) {
         if (noticeRepository.existsById(noticeId)) {
             noticeRepository.incrementViewCount(noticeId);
         }
     }
 
+    // 공지사항 등록 메소드
+//    public int createNotice(final Integer employeeId, final NoticeRequestDTO noticeRequestDTO) {
+//        // 사번으로 DB에서 사원 엔티티 가져오기
+//        Employee employee = employeeRepository.findById(employeeId).
+//                orElseThrow( () -> new EntityNotFoundException("사번이 비어있습니다."));
+////        if (employee == null) {
+////            throw new IllegalArgumentException("Invalid employee ID");
+////        }
+//
+//        // 파일 저장 로직. 파일을 저장하고 원본명, 경로, 타입을 가진 엔티티 리스트를 반환한다.
+//        List<NoticeImage> imageEntityList = saveImages(noticeRequestDTO.getImageList());
+//        if (imageEntityList == null) {
+//            return -1;
+//        }
+//
+//        // 공지사항 엔티티 생성
+////        Notice newNotice = Notice.of(employee, imageEntityList, noticeRequestDTO);
+//
+//        final Notice newNotice = Notice.of(
+//            noticeRequestDTO.getTitle(),
+//                noticeRequestDTO.getContent(),
+//                noticeRequestDTO.getCategory(),
+//                noticeRequestDTO.getSubCategory(),
+//                noticeRequestDTO.getPostedDate(),
+//                noticeRequestDTO.getViewCount(),
+//                noticeRequestDTO.getStatus(),
+//                noticeRequestDTO.getEmployeeId(),
+//                noticeRequestDTO.getImageList()
+//        );
+//
+//
+//        // 공지사항 DB 저장
+//        noticeRepository.save(newNotice);
+//
+//        // 생성된 공지사항 ID 반환
+//        return newNotice.getNoticeId();
+//    }
 
+    // 공지사항 등록 메소드
+    public Integer createNotice(final NoticeRequestDTO noticeRequestDTO, final MultipartFile noticeImg) {
 
-    // 공지사항 삭제 (지정된 ID의 공지사항 삭제)
-    @Transactional
-    public void deleteNotice(int noticeId) {
-        Optional<Notice> notice = noticeRepository.findById(noticeId);
-        if (notice.isPresent()) {
-            Notice existingNotice = notice.get();
-            for (NoticeImage image : existingNotice.getImages()) {
-                deleteImageFile(image.getPath());
+        final Notice newNotice = Notice.of(
+                noticeRequestDTO.getTitle(),
+                noticeRequestDTO.getContent(),
+                noticeRequestDTO.getCategory(),
+                noticeRequestDTO.getSubCategory(),
+                noticeRequestDTO.getPostedDate(),
+                noticeRequestDTO.getViewCount(),
+                noticeRequestDTO.getStatus(),
+                noticeRequestDTO.getEmployeeId(),
+                noticeRequestDTO.getImageList()
+        );
+
+        final Notice notice = noticeRepository.save(newNotice);
+
+        return notice.getNoticeId();
+    }
+
+    // 이미지 저장 로직
+    private List<NoticeImage> saveImages(List<MultipartFile> imageList) {
+        List<NoticeImage> imageEntityList = new ArrayList<>();
+        if (imageList != null && !imageList.isEmpty()) {
+            for (MultipartFile file : imageList) {
+                try {
+                    String extension = getFileExtension(file.getContentType());
+                    if (!extension.equalsIgnoreCase("jpg") && !extension.equalsIgnoreCase("png")) {
+                        throw new IllegalArgumentException("Invalid file type. Only JPG and PNG are allowed");
+                    }
+                    String randomName = UUID.randomUUID().toString().replace("-", "");
+                    String replaceFileName = randomName + "." + extension;
+
+                    Path uploadPath = Paths.get(IMAGE_DIR);
+                    if (!Files.exists(uploadPath)) {
+                        Files.createDirectories(uploadPath);
+                    }
+
+                    try (InputStream inputStream = file.getInputStream()) {
+                        Path filePath = uploadPath.resolve(replaceFileName);
+                        Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    imageEntityList.add(NoticeImage.of(file.getOriginalFilename(), replaceFileName, extension));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException("Failed to save image file");
+                }
             }
-            noticeRepository.delete(existingNotice);
+        }
+        return imageEntityList;
+    }
+
+    // 파일 확장자 검증 메소드
+    private String getFileExtension(String contentType) {
+        if (contentType != null) {
+            switch (contentType) {
+                case "image/jpeg":
+                    return "jpg";
+                case "image/png":
+                    return "png";
+                default:
+                    throw new IllegalArgumentException("Unsupported file type: " + contentType);
+            }
+        }
+        throw new IllegalArgumentException("Content type cannot be null");
+    }
+
+    // 공지사항 수정 메소드
+//    public void modifyNotice(final int noticeId, final NoticeRequestDTO noticeRequestDTO) {
+//        Notice notice = noticeRepository.findById(noticeId).orElse(null);
+//
+//        if (notice != null) {
+//            notice.updateNotice(noticeRequestDTO.getTitle(), noticeRequestDTO.getContent(),
+//                    noticeRequestDTO.getCategory(), noticeRequestDTO.getSubCategory());
+//
+//            List<NoticeImage> imageEntityList = saveImages(noticeRequestDTO.getImageList());
+//            if (imageEntityList != null) {
+//                notice.updateImages(imageEntityList);
+//            }
+//            noticeRepository.save(notice);
+//        }
+//    }
+
+    // 공지사항 삭제 메소드
+    @Transactional
+    public void deleteNotice(final int noticeId) {
+        Notice notice = noticeRepository.findById(noticeId).orElse(null);
+
+        if (notice != null) {
+            notice.getImages().forEach(image -> deleteImageFile(image.getPath()));
+            noticeRepository.delete(notice);
         }
     }
 
@@ -137,69 +218,30 @@ public class NoticeService {
         List<Notice> oldNotices = noticeRepository.findAll();
         oldNotices.stream()
                 .filter(notice -> notice.getPostedDate().isBefore(threeYearsAgo))
-                .forEach(noticeRepository::delete);     // 안되면 이 줄 탓일 가능성 큼
+                .forEach(noticeRepository::delete);
     }
 
-//    // 이미지 업로드
-//    @Transactional
-//    public void uploadImage(MultipartFile file, NoticeImageRequestDTO noticeImageRequestDTO) {
-//        Notice notice = noticeRepository.findById(noticeImageRequestDTO.getNoticeId()).orElse(null);
-//
-//        // 실제 이미지 파일 업로드 로직을 구현
-//        if (notice != null) {
-//            String absolutePath = Paths.get(uploadDir).toAbsolutePath().toString();
-//            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-//            String filePath = Paths.get(absolutePath, fileName).toString();
-//            String imageUrl = imageUrlBase + fileName;
-//        }
-//
-//
-//        try {
-//            Files.createDirectories(Paths.get(uploadDir));
-//            Path path = Paths.get(filePath);
-//            Files.write(path, file.getBytes());
-//        } catch (IOException e) {
-//            return;
-//        }
-//
-//        NoticeImage image = new NoticeImage(filePath, fileName, getFileExtention(fileName), notice.getNoticeId());
-//        notice.addImage(image);
-//        noticeRepository.save(notice);
-//    }
-
-    private String getFileExtention(String fileName) {
-        int lastIndexOfDot = fileName.lastIndexOf('.');
-        return lastIndexOfDot == -1 ? "" : fileName.substring(lastIndexOfDot + 1);
-    }
-
-    // 이미지 파일 삭제
-    private void deleteImageFile(String path) {
-        try {
-            Files.deleteIfExists(Paths.get(path));
-        } catch (IOException e) {
-            return;
+    // 이미지 삭제 메소드
+    @Transactional
+    public void removeImage(int noticeId, int imageId) {
+        Notice notice = noticeRepository.findById(noticeId).orElse(null);
+        if (notice != null) {
+            NoticeImage image = notice.getImages().stream().filter(img -> img.getImageId() == imageId).findFirst().orElse(null);
+            if (image != null) {
+                deleteImageFile(image.getPath());
+                notice.getImages().remove(image);
+                noticeRepository.save(notice);
+            }
         }
     }
 
+    // 이미지 파일 삭제 메소드
+    private void deleteImageFile(String path) {
+        try {
+            Files.deleteIfExists(Paths.get(IMAGE_DIR + path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    // 이미지 삭제
-//    @Transactional
-//    public void removeImage(int noticeId, int imageId) {
-//        Notice notice = noticeRepository.findById(noticeId).orElse(null);
-//
-//        if (notice != null) {
-//            NoticeImage image = notice.getImages().stream()
-//                    .filter(img -> img.getImageId() == imageId)
-//                    .findFirst()
-//                    .orElse(null);
-//        }
-//
-//        if (image != null) {
-//            notice.removeImage(image);
-//            noticeRepository.save(notice);
-//
-//            // 실제 파일 시스템에서 이미지 파일 삭제
-//            deleteImageFile(image.getPath());
-//        }
-//    }
 }

@@ -1,11 +1,14 @@
+### 공지사항 전체조회
+GET http://localhost:8001/notice/notices
+
 ### POST 요청 확인
-POST http://localhost:8001/notice
+POST http://localhost:8001/notice/regist
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 Access-Token: Bearer eyJkYXRlIjoxNzE4OTYzMjExODI4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE5MTEwMjciLCJleHAiOjE3MTg5NjY4MTF9.I-lTkwevhthQmQqzBEAzwysLYgOFJy5Ksozjx77CcDYljLooT4CbCF8qPuk61GsmWkQMw-yASYfwXMH-70-UWA
 
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="createNoticeRequestDTO"; filename="blob"
+Content-Disposition: form-data; name="noticeRequestDTO"; filename="blob"
 Content-Type: application/json
 
 {
