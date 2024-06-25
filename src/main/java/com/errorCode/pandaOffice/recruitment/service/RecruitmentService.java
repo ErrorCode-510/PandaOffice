@@ -11,6 +11,7 @@ import com.errorCode.pandaOffice.recruitment.domain.repository.PlaceRepository;
 import com.errorCode.pandaOffice.recruitment.dto.request.ApplicantRequest;
 import com.errorCode.pandaOffice.recruitment.dto.request.InterviewScheduleCreateRequest;
 import com.errorCode.pandaOffice.recruitment.dto.response.ApplicantResponse;
+import com.errorCode.pandaOffice.recruitment.dto.response.InterviewScheduleResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -191,15 +192,14 @@ public class RecruitmentService {
     }
 
     /* 9. 면접일정 상세 조회
-    * 프론트에서 면접관은 몇명인지 보여주는 기능 필요 */
-//    @Transactional(readOnly = true)
-//    public InterviewScheduleResponse getInterviewScheduleById(Integer id) {
-//        Optional<InterviewSchedule> interviewScheduleOptional = interviewScheduleRepository.findById(id);
-//        if (!interviewScheduleOptional.isPresent()) {
-//            return null;
-//        }
-//        InterviewSchedule interviewSchedule = interviewScheduleOptional.get();
-//        return InterviewScheduleResponse.from(interviewSchedule);
-//    }
+    * 프론트에서 면접관 및 면접자는 몇명인지 보여주는 기능 필요 (count) */
+    @Transactional(readOnly = true)
+    public InterviewScheduleResponse getInterviewScheduleById(Integer id) {
+
+        InterviewSchedule interviewSchedule = interviewScheduleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("조회하신 면접일정이 비어있습니다."));
+
+        return InterviewScheduleResponse.from(interviewSchedule);
+    }
 
 }
