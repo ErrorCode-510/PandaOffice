@@ -47,23 +47,23 @@ public class InterviewSchedule {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    /* 면접관 1 */
-    @ManyToOne
+    /* 면접관들 */
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interviewer_id")
     private Employee employee;
 
-    /* 면접관 2 */
-    @ManyToOne
+    /* 면접관들 2 */
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interviewer_id2")
     private Employee employee2;
 
-    /* 면접관 3 */
-    @ManyToOne
+    /* 면접관들 3 */
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interviewer_id3")
     private Employee employee3;
 
-    /* 면접자 */
-    @OneToMany(cascade = CascadeType.ALL)
+    /* 면접자들 */
+    @OneToMany
     @JoinColumn(name = "interview_schedule_id")
     private List<Applicant> applicantsList;
 
@@ -72,7 +72,7 @@ public class InterviewSchedule {
             Place place, Employee employee, Employee employee2, Employee employee3, List<Applicant> applicantsList
     ) {
         this.name = name;
-        this.memo = name;
+        this.memo = memo;
         this.startDate = startDate;
         this.endDate = endDate;
         this.startTime = startTime;

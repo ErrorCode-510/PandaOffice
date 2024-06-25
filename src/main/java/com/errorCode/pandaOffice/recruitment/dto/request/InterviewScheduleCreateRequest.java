@@ -35,15 +35,15 @@ public class InterviewScheduleCreateRequest {
     /* 면접 장소 */
     private final Place place;
 
-    /* 면접관 1 */
+    /* 면접관들 */
     private final Employee employee;
 
-    /* 면접관 2 */
+    /* 면접관들 2 */
     private final Employee employee2;
 
-    /* 면접관 3 */
+    /* 면접관들 3 */
     private final Employee employee3;
 
     /* 면접자들 */
-    private final List<Applicant> applicantIdList;
+    private final List<Applicant> applicantList;
 }
