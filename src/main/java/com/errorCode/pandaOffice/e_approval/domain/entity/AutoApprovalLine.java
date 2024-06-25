@@ -1,5 +1,7 @@
 package com.errorCode.pandaOffice.e_approval.domain.entity;
 
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.CreateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.UpdateApprovalDocumentTemplateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,16 +18,34 @@ public class AutoApprovalLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    /* 문서 양식 ID*/
-    private int autoApprovalId;
+
     /* 결재 순서 */
     @Column(nullable = false, name = "`order`")
     private int order;
 
     /* 사원 명시 */
-    private int employeeId;
+    private Integer employeeId;
 
     /* 직급, 부서 명시 */
-    private int jobId;
-    private int departmentId;
+    private Integer jobId;
+    private Integer departmentId;
+
+
+    public static AutoApprovalLine of(CreateApprovalDocumentTemplateRequest.AutoApprovalLineRequest line) {
+        AutoApprovalLine lineEntity = new AutoApprovalLine();
+        lineEntity.order = line.getOrder();
+        lineEntity.employeeId = line.getEmployeeId();
+        lineEntity.jobId = line.getJobId();
+        lineEntity.departmentId = line.getDepartmentId();
+        return lineEntity;
+    }
+
+    public static AutoApprovalLine of(UpdateApprovalDocumentTemplateRequest.AutoApprovalLine line) {
+        AutoApprovalLine lineEntity = new AutoApprovalLine();
+        lineEntity.order = line.getOrder();
+        lineEntity.employeeId = line.getEmployeeId();
+        lineEntity.jobId = line.getJobId();
+        lineEntity.departmentId = line.getDepartmentId();
+        return lineEntity;
+    }
 }

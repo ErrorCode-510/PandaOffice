@@ -6,6 +6,8 @@ Content-Type: application/json
 
 ### get 요청 확인
 GET http://localhost:8001/approval-document/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjgyMjUzMDI3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjIwNzkyODIyNTN9.rqH1HqMSR2x1b00CNm69on4D6CFU7mV5BH6Zay-d5ty5HeWy6ofgZFjb9VXdlhKImq9aC_WH9m-hIa9Fu45eag
+
 ### 결재 서류 추가 확인
 POST http://localhost:8001/approval-document
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -54,7 +56,7 @@ Access-Token: Bearer eyJkYXRlIjoxNzE4OTU4NDg0MTgyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 결재선 수정 테스트
 PUT http://localhost:8001/approval-document
-Access-Token: Bearer eyJkYXRlIjoxNzE5MTkwNzA2NDMxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE3MTIwMDEiLCJleHAiOjE3MTkxOTQzMDZ9.1tj6UmV1z_UUK6EIMngJttzqPYqsayoj0aBxMYs5crWep0x-FudA_X0hgkCwGHGvbFhBnYHow3ebMr5ZAyIiQw
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjgwMDk3OTA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODM2OTd9.MuH6LgK-CebofpafPehpqlD4A-ZgFWnd-rNKuLkSEv_PG2y68fHn9kDVyNwreC4yd7dqQAtvJUA9KU5I8Fl-GA
 Content-Type: application/json
 
 {
@@ -64,3 +66,10 @@ Content-Type: application/json
   "comment": "승인"
 }
 
+### GET 폴더 정렬 테스트
+GET http://localhost:8001/approval-document-template-folders
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjgyMjUzMDI3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjIwNzkyODIyNTN9.rqH1HqMSR2x1b00CNm69on4D6CFU7mV5BH6Zay-d5ty5HeWy6ofgZFjb9VXdlhKImq9aC_WH9m-hIa9Fu45eag
+
+###GET
+GET http://localhost:8001/approval-document-template/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MjgyMjUzMDI3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjIwNzkyODIyNTN9.rqH1HqMSR2x1b00CNm69on4D6CFU7mV5BH6Zay-d5ty5HeWy6ofgZFjb9VXdlhKImq9aC_WH9m-hIa9Fu45eag

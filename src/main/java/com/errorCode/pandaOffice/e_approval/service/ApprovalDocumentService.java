@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -106,7 +107,7 @@ public class ApprovalDocumentService {
      * @return 문서 response 객체
      */
     public ApprovalDocumentDetailResponse getDocumentDetail(int documentId) {
-        /* 익셉션 할당 필요 */
+
         final ApprovalDocument document = approvalDocumentRepository.findById(documentId).orElseThrow();
         return ApprovalDocumentDetailResponse.of(document);
     }
@@ -132,20 +133,11 @@ public class ApprovalDocumentService {
         Employee draftEmployee = employeeRepository.findById(employeeId)
                 .orElseThrow();
         /* REQUEST 안의 결재선 정보를 가져와 엔티티 리스트를 작성한다. */
-        final List<ApprovalLine> approvalLine = documentRequest.getApprovalLineList()
-                .stream().map(
-                        request -> {
-                            Employee employee = null;
-                            if (request.getEmployeeId() != null) {
-                                employee = employeeRepository.findById(request.getEmployeeId())
-                                        .orElseThrow();
-                            } else if (request.getDepartmentId() != null && request.getJobId() != null) {
-                                employee = (Employee) employeeRepository.findFirstByDepartmentIdAndJobIdOrderByEmployeeIdAsc(request.getDepartmentId(), request.getJobId())
-                                        .orElseThrow();
-                            }
-                            return ApprovalLine.of(request, employee);
-                        }
-                )
+        final List<ApprovalLine> approvalLine = documentRequest.getApprovalLineList().stream()
+                .map(line -> ApprovalLine.of(line.getOrder(),
+                        employeeRepository.findById(line.getEmployeeId())
+                                .orElseThrow()
+                ))
                 .toList();
         /* 요청 정보, 템플릿 엔티티, 사원 엔티티, 결재선 라인 엔티티, 파일 저장 엔티티를 인자로 받아 결재 서류를 작성한다.
          * 영속성 전이를 이용하여 결재 서류만 작성해도 된다. */
@@ -177,18 +169,12 @@ public class ApprovalDocumentService {
                 ApprovalLine currentLine = approvalLineList.stream()
                         .filter(line -> line.getId() == documentRequest.getApprovalLineId())
                         .findFirst()
-                        .orElse(null);
+                        .orElseThrow();
                 /* 다음 결재 라인 */
                 ApprovalLine nextLine = approvalLineList.stream()
                         .filter(line -> line.getOrder() == currentLine.getOrder() + 1)
                         .findFirst()
                         .orElse(null);
-                /* 결재자의 정보 확인 */
-//                if (currentLine.getEmployee() != currentEmployee) try {
-//                    throw new Exception();
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
                 /* 현재 라인 승인으로 처리 */
                 currentLine.processApproval(ApproveType.APPROVE, documentRequest.getComment());
                 /* 다음 라인이 null 이 아닐 경우 */
@@ -250,7 +236,7 @@ public class ApprovalDocumentService {
                 /* 선결하려는 결재 라인 선결처리 */
                 currentLine.processApproval(ApproveType.APPROVE.PRE_APPROVE, documentRequest.getComment());
                 /* 대기, 예정중인 결재선 모두 후열처리 */
-                pendingAndScheduledList.forEach(line-> line.changeStatus(ApproveType.CONFIRM_ONLY));
+                pendingAndScheduledList.forEach(line -> line.changeStatus(ApproveType.CONFIRM_ONLY));
                 /* 다음 라인이 null 이 아닐 경우 */
                 if (nextLine != null) {
                     /* 예정 -> 대기로 변경 */
@@ -265,7 +251,7 @@ public class ApprovalDocumentService {
             /* 전결 처리 과정 */
             case 5: {
                 /* 전결처리 할 결재선 */
-                ApprovalLine currentLine =  approvalLineList.stream()
+                ApprovalLine currentLine = approvalLineList.stream()
                         .filter(line -> line.getEmployee() == currentEmployee)
                         .findFirst()
                         .orElse(null);
@@ -279,7 +265,7 @@ public class ApprovalDocumentService {
                 /* 전결 처리 */
                 currentLine.processApproval(ApproveType.ALL_APPROVE, documentRequest.getComment());
                 /* 대기, 예정 상태의 리스트를 모두 후열처리 */
-                pendingAndScheduledList.forEach(line-> line.changeStatus(ApproveType.CONFIRM_ONLY));
+                pendingAndScheduledList.forEach(line -> line.changeStatus(ApproveType.CONFIRM_ONLY));
                 /* 결재 상태를 승인으로 변경 */
                 document.processApproval(ApprovalStatus.IN_PROGRESS);
                 approvalDocumentRepository.save(document);
@@ -293,7 +279,7 @@ public class ApprovalDocumentService {
                         .orElse(null);
                 /* 이후의 결재선 */
                 List<ApprovalLine> afterLineList = approvalLineList.stream()
-                        .filter(line->line.getOrder() > currentLine.getOrder())
+                        .filter(line -> line.getOrder() > currentLine.getOrder())
                         .toList();
 
                 /* 결재선 반려처리 */
@@ -301,7 +287,7 @@ public class ApprovalDocumentService {
                 /* 결재 서류 반려처리 */
                 document.processApproval(ApprovalStatus.DENY);
                 /* 이후 결재선 null 값 처리 */
-                afterLineList.forEach(line-> line.changeStatus(ApproveType.DENY_AFTER));
+                afterLineList.forEach(line -> line.changeStatus(ApproveType.DENY_AFTER));
 
                 approvalDocumentRepository.save(document);
                 break;
@@ -313,14 +299,19 @@ public class ApprovalDocumentService {
         int employeeId = TokenUtils.getEmployeeId();
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
         ApprovalDocument document = approvalDocumentRepository.findById(documentId).orElse(null);
-        if (employee != document.getDraftEmployee()) {
-            throw new RuntimeException("기안자 정보가 일치하지 않습니다.");
-        }
-        if (document == null) {
-            throw new RuntimeException("서류가 존재하지 않습니다.");
-        }
-        if (document.getApprovalLineList().get(0).getStatus() != ApproveType.PENDING){
-            throw new RuntimeException("결재된 서류는 수정할 수 없습니다.");
+//        if (employee != document.getDraftEmployee()) {
+//            throw new RuntimeException("기안자 정보가 일치하지 않습니다.");
+//        }
+
+        try {
+            if (document == null) {
+                throw new Exception();
+            }
+            if (document.getApprovalLineList().get(0).getStatus() != ApproveType.PENDING) {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         approvalDocumentRepository.deleteById(documentId);
     }

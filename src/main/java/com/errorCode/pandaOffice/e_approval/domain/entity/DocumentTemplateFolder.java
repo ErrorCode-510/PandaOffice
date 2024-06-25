@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.e_approval.domain.entity;
 
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.CreateApprovalDocumentFolderRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,5 +20,16 @@ public class DocumentTemplateFolder {
     private String name;
     /* 상위 폴더 ID */
     @Column(nullable = true)
-    private int refFolderId;
+    private Integer refFolderId;
+
+    public static DocumentTemplateFolder of(CreateApprovalDocumentFolderRequest request) {
+        DocumentTemplateFolder folder = new DocumentTemplateFolder();
+        folder.name = request.getName();
+        folder.refFolderId = request.getRefFolderId();
+        return folder;
+    }
+
+    public void modifyName(String newName) {
+        this.name = newName;
+    }
 }
