@@ -3,6 +3,7 @@ package com.errorCode.pandaOffice.recruitment.dto.request;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
 import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class InterviewScheduleCreateRequest {
+public class InterviewScheduleModifyRequest {
 
     /* 면접 일정 코드 */
     private final int id;
@@ -22,7 +23,7 @@ public class InterviewScheduleCreateRequest {
     private final String name;
 
     /* 메모 */
-    @NotNull
+    @NotNull    // "", " " 은 허용
     private final String memo;
 
     /* 일정 시작일 */

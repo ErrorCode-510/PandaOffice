@@ -5,6 +5,7 @@ import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
 import com.errorCode.pandaOffice.recruitment.dto.request.ApplicantRequest;
 import com.errorCode.pandaOffice.recruitment.dto.request.InterviewScheduleCreateRequest;
+import com.errorCode.pandaOffice.recruitment.dto.request.InterviewScheduleModifyRequest;
 import com.errorCode.pandaOffice.recruitment.dto.response.ApplicantResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.InterviewScheduleResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
@@ -113,10 +114,20 @@ public class RecruitmentController {
     }
 
     /* 9. 면접일정 상세 조회 */
-    @GetMapping("interview-schedule/{id}")
+    @GetMapping("interview-schedule/detail/{id}")
     public ResponseEntity<InterviewScheduleResponse> detailInterviewSchedule(@PathVariable Integer id) {
         InterviewScheduleResponse interviewScheduleResponse = recruitmentService.getInterviewScheduleById(id);
         return ResponseEntity.ok(interviewScheduleResponse);
+    }
+
+    /* 10. 면접일정 수정 */
+    @PutMapping("interview-schedule/modify/{id}")
+    public ResponseEntity<Void> modifyInterviewSchedule(
+            @PathVariable Integer id,
+            @RequestBody InterviewScheduleModifyRequest request
+    ) {
+        recruitmentService.modifyInterviewScheduleById(id, request);
+        return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
     }
 
 }
