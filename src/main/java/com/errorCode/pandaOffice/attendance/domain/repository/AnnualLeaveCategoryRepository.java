@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AnnualLeaveCategoryRepository extends JpaRepository<AnnualLeaveCategory, Integer> {
 
+    AnnualLeaveCategory findByName(String name);
 }

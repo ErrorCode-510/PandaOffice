@@ -12,13 +12,19 @@ import com.errorCode.pandaOffice.attendance.dto.AnnualLeaveCategory.response.Ann
 import com.errorCode.pandaOffice.attendance.dto.AnnualLeaveRecord.response.AnnualLeaveRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.AttendanceRecord.response.AttendanceRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.OvertimeRecord.response.OverTimeRecordResponse;
+import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,21 +39,8 @@ public class AttendanceService {
 
     private final AnnualLeaveCategoryRepository annualLeaveCategoryRepository;
 
-    /* 0. 현재 날짜의 주 계산식 메소드 */
-    public void currentWeek() {
+    private final EmployeeRepository employeeRepository;
 
-        // 현재 날짜 가져오기
-        LocalDate currentDate = LocalDate.now();
-
-        // 현재 날짜의 주를 가져오기 위해 WeekFields 설정 (한국 기준)
-        WeekFields weekFields = WeekFields.of(Locale.KOREA);
-        int weekNumber = currentDate.get(weekFields.weekOfMonth());
-
-        // 결과 출력
-        System.out.println("현재 날짜: " + currentDate);
-        System.out.println("이번 달의 몇 번째 주인지: " + weekNumber);
-
-    }
 
     /* 1. 사원의 아이디를 기준으로 모든 근태 기록을 보여주는 기능 */
     public List<AttendanceRecordResponse> getAttendanceRecord(int employeeId) {
@@ -70,8 +63,9 @@ public class AttendanceService {
         return overtimeRecords.stream()
                 .map(overtimeRecord -> new OverTimeRecordResponse(
                         overtimeRecord.getId(),
-                        overtimeRecord.getStartDate(),
-                        overtimeRecord.getEndDate(),
+                        overtimeRecord.getDate(),
+                        overtimeRecord.getStartTime(),
+                        overtimeRecord.getEndTime(),
                         overtimeRecord.getType()
                 ))
                 .collect(Collectors.toList());
@@ -93,47 +87,261 @@ public class AttendanceService {
 
 
     /* 4. 사원의 아이디를 기준으로 연차 기록 카테고리를 가져온다.
-    * 연차 기록도 동시에 가져와야한다.*/
-//    public List<AnnualLeaveCategoryResponse> getAnnualLeaveCategory(int employeeId) {
-//        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployee_EmployeeId(employeeId);
-//
-//        List<AnnualLeaveCategory> annualLeaveCategories = annualLeaveRecords.findByAnnualLeaveCategory_
-//
-//
-//    }
+     * 연차 기록도 동시에 가져와야한다.*/
+    public List<AnnualLeaveCategoryResponse> getAnnualLeaveCategory(int employeeId) {
+        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployeeIdWithCategory(employeeId);
+
+        return annualLeaveRecords.stream()
+                .map(annualLeaveRecord -> new AnnualLeaveCategoryResponse(
+                        annualLeaveRecord.getAnnualLeaveCategory().getId(), // categoryId
+                        annualLeaveRecord.getAnnualLeaveCategory().getName(), // categoryName
+                        annualLeaveRecord.getId(), // recordId
+                        annualLeaveRecord.getDate(), // recordDate
+                        annualLeaveRecord.getNowAmount(), // nowAmount
+                        annualLeaveRecord.getAmount(), // amount
+                        annualLeaveRecord.getApprovalDocument() != null ? annualLeaveRecord.getApprovalDocument().getId() : 0 // approvalDocumentId (null 가능)
+                ))
+                .collect(Collectors.toList());
+    }
 
 
-
-
-
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ1.내 근태 현황 페이지(Attendance Status)의 기능들 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1.내 근태 현황 페이지(Attendance Status)의 기능들 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
     /* 1. 상단의 날짜를 프론트로부터 받아서 날짜에 따라 그 주에 해당하는 근태 기록들을 표로 확인하기 */
 
     /* 2. 상단의 표(사각형 5개)에 표시된 부분들 제작 */
 
+    // 패치노트
+    // 1. attendanceRecord 엔티티 수정함(누적 시간, 잔여 시간 필드 추가)
+    // 2. OvertiemRecord 엔티티 수정함(attendanceRecord와 거의 비슷하게 수정 - 누적 초과 시간 필드 추가 , date 필드 추가 , 날짜를 시간으로 변경 )
+    // 3. 주별 누적 시간 계산 메소드 추가
+
+    /* 공통적으로 쓰는 메소드 */
+    /* 1.해당 날짜의 주를 구하는 날짜 */
+    public String getWeek(LocalDate date) {
+
+        // 한 주의 시작은 월요일이고, 첫 주에 4일이 포함되어있어야 첫 주 취급 (목/ 금/ 토/ 일)
+        WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
+
+        int weekOfMonth = date.get(weekFields.weekOfMonth());
+
+        // 첫 주에 해당하지 않는 주의 경우 전 달 마지막 주차로 계산
+        if (weekOfMonth == 0) {
+
+            // 전 달의 마지막 날 기준
+            LocalDate lastDayOfLastMonth = date.with(TemporalAdjusters.firstDayOfMonth()).minusDays(1);
+
+            return getWeek(lastDayOfLastMonth);
+        }
+
+        // 이번 달의 마지막 날 기준
+        LocalDate lastDayOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
+
+        // 마지막 주차의 경우 마지막 날이 월~수 사이이면 다음달 1주차로 계산
+        if (weekOfMonth == lastDayOfMonth.get(weekFields.weekOfMonth()) && lastDayOfMonth.getDayOfWeek().compareTo(DayOfWeek.THURSDAY) < 0) {
+
+            // 마지막 날 + 1일 => 다음달 1일
+            LocalDate firstDayOfNextMonth = lastDayOfMonth.plusDays(1);
+
+            return getWeek(firstDayOfNextMonth);
+        }
+
+        return date.getYear() + "-" + date.getMonthValue() + "-W" + weekOfMonth;
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 누적 근무 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    /* 2 표에서 Attendance만 해당하는 부분 구현
+    * 1. 이번 주 누적
+    * 2. 이번 주 잔여
+    * 3. 이번 달 누적 */
+    public List<AttendanceRecordResponse> calculateAttendanceTime(int employeeId) {
+
+        List<AttendanceRecord> attendanceRecords = attendanceRecordRepository.findByEmployee_EmployeeId(employeeId);
+
+        // 이번 주 누적 근무 시간
+        Map<String, Duration> weeklyCumulativeTimes = calculateWeeklyCumulativeTimes(attendanceRecords);
+
+        // 이번 주 잔여 근무 시간
+        Duration fortyHours = Duration.ofHours(40);
+
+        // 이번 달 누적 근무 시간
+        Map<String, Duration> monthlyCumulativeTimes = calculateMonthlyCumulativeTimes(attendanceRecords);
+
+        // AttendanceRecordResponse 리스트 생성 및 반환
+        return attendanceRecords.stream()
+                .map(attendanceRecord -> {
+
+                    // 전달받은 날짜에서 주를 계산
+                    String week = getWeek(attendanceRecord.getDate());
+
+                    // 전달받은 날짜에서 달을 계산
+                    String month = attendanceRecord.getDate().getYear() + "-" + attendanceRecord.getDate().getMonthValue();
+
+                    // weeklyCumulativeTimes 맵에서 weekKey에 해당하는 값을 가져오거나, 해당 키가 맵에 없을 경우 기본값인 Duration.ZERO(0시간)를 반환
+                    Duration weeklyCumulativeTime = weeklyCumulativeTimes.getOrDefault(week, Duration.ZERO);
+
+                    // 40시간에서 누적시간을 뺀 값
+                    Duration remainingTime = fortyHours.minus(weeklyCumulativeTime);
+
+                    // monthlyCumulativeTimes 맵에서 month에 해당하는 값을 가져오거나, 해당 키가 맵에 없을 경우 기본값인 Duration.ZERO(0시간)를 반환
+                    Duration monthlyCumulativeTime = monthlyCumulativeTimes.getOrDefault(month, Duration.ZERO);
+
+                    return new AttendanceRecordResponse(
+                            attendanceRecord.getId(),
+                            attendanceRecord.getDate(),
+                            attendanceRecord.getCheckInTime(),
+                            attendanceRecord.getCheckOutTime(),
+                            attendanceRecord.getTotalLateTime(),
+                            weeklyCumulativeTime,
+                            remainingTime,
+                            monthlyCumulativeTime
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    /* 2-1. 이번 주 누적 근무 시간을 계산하는 메소드 */
+    public Map<String, Duration> calculateWeeklyCumulativeTimes(List<AttendanceRecord> attendanceRecords) {
+
+        // 주를 Key 값으로 받아서 누적 시간을 담아주는 Map 객체를 만든다.
+        Map<String, Duration> weeklyCumulativeTimes = new HashMap<>();
+
+        // 반복문을 통해서 전달받은 AttendanceRecord 목록의 date 값을 계속해서 추출해서 Key값으로 담아주고
+        for (AttendanceRecord attendanceRecord : attendanceRecords) {
+
+            String week = getWeek(attendanceRecord.getDate());
+
+            // 출근 시간과 퇴근 시간 사이의 시간을 계산해서 노동 시간을 구한다.
+            Duration workDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
+
+            // 주별 누적 시간 갱신해준다.
+            weeklyCumulativeTimes.merge(week, workDuration, Duration::plus);
+        }
+
+        return weeklyCumulativeTimes;
+    }
+
+    /* 2-2 이번 달 누적 근무 시간을 계산하는 메소드 */
+    public Map<String,Duration> calculateMonthlyCumulativeTimes(List<AttendanceRecord> attendanceRecords) {
+
+        Map<String, Duration> monthlyCumulativeTimes = new HashMap<>();
+
+        for (AttendanceRecord attendanceRecord : attendanceRecords) {
+
+            // 날짜를 전달 받아서 년과 달을 Key 값으로 삼는다
+            String month = attendanceRecord.getDate().getYear() + "-" + attendanceRecord.getDate().getMonthValue();
+
+            // 출근 시간과 퇴근 시간 사이의 시간을 계산해서 노동 시간을 구한다.
+            Duration workDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
+
+            // 달별 누적 시간 갱신해준다.
+            monthlyCumulativeTimes.merge(month, workDuration, Duration::plus);
+        }
+
+        return monthlyCumulativeTimes;
+
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 초과 근무 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    /* 2-3. 표에서 overtime에 대한 부분만 나타내기
+    * 1. 이번 주 초과 근무
+    * 2. 이번 달 초과 근무 */
+    public List<OverTimeRecordResponse> calculateOverTime(int employeeId) {
+        List<OvertimeRecord> overtimeRecords = overtimeRecordRepository.findByEmployee_EmployeeId(employeeId);
+
+        Map<String, Duration> weeklyExtendedOvertimes = calculateWeeklyOverTimes(overtimeRecords, "연장");
+        Map<String, Duration> weeklyHolidayOvertimes = calculateWeeklyOverTimes(overtimeRecords, "휴일");
+        Map<String, Duration> monthlyExtendedOvertimes = calculateMonthlyOverTimes(overtimeRecords, "연장");
+        Map<String, Duration> monthlyHolidayOvertimes = calculateMonthlyOverTimes(overtimeRecords, "휴일");
+
+        return overtimeRecords.stream()
+                .map(overtimeRecord -> {
+                    String week = getWeek(overtimeRecord.getDate());
+                    String month = overtimeRecord.getDate().getYear() + "-" + overtimeRecord.getDate().getMonthValue();
+
+                    Duration weeklyOverTime = overtimeRecord.getType().equals("연장")
+                            ? weeklyExtendedOvertimes.getOrDefault(week, Duration.ZERO)
+                            : weeklyHolidayOvertimes.getOrDefault(week, Duration.ZERO);
+                    Duration monthlyOverTime = overtimeRecord.getType().equals("연장")
+                            ? monthlyExtendedOvertimes.getOrDefault(month, Duration.ZERO)
+                            : monthlyHolidayOvertimes.getOrDefault(month, Duration.ZERO);
+
+                    return new OverTimeRecordResponse(
+                            overtimeRecord.getId(),
+                            overtimeRecord.getDate(),
+                            overtimeRecord.getStartTime(),
+                            overtimeRecord.getEndTime(),
+                            overtimeRecord.getType(),
+                            weeklyOverTime,
+                            monthlyOverTime
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    /* 2-4. 주별 누적 초과 근무 */
+    public Map<String, Duration> calculateWeeklyOverTimes(List<OvertimeRecord> overtimeRecords, String type) {
+        Map<String, Duration> weeklyOvertimes = new HashMap<>();
+
+        for (OvertimeRecord overtimeRecord : overtimeRecords) {
+            if (overtimeRecord.getType().equals(type)) {
+                String week = getWeek(overtimeRecord.getDate());
+                Duration overWorkDuration = Duration.between(overtimeRecord.getStartTime(), overtimeRecord.getEndTime());
+                weeklyOvertimes.merge(week, overWorkDuration, Duration::plus);
+            }
+        }
+
+        return weeklyOvertimes;
+    }
+
+    /* 2-5. 월별 누적 초과 근무 */
+    public Map<String, Duration> calculateMonthlyOverTimes(List<OvertimeRecord> overtimeRecords, String type) {
+        Map<String, Duration> monthlyOverTimes = new HashMap<>();
+
+        for (OvertimeRecord overtimeRecord : overtimeRecords) {
+            if (overtimeRecord.getType().equals(type)) {
+                String month = overtimeRecord.getDate().getYear() + "-" + overtimeRecord.getDate().getMonthValue();
+                Duration overWorkDuration = Duration.between(overtimeRecord.getStartTime(), overtimeRecord.getEndTime());
+                monthlyOverTimes.merge(month, overWorkDuration, Duration::plus);
+            }
+        }
+
+        return monthlyOverTimes;
+    }
+
+
+
     /* 3. 표에 보이는 부분들을 나타낼 수 있도록 제작 */
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ2.내 연차 내역(Annual Leave Record)의 기능들*/
+    // 서비스 부분에서는 기능을 다 구현함 컨트롤러 부분에서 필요한 부분만 떼가서 쓰면 됨
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 2.내 연차 내역(Annual Leave Record)의 기능들 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
+    // 패치노트
+    // 1.연차의 엔티티 수정 (연차 기록 카테고리 엔티티에서 분류 필드 추가함)
 
     /* 1. 사원의 연차를 표 형식으로 표현해줌  */
 
+
     /* 2. 연차 사용기간을 프론트에서 검색 받아서 사용 내역의 표가 변경된다.
-    * 근데 사용 기간은 경우는 연차 기록 테이블에 있지 않기 때문에 검색하는 방법은
-    * 등록일을 시작일로 받고 종료일을 등록일로부터 소진한 연차의 갯수만큼 더한 값을
-    * 종료일로 해야한다.                                                    */
+     * 근데 사용 기간은 경우는 연차 기록 테이블에 있지 않기 때문에 검색하는 방법은
+     * 등록일을 시작일로 받고 종료일을 등록일로부터 소진한 연차의 갯수만큼 더한 값을
+     * 종료일로 해야한다.                                                    */
 
     /* 3. 생성 내역은 그냥 연차 기록에서 가져와서 값 나타내주면 됨
-    * 유효기간 같은 경우는 등록일로부터 1년을 더하도록 로직을 짜면 되고
-    * 윤년같은 경우는 366로 더하도록 로직을 짜야함                            */
+     * 유효기간 같은 경우는 등록일로부터 1년을 더하도록 로직을 짜면 되고
+     * 윤년같은 경우는 366로 더하도록 로직을 짜야함                            */
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ3.근태 캘린더(Attendance Calendar)  ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     /* 1. 왼쪽 위에 화살표와 오늘 버튼 이거는 프론트쪽에서 작동하는 기능이지만
-    * 화살표를 누르게 되면 비동기로 달력이 바뀌게 되는데
-    * 달력이 바뀐 달에 맞춰서 달력을 바꿀거임
-    * 즉 프론트에서 날짜가 바뀐다 -> 그 날짜를 rest에서 입력받는다 -> 입력받은 날짜에 맞춰서 값을 보내준다.
-    * 연차의 값 중에서 소진한 연차의 값만 보내주면 된다. */
+     * 화살표를 누르게 되면 비동기로 달력이 바뀌게 되는데
+     * 달력이 바뀐 달에 맞춰서 달력을 바꿀거임
+     * 즉 프론트에서 날짜가 바뀐다 -> 그 날짜를 rest에서 입력받는다 -> 입력받은 날짜에 맞춰서 값을 보내준다.
+     * 연차의 값 중에서 소진한 연차의 값만 보내주면 된다. */
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ4.내 근태 신청 현황(Attendance Input Status)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
@@ -153,9 +361,9 @@ public class AttendanceService {
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ5.근태 신청서(Attendance Form)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     /* 1. 기안정보
-    * 1. 기안자 : 사번을 통해서 사원 테이블의 정보를 출력
-    * 2. 기안일 : 현재 시간
-    * 3. 문서번호는 근태 친성서를 눌렀을 때 신규로 만들어진 문서번호를 받는다.*/
+     * 1. 기안자 : 사번을 통해서 사원 테이블의 정보를 출력
+     * 2. 기안일 : 현재 시간
+     * 3. 문서번호는 근태 친성서를 눌렀을 때 신규로 만들어진 문서번호를 받는다.*/
 
     /* 2.결재
     *  1. 똑같이 기안자에 대한 정보를 받아서 신청쪽에는 작성자 본인의 정보를
@@ -171,7 +379,7 @@ public class AttendanceService {
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ6.연차 조정(Annual Leave Adjustment)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     /* 1. 귀속년도 : 년도만 검색해서 해당년도의 연차 기록을 보여줄거임
-    * 그니까 프론트에서 년도만 받고 그 년도에 해당하는 날짜를 계산하도록 작성하면 됨 */
+     * 그니까 프론트에서 년도만 받고 그 년도에 해당하는 날짜를 계산하도록 작성하면 됨 */
 
     /* 2. 연차 정보 : 연차 기록을 연차 기록 카테고리와 함께 th문으로 나타내주면 됨 */
 
@@ -189,9 +397,9 @@ public class AttendanceService {
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ7.모든 사원 근태 현황(Attendance Status of All Employees)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
     /* 1. 조건별 상세 검색
-    * 1. 입사일을 기준으로 검색을 할거다.
-    * 2. 사원 + 연차 테이블을 조인해서 나타내야한다.
-    * 3. 근데 이거 전부 다 프론트라서.. 어카냐 지금..  */
+     * 1. 입사일을 기준으로 검색을 할거다.
+     * 2. 사원 + 연차 테이블을 조인해서 나타내야한다.
+     * 3. 근데 이거 전부 다 프론트라서.. 어카냐 지금..  */
 
     /* 2. 목록 : 이름이랑 직급이랑 같이 나오게 해야하는거 말고는 딱히 신경써야 할 부분이 없어보임 */
 
