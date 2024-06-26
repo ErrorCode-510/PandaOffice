@@ -16,4 +16,20 @@ Content-Type: application/json
 
 ### 캘린더 일정 조회
 GET http://localhost:8001/schedule/detail/1
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mzc4MDY4Mzg4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzODE2Njh9.viK_aVWB-SBoM9k4jVheDimHrhx8IGg7ASJFLXqXFwJgC2JkujLSQHYEKrcm7HIEoc1QPcZNFyskviUJPRDpog
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzgyMDY3NDA3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzODU2Njd9.zLEfPbcrAUV2Gk9O_SG77KGwmEFBJFbeGEoXypdC1uX0FBKUQ9c7vJ08HpB_YCjd1KNp3Vpp4PgqW-G2G2N0OA
+
+### 캘린더 일정 수정
+PUT http://localhost:8001/schedule/modify/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzgyMDY3NDA3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzODU2Njd9.zLEfPbcrAUV2Gk9O_SG77KGwmEFBJFbeGEoXypdC1uX0FBKUQ9c7vJ08HpB_YCjd1KNp3Vpp4PgqW-G2G2N0OA
+Content-Type: application/json
+
+{
+  "name": "회의 수정",
+  "description": "우리 아빠 사장",
+  "startDate": "2024-06-26",
+  "endDate": "2024-06-26",
+  "startTime": "13:00",
+  "employee": {
+    "employeeId": 201511001
+  }
+}

@@ -40,7 +40,7 @@ public class Schedule {
     private LocalTime  startTime;
 
     /* 사원 */
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
@@ -72,13 +72,16 @@ public class Schedule {
     }
 
     /* 캘린더 일정 수정 */
-    public void modify (Schedule schedule) {
-        this.name = schedule.getName();
-        this.description = schedule.getDescription();
-        this.startDate = schedule.getStartDate();
-        this.endDate = schedule.getEndDate();
-        this.startTime = schedule.getStartTime();
-        this.employee = schedule.getEmployee();
+    public void modify (
+            String name, String description, LocalDate startDate, LocalDate endDate,
+            LocalTime startTime, Employee employee
+    ) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.employee = employee;
     }
 
 }

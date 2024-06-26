@@ -19,9 +19,9 @@ public class ScheduleController {
     /* 1. 캘린더 일정 등록 */
     @PostMapping("/regist")
     public ResponseEntity<Void> registSchedule(
-            @RequestBody ScheduleCreateRequest schedule
+            @RequestBody ScheduleCreateRequest scheduleRes
     ) {
-        Integer id = scheduleService.registSchedule(schedule);
+        Integer id = scheduleService.registSchedule(scheduleRes);
         return ResponseEntity.created(URI.create("/schedule/regist" + id)).build();
     }
 
@@ -32,5 +32,15 @@ public class ScheduleController {
     ) {
         ScheduleResponse scheduleResponse = scheduleService.detailSchedule(id);
         return ResponseEntity.ok(scheduleResponse);
+    }
+
+    /* 3. 캘린더 일정 수정 */
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<Void> modifySchedule(
+            @PathVariable Integer id,
+            @RequestBody ScheduleCreateRequest scheduleRes
+    ) {
+        scheduleService.modifySchedule(id, scheduleRes);
+        return ResponseEntity.created(URI.create("/schedule/modify" + id)).build();
     }
 }

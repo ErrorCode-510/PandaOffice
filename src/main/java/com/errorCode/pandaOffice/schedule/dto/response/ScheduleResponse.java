@@ -12,6 +12,9 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class ScheduleResponse {
 
+    /* 일정 코드 */
+    private final int id;
+
     /* 일정명 */
     private final String name;
 
@@ -33,6 +36,7 @@ public class ScheduleResponse {
     /* 엔티티 -> DTO 변환 */
     public static ScheduleResponse from(final Schedule schedule) {
         return new ScheduleResponse(
+                schedule.getId(),
                 schedule.getName(),
                 schedule.getDescription(),
                 schedule.getStartDate(),
