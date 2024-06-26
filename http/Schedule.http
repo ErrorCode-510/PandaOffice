@@ -1,6 +1,6 @@
 ### 캘린더 일정 등록
 POST http://localhost:8001/schedule/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5MzcwNDQwMTQ4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzQwNDB9.GwLtvTF4Jc3asWI7qraxxkqZb7i1nXVrLX9RtH3nHzARR54u_TCYeCaoLx0NXLCCDSmHAqys7kZfzB67p6EHtw
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mzc4MDY4Mzg4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzODE2Njh9.viK_aVWB-SBoM9k4jVheDimHrhx8IGg7ASJFLXqXFwJgC2JkujLSQHYEKrcm7HIEoc1QPcZNFyskviUJPRDpog
 Content-Type: application/json
 
 {
@@ -13,3 +13,7 @@ Content-Type: application/json
     "employeeId": 201511004
   }
 }
+
+### 캘린더 일정 조회
+GET http://localhost:8001/schedule/detail/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mzc4MDY4Mzg4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzODE2Njh9.viK_aVWB-SBoM9k4jVheDimHrhx8IGg7ASJFLXqXFwJgC2JkujLSQHYEKrcm7HIEoc1QPcZNFyskviUJPRDpog
