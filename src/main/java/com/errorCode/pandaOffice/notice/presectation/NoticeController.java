@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.notice.presectation;
 
+import com.errorCode.pandaOffice.common.exception.NotFoundException;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
@@ -84,15 +85,19 @@ public class NoticeController {
     }
 
     // 공지사항 수정
-//    @PutMapping("/notices/{noticeId}")
-//    public ResponseEntity<Void> modifyNotice(
-//            @PathVariable final int noticeId,
-//            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
-//    ) {
-//        noticeService.modifyNotice(noticeId, noticeRequestDTO);
-//
-//        return ResponseEntity.noContent().build();
-//    }
+    @PutMapping("/notices/{noticeId}")
+    public ResponseEntity<Void> modifyNotice(
+            @PathVariable final int noticeId,
+            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
+    ) {
+        try {
+            noticeService.modifyNotice(noticeId, noticeRequestDTO);
+            return ResponseEntity.noContent().build();  // 수정 성공 시 204 No Content 응답
+
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();  // 공지사항을 찾을 수 없을 때 404 Not Found 응답
+        }
+    }
 
     // 공지사항 삭제
     @DeleteMapping("/notices/{noticeId}")

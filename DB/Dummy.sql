@@ -1,3 +1,5 @@
+use officeerp;
+
 -- department 테이블에 더미 데이터 삽입
 INSERT INTO `department` (`id`, `name`)
 VALUES

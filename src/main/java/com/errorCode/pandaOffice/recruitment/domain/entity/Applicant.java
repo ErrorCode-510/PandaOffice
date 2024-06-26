@@ -52,7 +52,7 @@ public class Applicant {
         this.email = email;
     }
 
-    /* 엔티티로 면접자 등록 */
+    /* 면접자 수정 */
     public void modify(String name, LocalDate birthDate, String gender, String phone, String address, String email) {
         this.name = name;
         this.birthDate = birthDate;
@@ -62,6 +62,7 @@ public class Applicant {
         this.email = email;
     }
 
+    /* 면접자 등록 */
     public static Applicant of (
             final String name,
             final LocalDate birthDate,

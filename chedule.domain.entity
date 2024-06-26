@@ -1,0 +1,35 @@
+[1mdiff --git a/src/main/java/com/errorCode/pandaOffice/schedule/domain/entity/Schedule.java b/src/main/java/com/errorCode/pandaOffice/schedule/domain/entity/Schedule.java[m
+[1mindex 3f28c1b..b3472ac 100644[m
+[1m--- a/src/main/java/com/errorCode/pandaOffice/schedule/domain/entity/Schedule.java[m
+[1m+++ b/src/main/java/com/errorCode/pandaOffice/schedule/domain/entity/Schedule.java[m
+[36m@@ -1,5 +1,6 @@[m
+ package com.errorCode.pandaOffice.schedule.domain.entity;[m
+ [m
+[32m+[m[32mimport com.errorCode.pandaOffice.employee.domain.entity.Employee;[m
+ import jakarta.persistence.*;[m
+ import lombok.AccessLevel;[m
+ import lombok.Getter;[m
+[36m@@ -27,15 +28,20 @@[m [mpublic class Schedule {[m
+     private String description;[m
+ [m
+     /* 일정 시작일 */[m
+[31m-    @Column(nullable = true)[m
+[32m+[m[32m    @Column[m
+     private LocalDate startDate;[m
+ [m
+     /* 일정 종료일 */[m
+[31m-    @Column(nullable = true)[m
+[32m+[m[32m    @Column[m
+     private LocalDate endDate;[m
+ [m
+     /* 일정 시작 일시 */[m
+[31m-    @Column(nullable = true)[m
+[32m+[m[32m    @Column[m
+     private LocalTime  startTime;[m
+ [m
+[32m+[m[32m    /* 사원 */[m
+[32m+[m[32m    @ManyToOne[m
+[32m+[m[32m    @JoinColumn(name = "employee_id")[m
+[32m+[m[32m    private Employee employee;[m
+[32m+[m
+ }[m
