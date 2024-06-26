@@ -20,5 +20,5 @@ public class NoticeRequestDTO {
     private Employee employeeId;  // 사원 코드
     private LocalDate postedDate;  // 작성일
     private int viewCount;  // 조회수
-    private char status;  // 상태
+    private char status;  // 공개여부(Y/N)
 }
