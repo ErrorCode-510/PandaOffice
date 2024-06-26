@@ -1,0 +1,15 @@
+### 캘린더 일정 등록
+POST http://localhost:8001/schedule/regist
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcwNDQwMTQ4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzQwNDB9.GwLtvTF4Jc3asWI7qraxxkqZb7i1nXVrLX9RtH3nHzARR54u_TCYeCaoLx0NXLCCDSmHAqys7kZfzB67p6EHtw
+Content-Type: application/json
+
+{
+  "name": "회의",
+  "description": "부장님 아이스 아메리카노",
+  "startDate": "2024-06-26",
+  "endDate": "2024-06-26",
+  "startTime": "09:00",
+  "employee": {
+    "employeeId": 201511004
+  }
+}

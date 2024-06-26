@@ -1,4 +1,4 @@
 package com.errorCode.pandaOffice.schedule.dto.response;
 
-public class template {
+public class ScheduleResponse {
 }
