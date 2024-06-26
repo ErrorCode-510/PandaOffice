@@ -10,6 +10,7 @@ import com.errorCode.pandaOffice.recruitment.domain.repository.InterviewSchedule
 import com.errorCode.pandaOffice.recruitment.domain.repository.PlaceRepository;
 import com.errorCode.pandaOffice.recruitment.dto.request.ApplicantRequest;
 import com.errorCode.pandaOffice.recruitment.dto.request.InterviewScheduleCreateRequest;
+import com.errorCode.pandaOffice.recruitment.dto.request.InterviewScheduleModifyRequest;
 import com.errorCode.pandaOffice.recruitment.dto.response.ApplicantResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.InterviewScheduleResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
@@ -21,10 +22,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -134,7 +138,8 @@ public class RecruitmentService {
     }
 
     /* 6. 면접자 삭제 */
-    public void remove(Integer id) {
+    @Transactional
+    public void deleteApplicant(Integer id) {
         applicantRepository.deleteById((id));
     }
 
@@ -164,9 +169,9 @@ public class RecruitmentService {
         /* id로 사원정보 찾기 및 없을 시 Exception 처리 */
         Employee employee = employeeRepository.findById(request.getEmployee().getEmployeeId())
                 .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
-        Employee employee2 = employeeRepository.findById(request.getEmployee().getEmployeeId())
+        Employee employee2 = employeeRepository.findById(request.getEmployee2().getEmployeeId())
                 .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
-        Employee employee3 = employeeRepository.findById(request.getEmployee().getEmployeeId())
+        Employee employee3 = employeeRepository.findById(request.getEmployee3().getEmployeeId())
                 .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
         /* id로 면접자 찾기 및 없을 시 Exception 처리 */
         List<Applicant> applicants = new ArrayList<>();
@@ -191,8 +196,7 @@ public class RecruitmentService {
         return interviewSchedule.getId();
     }
 
-    /* 9. 면접일정 상세 조회
-    * 프론트에서 면접관 및 면접자는 몇명인지 보여주는 기능 필요 (count) */
+    /* 9. 면접일정 상세 조회 */
     @Transactional(readOnly = true)
     public InterviewScheduleResponse getInterviewScheduleById(Integer id) {
 
@@ -202,4 +206,43 @@ public class RecruitmentService {
         return InterviewScheduleResponse.from(interviewSchedule);
     }
 
+    /* 10. 면접일정 수정 */
+    @Transactional
+    public void modifyInterviewScheduleById(Integer id, InterviewScheduleModifyRequest request) {
+        InterviewSchedule interviewSchedule = interviewScheduleRepository.findById(id)
+                .orElseThrow( () -> new EntityNotFoundException("면접일정이 비어있습니다."));
+
+        /* DB에서 세션이 겹치지 않기 위해 사원 조회 */
+        Employee employee = employeeRepository.findById(request.getEmployee().getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
+        Employee employee2 = employeeRepository.findById(request.getEmployee2().getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
+        Employee employee3 = employeeRepository.findById(request.getEmployee3().getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
+
+        /* DB에서 세션이 겹치지 않기 위해 면접자 조회 */
+        List<Applicant> applicants = request.getApplicantList().stream().map(
+                applicant -> applicantRepository.findById(applicant.getId())
+                        .orElseThrow(() -> new EntityNotFoundException("면접자 엔티티가 비어있습니다."))
+        ).collect(Collectors.toList());
+
+        interviewSchedule.modify(
+                request.getName(),
+                request.getMemo(),
+                request.getStartDate(),
+                request.getEndDate(),
+                request.getStartTime(),
+                request.getPlace(),
+                employee,
+                employee2,
+                employee3,
+                applicants
+        );
+    }
+
+    /* 면접일정 삭제 */
+    @Transactional
+    public void deleteInterviewSchedule(Integer id) {
+        interviewScheduleRepository.deleteById(id);
+    }
 }

@@ -22,6 +22,9 @@ public class AnnualLeaveCategory {
     /* 연차 분류 이름 */
     private String name;
 
+    /* 연차 분류의 타입 */
+    private String type;
+
     public AnnualLeaveCategory(int id, String name) {
         this.id = id;
         this.name = name;

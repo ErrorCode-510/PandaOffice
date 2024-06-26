@@ -1,0 +1,38 @@
+### 공지사항 전체조회
+GET http://localhost:8001/notice/notices
+
+### POST 요청 확인
+POST http://localhost:8001/notice/regist
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzE0NjIwOTEyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjM2MDAwMTcxOTMxNDYyMH0.QRSX_H_fomVwienR-61PVNEq4tKomG13gzwdJTwBqVftG1X1Clq6s6E0VUxnOAcTQS7PH6HNfIsllCVtEhHr8w
+Content-Type:application/json
+
+{
+  "title": "전체회식안내",
+  "content": "장소 : 하남돼지집 본점\n시간 : 금일 오후7시",
+  "category": "전체공지",
+  "subCategory": null,
+  "postedDate": "2024-06-26",
+  "viewCount": 0,
+  "status": "Y",
+  "employeeId": {
+    "employeeId": 201511001
+  }
+}
+
+### put 요청 확인
+PUT http://localhost:8001/notice/notices/2
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzY2MTQ0ODcwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjM2MDAwMTcxOTM2NjE0NH0.78Zi-K-Pn8vUQksH4xXiEL9Xn6O_5MhLpcm_FH7XmHJK4WxsJy45I1LAJjv0mF-H_dcFxZ4oXf--S3WBK6SQ0A
+Content-Type:application/json
+
+{
+  "title": "전체회식안내",
+  "content": "장소 : 하남돼지집 본점\n시간 : 금일 오후7시",
+  "category": "전체공지",
+  "subCategory": null,
+  "postedDate": "2024-06-26",
+  "viewCount": 0,
+  "status": "Y",
+  "employeeId": {
+    "employeeId": 201511001
+  }
+}

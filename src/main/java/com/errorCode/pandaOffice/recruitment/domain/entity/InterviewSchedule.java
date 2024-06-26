@@ -83,6 +83,7 @@ public class InterviewSchedule {
         this.applicantsList = applicantsList;
     }
 
+    /* 면접일정 등록 */
     public static InterviewSchedule of(
             final String name, final String memo, final LocalDate startDate, final LocalDate endDate, final LocalTime startTime,
             final Place place, final Employee employee, final Employee employee2, final Employee employee3,
@@ -100,5 +101,22 @@ public class InterviewSchedule {
                 employee3,
                 applicantsList
         );
+    }
+
+    /* 면접일정 수정 */
+    public void modify(
+            String name, String memo, LocalDate startDate, LocalDate endDate, LocalTime startTime,
+            Place place, Employee employee, Employee employee2, Employee employee3, List<Applicant> applicantsList
+    ) {
+        this.name = name;
+        this.memo = memo;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.place = place;
+        this.employee = employee;
+        this.employee2 = employee2;
+        this.employee3 = employee3;
+        this.applicantsList = applicantsList;
     }
 }

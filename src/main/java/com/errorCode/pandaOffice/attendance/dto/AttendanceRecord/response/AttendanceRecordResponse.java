@@ -2,6 +2,7 @@ package com.errorCode.pandaOffice.attendance.dto.AttendanceRecord.response;
 
 import lombok.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -27,4 +28,20 @@ public class AttendanceRecordResponse {
     /* 근무 누적 지각 시간 */
     private LocalTime totalLateTime;
 
+    /* 주별 누적 시간 */
+    private Duration weeklyCumulativeTime;
+
+    /* 주별 잔여 시간 */
+    private Duration remainingTime;
+
+    /* 달별 누적 시간 */
+    private Duration monthlyCumulativeTimes;
+
+    public AttendanceRecordResponse(int id, LocalDate date, LocalTime checkInTime, LocalTime checkOutTime, LocalTime totalLateTime) {
+        this.id = id;
+        this.date = date;
+        this.checkInTime = checkInTime;
+        this.checkOutTime = checkOutTime;
+        this.totalLateTime = totalLateTime;
+    }
 }

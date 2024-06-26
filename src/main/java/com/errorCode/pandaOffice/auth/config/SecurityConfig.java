@@ -62,7 +62,7 @@ public class SecurityConfig {
 //                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/signup", "/api/v1/members/login").permitAll();
 //                    auth.requestMatchers("/api/v1/products/*/reviews/**").authenticated();
 //                    auth.requestMatchers("/api/v1/products-management/**", "/api/v1/products/**").hasRole("ADMIN");
-                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
                 /* 기본적으로 동작하는 로그인 필터 이전에 커스텀 로그인 필터를 설정한다. */
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
