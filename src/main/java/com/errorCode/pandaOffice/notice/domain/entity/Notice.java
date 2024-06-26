@@ -81,11 +81,15 @@ public class Notice {
     }
 
     // 공지사항 업데이트 메소드
-    public void updateNotice(String title, String content, String category, String subCategory) {
+    public void updateNotice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, Employee employee) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.subCategory = subCategory;
+        this.postedDate = postedDate;
+        this.viewCount = viewCount;
+        this.status = status;
+        this.employee = employee;
     }
 
 }
