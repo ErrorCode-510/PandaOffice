@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.*;
@@ -319,7 +320,20 @@ public class AttendanceService {
      * 즉 프론트에서 날짜가 바뀐다 -> 그 날짜를 rest에서 입력받는다 -> 입력받은 날짜에 맞춰서 값을 보내준다.
      * 연차의 값 중에서 소진한 연차의 값만 보내주면 된다. */
 
+    public List<AnnualLeaveRecordResponse> getAnnualCalendar(LocalDate searchDate) {
 
+        // 검색할 달의 첫 날과 마지막 날을 계산합니다.
+        YearMonth yearMonth = YearMonth.from(searchDate);
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        // 모든 사원의 연차 기록을 검색합니다.
+        List<AnnualLeaveRecord> recordList = annualLeaveRecordRepository.findByDateBetween(startDate, endDate);
+
+        AnnualLeaveRecordResponse response = AnnualLeaveRecordResponse.of(recordList);
+
+        return List.of(response);
+    }
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 4.내 근태 신청 현황(Attendance Input Status) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 

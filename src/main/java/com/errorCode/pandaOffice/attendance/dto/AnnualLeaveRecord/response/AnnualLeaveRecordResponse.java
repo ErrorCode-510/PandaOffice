@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Getter
@@ -23,6 +24,8 @@ public class AnnualLeaveRecordResponse {
     private List<UsedLeaveRecord> usedLeave;
 
     private List<CreatedRecord> createdRecord;
+
+    private List<AnnualLeaveRecordCalendar> annualLeaveRecordCalendars;
 
 
     /* 2.AnnualLeaveRecordResponse 타입의 of 메소드를 만들어 준다.
@@ -56,10 +59,23 @@ public class AnnualLeaveRecordResponse {
 
         response.calculateLeaveRecord = CalculateLeaveRecord.of(recordList);
 
+        response.annualLeaveRecordCalendars = recordList.stream()
+                .filter(record->record
+                        .getAnnualLeaveCategory()   //카테고리 가져오기
+                        .getType()                  // 타입명 가져오기
+                        .equals("소진"))              // 비교 결과값 (필터 완료)
+                .map(
+                        /* 한번 더 of 메소드를 작성해서 내보낼 값을 설정해준다. */
+                        recordEntity -> AnnualLeaveRecordCalendar.of(recordEntity)
+                )
+                .toList();
+
         return response;
     }
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 연차 계산 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1. 내 연차 내역 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1-1.연차 계산 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
 
     @Getter
@@ -80,30 +96,32 @@ public class AnnualLeaveRecordResponse {
             double totalLeave = 0.0;
             double usedLeave = 0.0;
 
-            for (AnnualLeaveRecord record : recordList) {
+            int currentYear = LocalDate.now().getYear();
 
+            for (AnnualLeaveRecord record : recordList) {
                 String type = record.getAnnualLeaveCategory().getType();
                 String name = record.getAnnualLeaveCategory().getName();
-
+                LocalDate date = record.getDate();
                 double amount = record.getAmount();
 
-                if (name.equals("기본 발생")) {
-                    generatedLeave += amount;
-                }
-
-                switch (type) {
-                    case "부여":
+                if (date.getYear() == currentYear) {
+                    if (name.equals("기본 발생")) {
                         generatedLeave += amount;
-                        adjustedLeave += amount;
-                        totalLeave += amount;
-                        break;
-                    case "소진":
-                        adjustedLeave -= amount;
-                        usedLeave += amount;
-                        break;
-                    default:
-                        // 기타 다른 타입이 있다면 무시
-                        break;
+                    }
+
+                    switch (type) {
+                        case "부여":
+                            adjustedLeave += amount;
+                            totalLeave += amount;
+                            break;
+                        case "소진":
+                            adjustedLeave -= amount;
+                            usedLeave += amount;
+                            break;
+                        default:
+                            // 기타 다른 타입이 있다면 무시
+                            break;
+                    }
                 }
             }
 
@@ -120,7 +138,7 @@ public class AnnualLeaveRecordResponse {
         }
     }
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 연차 사용 내역 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1-2.연차 사용 내역 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     @Getter
     @RequiredArgsConstructor
@@ -129,12 +147,16 @@ public class AnnualLeaveRecordResponse {
 
         /* UsedLeaveRecord 에서 내보낼 필드명들을 적어준다. */
         private String employeeName;
-        private String departmentName;
-        private String categoryName;
-        private LocalDate startDate;
-        private LocalDate endDate;
-        private double amount;
 
+        private String departmentName;
+
+        private String categoryName;
+
+        private LocalDate startDate;
+
+        private LocalDate endDate;
+
+        private double amount;
 
         public static UsedLeaveRecord of(AnnualLeaveRecord recordEntity) {
 
@@ -152,14 +174,17 @@ public class AnnualLeaveRecordResponse {
         }
     }
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 연차 생성 내역 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1-3.연차 생성 내역 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
     @Getter
     @RequiredArgsConstructor
     public static class CreatedRecord{
 
         private LocalDate registDate;
+
         private LocalDate validityDate;
+
         private String content;
+
         private double amount;
 
         public static CreatedRecord of(AnnualLeaveRecord recordEntity) {
@@ -174,6 +199,59 @@ public class AnnualLeaveRecordResponse {
             return response;
         }
     }
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 2.연차 캘린더 - 연차 기록 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class AnnualLeaveRecordCalendar{
+
+        private String employeeName;
+
+        /* 사원의 직급 */
+        private String employeeJob;
+
+        private LocalDate startDate;
+
+        private LocalDate endDate;
+
+        private String annualLeaveType;
+
+        public static AnnualLeaveRecordCalendar of(AnnualLeaveRecord recordEntity) {
+
+            AnnualLeaveRecordCalendar response = new AnnualLeaveRecordCalendar();
+
+            response.employeeName = recordEntity.getEmployee().getName();
+            response.startDate = recordEntity.getDate();
+            response.endDate = recordEntity.getDate().plusDays((long) Math.floor(recordEntity.getAmount()));
+
+            return response;
+        }
+    }
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 3.내 근태 신청 현황 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 //
