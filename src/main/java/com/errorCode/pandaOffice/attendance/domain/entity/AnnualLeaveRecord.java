@@ -15,7 +15,7 @@ import java.util.Date;
 @Entity
 @Table
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 /* 연차 기록 */
 public class AnnualLeaveRecord {
@@ -34,6 +34,9 @@ public class AnnualLeaveRecord {
     /* 수량 (연차를 얼마나 썼는지, 받았는지에 대한 수량임) */
     private double amount;
 
+    /* 연차에 대한 내용 */
+    private String content;
+
     @ManyToOne
     @JoinColumn(name = "employee_id")
     /* 사번 */
@@ -50,12 +53,13 @@ public class AnnualLeaveRecord {
     private ApprovalDocument approvalDocument;
 
     public AnnualLeaveRecord(int id, LocalDate date, double nowAmount, double amount,
-                             Employee employee, AnnualLeaveCategory annualLeaveCategory,
+                             String content, Employee employee, AnnualLeaveCategory annualLeaveCategory,
                              ApprovalDocument approvalDocument) {
         this.id = id;
         this.date = date;
         this.nowAmount = nowAmount;
         this.amount = amount;
+        this.content = content;
         this.employee = employee;
         this.annualLeaveCategory = annualLeaveCategory;
         this.approvalDocument = approvalDocument;

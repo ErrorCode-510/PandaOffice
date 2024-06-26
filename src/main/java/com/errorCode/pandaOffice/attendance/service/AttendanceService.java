@@ -12,6 +12,7 @@ import com.errorCode.pandaOffice.attendance.dto.AnnualLeaveCategory.response.Ann
 import com.errorCode.pandaOffice.attendance.dto.AnnualLeaveRecord.response.AnnualLeaveRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.AttendanceRecord.response.AttendanceRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.OvertimeRecord.response.OverTimeRecordResponse;
+import com.errorCode.pandaOffice.auth.util.TokenUtils;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.*;
@@ -70,40 +69,6 @@ public class AttendanceService {
                 ))
                 .collect(Collectors.toList());
     }
-
-    /* 3. 사원의 아이디를 기준으로 연차 기록을 가져온다. */
-    public List<AnnualLeaveRecordResponse> getAnnualLeaveRecord(int employeeId) {
-        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployee_EmployeeId(employeeId);
-
-        return annualLeaveRecords.stream()
-                .map(annualLeaveRecord -> new AnnualLeaveRecordResponse(
-                        annualLeaveRecord.getId(),
-                        annualLeaveRecord.getDate(),
-                        annualLeaveRecord.getNowAmount(),
-                        annualLeaveRecord.getAmount()
-                ))
-                .collect(Collectors.toList());
-    }
-
-
-    /* 4. 사원의 아이디를 기준으로 연차 기록 카테고리를 가져온다.
-     * 연차 기록도 동시에 가져와야한다.*/
-    public List<AnnualLeaveCategoryResponse> getAnnualLeaveCategory(int employeeId) {
-        List<AnnualLeaveRecord> annualLeaveRecords = annualLeaveRecordRepository.findByEmployeeIdWithCategory(employeeId);
-
-        return annualLeaveRecords.stream()
-                .map(annualLeaveRecord -> new AnnualLeaveCategoryResponse(
-                        annualLeaveRecord.getAnnualLeaveCategory().getId(), // categoryId
-                        annualLeaveRecord.getAnnualLeaveCategory().getName(), // categoryName
-                        annualLeaveRecord.getId(), // recordId
-                        annualLeaveRecord.getDate(), // recordDate
-                        annualLeaveRecord.getNowAmount(), // nowAmount
-                        annualLeaveRecord.getAmount(), // amount
-                        annualLeaveRecord.getApprovalDocument() != null ? annualLeaveRecord.getApprovalDocument().getId() : 0 // approvalDocumentId (null 가능)
-                ))
-                .collect(Collectors.toList());
-    }
-
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1.내 근태 현황 페이지(Attendance Status)의 기능들 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
@@ -312,8 +277,6 @@ public class AttendanceService {
         return monthlyOverTimes;
     }
 
-
-
     /* 3. 표에 보이는 부분들을 나타낼 수 있도록 제작 */
 
     // 서비스 부분에서는 기능을 다 구현함 컨트롤러 부분에서 필요한 부분만 떼가서 쓰면 됨
@@ -325,7 +288,6 @@ public class AttendanceService {
 
     /* 1. 사원의 연차를 표 형식으로 표현해줌  */
 
-
     /* 2. 연차 사용기간을 프론트에서 검색 받아서 사용 내역의 표가 변경된다.
      * 근데 사용 기간은 경우는 연차 기록 테이블에 있지 않기 때문에 검색하는 방법은
      * 등록일을 시작일로 받고 종료일을 등록일로부터 소진한 연차의 갯수만큼 더한 값을
@@ -335,7 +297,21 @@ public class AttendanceService {
      * 유효기간 같은 경우는 등록일로부터 1년을 더하도록 로직을 짜면 되고
      * 윤년같은 경우는 366로 더하도록 로직을 짜야함                            */
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ3.근태 캘린더(Attendance Calendar)  ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    public List<AnnualLeaveRecordResponse> getAnnualLeaveRecord(LocalDate startDate, LocalDate endDate) {
+
+        /* 토큰에서 사원 ID 가져오는 메소드 */
+        int employeeId = TokenUtils.getEmployeeId();
+
+        /* 사원 id에 맞는 연차 기록 entity 가져오기 */
+        List<AnnualLeaveRecord> recordList = annualLeaveRecordRepository.findByEmployee_EmployeeIdAndDateBetween(employeeId, startDate, endDate);
+
+        AnnualLeaveRecordResponse response = AnnualLeaveRecordResponse.of(recordList);
+
+        return List.of(response);
+
+    }
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 3.연차 캘린더(Attendance Calendar)  ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     /* 1. 왼쪽 위에 화살표와 오늘 버튼 이거는 프론트쪽에서 작동하는 기능이지만
      * 화살표를 누르게 되면 비동기로 달력이 바뀌게 되는데
@@ -343,7 +319,9 @@ public class AttendanceService {
      * 즉 프론트에서 날짜가 바뀐다 -> 그 날짜를 rest에서 입력받는다 -> 입력받은 날짜에 맞춰서 값을 보내준다.
      * 연차의 값 중에서 소진한 연차의 값만 보내주면 된다. */
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ4.내 근태 신청 현황(Attendance Input Status)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 4.내 근태 신청 현황(Attendance Input Status) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     /* 1. 사원의 근태 신청 현황을 표 형식으로 보여줄건데
     *  1. 지각 : 근태 기록에서 지각한 날짜가 몇개인지 코드를 짜서 그 근태 번호에 모든 기록을 나타내도록 작성
@@ -358,25 +336,7 @@ public class AttendanceService {
 
     /* 4.연차 신청 현황 : 연차 기록 테이블에서 따와서 보여주면 됨 */
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ5.근태 신청서(Attendance Form)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
-
-    /* 1. 기안정보
-     * 1. 기안자 : 사번을 통해서 사원 테이블의 정보를 출력
-     * 2. 기안일 : 현재 시간
-     * 3. 문서번호는 근태 친성서를 눌렀을 때 신규로 만들어진 문서번호를 받는다.*/
-
-    /* 2.결재
-    *  1. 똑같이 기안자에 대한 정보를 받아서 신청쪽에는 작성자 본인의 정보를
-       2. 승인 파트는 고정이다. */
-
-    /* 3. 신청 내용
-    *  1. 근무 구분 : 버튼을 누르는 식으로 해서 버튼을 누르면 근태 신청의 카테고리가 정해진다.
-       2. 근무 일시 : 본인이 직접 입력
-       3. 근무시간 : 근무 일시를 알아서 계산함
-       4. 비고는 알아서 적기
-       5. 신청완료 버튼 누르면 submit으로 된다. 아마도? */
-
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ6.연차 조정(Annual Leave Adjustment)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 5.연차 조정(Annual Leave Adjustment) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
     /* 1. 귀속년도 : 년도만 검색해서 해당년도의 연차 기록을 보여줄거임
      * 그니까 프론트에서 년도만 받고 그 년도에 해당하는 날짜를 계산하도록 작성하면 됨 */
@@ -395,7 +355,8 @@ public class AttendanceService {
     *  3. 합계 : 현재 상태(부여 연차, 소진연차)에서 계산된 값이 표시됨
        4. 저장 : 저장 버튼 누르면 팝업창이 뜨면서 저장이 완료됨*/
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ7.모든 사원 근태 현황(Attendance Status of All Employees)ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 7.모든 사원 근태 현황(Attendance Status of All Employees) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+
     /* 1. 조건별 상세 검색
      * 1. 입사일을 기준으로 검색을 할거다.
      * 2. 사원 + 연차 테이블을 조인해서 나타내야한다.
