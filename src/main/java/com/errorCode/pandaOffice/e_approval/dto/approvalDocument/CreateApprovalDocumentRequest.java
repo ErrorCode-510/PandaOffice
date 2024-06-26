@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument;
+package com.errorCode.pandaOffice.e_approval.dto.approvalDocument;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
