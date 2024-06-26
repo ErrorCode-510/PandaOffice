@@ -69,7 +69,7 @@ public class RecruitmentController {
     }
 
     /* 4. 면접자 상세 조회 */
-    @GetMapping("/applicant/{id}")
+    @GetMapping("/applicant/detail/{id}")
     public ResponseEntity<ApplicantResponse> detailApplicant(@PathVariable Integer id) {
         ApplicantResponse applicantResponse = recruitmentService.getApplicantById(id);
 
@@ -81,7 +81,7 @@ public class RecruitmentController {
     }
 
     /* 5. 면접자 수정 */
-    @PutMapping("applicant/{id}")
+    @PutMapping("applicant/modify/{id}")
     public ResponseEntity<Void> applicantUpdate(
             @PathVariable Integer id,
             @RequestBody ApplicantRequest applicantRequest
@@ -91,9 +91,9 @@ public class RecruitmentController {
     }
 
     /* 6. 면접자 삭제 */
-    @DeleteMapping("applicant/{id}")
+    @DeleteMapping("applicant/delete/{id}")
     public ResponseEntity<Void> deleteApplicant(@PathVariable Integer id) {
-        recruitmentService.remove(id);
+        recruitmentService.deleteApplicant(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -128,6 +128,13 @@ public class RecruitmentController {
     ) {
         recruitmentService.modifyInterviewScheduleById(id, request);
         return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
+    }
+
+    /* 11. 면접일정 삭제 */
+    @DeleteMapping("interview-schedule/delete/{id}")
+    public ResponseEntity<Void> deleteInterviewSchedule(@PathVariable Integer id) {
+        recruitmentService.deleteInterviewSchedule(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
