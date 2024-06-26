@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -41,22 +42,14 @@ public class AttendanceController {
     }
 
     @GetMapping("/annual-leave")
-    public ResponseEntity<AnnualLeaveRecordResponse> getAnnualLeaveRecord(@RequestParam int employeeId) {
+    public ResponseEntity<AnnualLeaveRecordResponse> getAnnualLeaveRecord(@RequestParam LocalDate searchStartDate,
+                                                                          @RequestParam LocalDate searchEndDate) {
 
-        /* 3. 서비스 객체의 getOvertimeRecord 메소드에 사번을 전달하여 연차 기록 가져오기 */
-        List<AnnualLeaveRecordResponse> annualLeaveRecordResponses = attendanceService.getAnnualLeaveRecord(employeeId);
-
-        return null;
-
-    }
-
-    @GetMapping("/annual-leave-category/{employeeId}")
-    public ResponseEntity<List<AnnualLeaveCategoryResponse>> getAnnualLeaveCategory(@PathVariable int employeeId) {
-
-        /* 4. 서비스 객체의 getAnnualLeaveCategory 메소드에 사번을 전달하여 연차 기록과 연차 기록 카테고리를 동시에 가져오기  */
-        List<AnnualLeaveCategoryResponse> categoryResponses = attendanceService.getAnnualLeaveCategory(employeeId);
+        /* 4. 서비스 객체의 getOvertimeRecord 메소드에 사번을 전달하여 연차 기록 가져오기 */
+        List<AnnualLeaveRecordResponse> annualLeaveRecordResponses = attendanceService.getAnnualLeaveRecord(searchStartDate, searchEndDate);
 
         return null;
+
     }
 
     /* 5. 해당 월, 주의 누적 근무 시간 불러오기 */
@@ -74,6 +67,17 @@ public class AttendanceController {
     public ResponseEntity<OverTimeRecordResponse> calculateOverTime(@RequestParam int employeeId) {
 
         List<OverTimeRecordResponse> overTime = attendanceService.calculateOverTime(employeeId);
+
+        return null;
+
+    }
+
+    /* 7. 해당 년도의 연차 내역 불러오기  */
+    @GetMapping("/3")
+    public ResponseEntity<AnnualLeaveRecordResponse> countAnnualLeave(@RequestParam LocalDate startDate,
+                                                                      @RequestParam LocalDate endDate) {
+
+        List<AnnualLeaveRecordResponse> everyAnnualLeave = attendanceService.getAnnualLeaveRecord(startDate, endDate);
 
         return null;
 
