@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.notice.service;
 
+import com.errorCode.pandaOffice.common.exception.NotFoundException;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import com.errorCode.pandaOffice.notice.domain.repository.NoticeRepository;
@@ -60,7 +61,7 @@ public class NoticeService {
     @Transactional(readOnly = true)
     public NoticeResponseDTO getNoticeById(final int noticeId) {
         Optional<Notice> noticeOptional = noticeRepository.findById(noticeId);
-        return noticeOptional.map(notice -> NoticeResponseDTO.from(notice)).orElse(null);
+        return noticeOptional.map(notice -> NoticeResponseDTO.from(notice)).orElseThrow();
     }
 
     // 조회수 증가
@@ -92,20 +93,21 @@ public class NoticeService {
     }
 
     // 공지사항 수정 메소드
-//    public void modifyNotice(final int noticeId, final NoticeRequestDTO noticeRequestDTO) {
-//        Notice notice = noticeRepository.findById(noticeId).orElse(null);
-//
-//        if (notice != null) {
-//            notice.updateNotice(noticeRequestDTO.getTitle(), noticeRequestDTO.getContent(),
-//                    noticeRequestDTO.getCategory(), noticeRequestDTO.getSubCategory());
-//
-//            List<NoticeImage> imageEntityList = saveImages(noticeRequestDTO.getImageList());
-//            if (imageEntityList != null) {
-//                notice.updateImages(imageEntityList);
-//            }
-//            noticeRepository.save(notice);
-//        }
-//    }
+    public void modifyNotice(final int noticeId, final NoticeRequestDTO noticeRequestDTO) {
+        Notice notice =  noticeRepository.findById(noticeId).orElseThrow();
+
+       notice.updateNotice (
+               noticeRequestDTO.getTitle(),
+               noticeRequestDTO.getContent(),
+               noticeRequestDTO.getCategory(),
+               noticeRequestDTO.getSubCategory(),
+               noticeRequestDTO.getPostedDate(),
+               noticeRequestDTO.getViewCount(),
+               noticeRequestDTO.getStatus(),
+               noticeRequestDTO.getEmployeeId()
+       );
+       noticeRepository.save(notice);
+    }
 
     // 공지사항 삭제 메소드
     @Transactional
