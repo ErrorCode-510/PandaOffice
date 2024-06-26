@@ -10,7 +10,9 @@ import java.time.LocalDate;
 
 
 //설문 entity
+//연결관계 어노테이션 설정 필요
 @Entity
+@Table(name="survey")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Survey {
@@ -19,13 +21,16 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // 설문id
 
+    @Column(name = "category_id") //JoinColumn 사용해야 하지만 일단 보류
     private int categoryId;// 카테고리id
 
-    @Column(length = 255)
+    @Column(name="title",length = 255)
     private String title;
 
+    @Column(name="start_date")
     private LocalDate startDate;
 
+    @Column(name="end_date")
     private LocalDate endDate;
 
 

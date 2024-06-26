@@ -71,4 +71,8 @@ public class ApprovalDocument {
         approvalDocument.approvalLineList = approvalLine;
         return approvalDocument;
     }
+
+    public void processApproval(ApprovalStatus status) {
+        this.status = status;
+    }
 }

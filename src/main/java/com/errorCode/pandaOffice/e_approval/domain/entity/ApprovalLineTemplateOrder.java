@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "approval_line_template_order")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-/* 자동 결재선의 순서 */
+/* 결재선 템플릿의 순서 */
 public class ApprovalLineTemplateOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
