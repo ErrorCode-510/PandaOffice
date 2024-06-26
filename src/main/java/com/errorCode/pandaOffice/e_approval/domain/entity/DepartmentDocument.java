@@ -15,9 +15,7 @@ public class DepartmentDocument {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     /* 문서 양식 ID */
-    @Column(nullable = false)
-    private int documentId;
-    /* 부서함 ID */
-    @Column(nullable = false)
-    private int departmentBoxId;
+    @ManyToOne
+    @JoinColumn(name = "document_template_id")
+    private ApprovalDocument document;
 }
