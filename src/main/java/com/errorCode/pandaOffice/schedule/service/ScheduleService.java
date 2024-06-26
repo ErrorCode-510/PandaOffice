@@ -14,7 +14,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    /* 캘린더 일정 등록 */
+    /* 1. 캘린더 일정 등록 */
     @Transactional
     public Integer registSchedule(ScheduleCreateRequest schedule) {
         Schedule newSchedule = Schedule.of(

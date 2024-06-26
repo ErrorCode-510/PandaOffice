@@ -64,11 +64,11 @@ Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 면접장소 전체 조회
 GET http://localhost:8001/recruitment/place
-Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
 
 ### 면접일정 등록
 POST http://localhost:8001/recruitment/interview-schedule/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
 Content-Type: application/json
 
 {
@@ -90,22 +90,22 @@ Content-Type: application/json
     "employeeId": 201511003
   },
   "applicantList": [
-    {"id": 21},
-    {"id": 22},
-    {"id": 23},
-    {"id": 24},
-    {"id": 25},
-    {"id": 26},
-    {"id": 27},
-    {"id": 28},
-    {"id": 29},
-    {"id": 30}
+    {"id": 1},
+    {"id": 2},
+    {"id": 3},
+    {"id": 4},
+    {"id": 5},
+    {"id": 6},
+    {"id": 7},
+    {"id": 8},
+    {"id": 9},
+    {"id": 10}
   ]
 }
 
 ### 면접일정 상세 조회
-GET http://localhost:8001/recruitment/interview-schedule/detail/2
-Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
+GET http://localhost:8001/recruitment/interview-schedule/detail/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
 
 ### 면접일정 수정
 PUT http://localhost:8001/recruitment/interview-schedule/modify/1
@@ -145,5 +145,5 @@ Content-Type: application/json
 }
 
 ### 면접일정 삭제
-DELETE http://localhost:8001/recruitment/interview-schedule/delete/2
-Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
+DELETE http://localhost:8001/recruitment/interview-schedule/delete/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g

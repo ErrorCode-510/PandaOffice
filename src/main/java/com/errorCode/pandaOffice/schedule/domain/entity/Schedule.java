@@ -56,7 +56,7 @@ public class Schedule {
         this.employee = employee;
     }
 
-    /* 캘린더 일정 등록 생성자 */
+    /* 1. 캘린더 일정 등록 생성자 */
     public static Schedule of(
             String name, String description, LocalDate startDate, LocalDate endDate,
             LocalTime startTime, Employee employee

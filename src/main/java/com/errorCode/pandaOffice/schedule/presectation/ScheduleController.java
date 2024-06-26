@@ -18,7 +18,7 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    /* 캘린더 일정 등록 */
+    /* 1. 캘린더 일정 등록 */
     @PostMapping("/regist")
     public ResponseEntity<Void> registSchedule(
             @RequestBody ScheduleCreateRequest schedule

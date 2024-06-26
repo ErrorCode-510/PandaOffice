@@ -47,17 +47,17 @@ public class InterviewSchedule {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    /* 면접관들 */
+    /* 면접관 */
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interviewer_id")
     private Employee employee;
 
-    /* 면접관들 2 */
+    /* 면접관 2 */
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interviewer_id2")
     private Employee employee2;
 
-    /* 면접관들 3 */
+    /* 면접관 3 */
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "interviewer_id3")
     private Employee employee3;
