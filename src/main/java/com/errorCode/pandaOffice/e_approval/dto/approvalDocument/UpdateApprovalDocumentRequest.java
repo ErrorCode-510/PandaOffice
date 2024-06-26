@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument;
+package com.errorCode.pandaOffice.e_approval.dto.approvalDocument;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

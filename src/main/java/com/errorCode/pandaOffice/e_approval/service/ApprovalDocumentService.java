@@ -10,11 +10,10 @@ import com.errorCode.pandaOffice.e_approval.domain.repository.*;
 import com.errorCode.pandaOffice.e_approval.domain.repository.specification.ApprovalDocumentSpecification;
 import com.errorCode.pandaOffice.e_approval.domain.type.ApprovalStatus;
 import com.errorCode.pandaOffice.e_approval.domain.type.ApproveType;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentListResponse;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentDetailResponse;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.CreateApprovalDocumentRequest;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.UpdateApprovalDocumentRequest;
-import com.errorCode.pandaOffice.employee.domain.entity.Department;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentListResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentDetailResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.UpdateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +22,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor

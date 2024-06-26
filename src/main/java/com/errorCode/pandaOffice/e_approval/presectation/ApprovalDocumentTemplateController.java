@@ -1,6 +1,5 @@
 package com.errorCode.pandaOffice.e_approval.presectation;
 
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.CreateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.*;
 import com.errorCode.pandaOffice.e_approval.service.ApprovalDocumentTemplateService;
 import lombok.RequiredArgsConstructor;
