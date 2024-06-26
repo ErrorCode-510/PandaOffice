@@ -43,4 +43,13 @@ public class ScheduleController {
         scheduleService.modifySchedule(id, scheduleRes);
         return ResponseEntity.created(URI.create("/schedule/modify" + id)).build();
     }
+
+    /* 4. 캘린더 일정 삭제 */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable Integer id
+    ) {
+        scheduleService.deleteSchedule(id);
+        return ResponseEntity.noContent().build();
+    }
 }

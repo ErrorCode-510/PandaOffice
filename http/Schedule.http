@@ -33,3 +33,7 @@ Content-Type: application/json
     "employeeId": 201511001
   }
 }
+
+### 캘린더 일정 삭제
+DELETE http://localhost:8001/schedule/delete/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzgyMDY3NDA3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzODU2Njd9.zLEfPbcrAUV2Gk9O_SG77KGwmEFBJFbeGEoXypdC1uX0FBKUQ9c7vJ08HpB_YCjd1KNp3Vpp4PgqW-G2G2N0OA

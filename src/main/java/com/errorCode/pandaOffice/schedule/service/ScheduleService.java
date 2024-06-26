@@ -57,4 +57,10 @@ public class ScheduleService {
                 employee
         );
     }
+
+    /* 4. 캘린더 일정 삭제 */
+    @Transactional
+    public void deleteSchedule(Integer id) {
+        scheduleRepository.deleteById(id);
+    }
 }

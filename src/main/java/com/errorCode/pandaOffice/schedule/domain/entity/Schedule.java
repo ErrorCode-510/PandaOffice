@@ -71,7 +71,7 @@ public class Schedule {
         );
     }
 
-    /* 캘린더 일정 수정 */
+    /* 3. 캘린더 일정 수정 */
     public void modify (
             String name, String description, LocalDate startDate, LocalDate endDate,
             LocalTime startTime, Employee employee
