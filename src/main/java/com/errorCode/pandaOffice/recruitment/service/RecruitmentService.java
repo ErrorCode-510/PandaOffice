@@ -139,7 +139,7 @@ public class RecruitmentService {
 
     /* 6. 면접자 삭제 */
     @Transactional
-    public void remove(Integer id) {
+    public void deleteApplicant(Integer id) {
         applicantRepository.deleteById((id));
     }
 
@@ -238,5 +238,11 @@ public class RecruitmentService {
                 employee3,
                 applicants
         );
+    }
+
+    /* 면접일정 삭제 */
+    @Transactional
+    public void deleteInterviewSchedule(Integer id) {
+        interviewScheduleRepository.deleteById(id);
     }
 }

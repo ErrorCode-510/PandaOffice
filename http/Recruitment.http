@@ -1,6 +1,6 @@
 ### 면접자 전체 조회
-GET http://localhost:8001/recruitment/applicant?page=9
-Access-Token: Bearer eyJkYXRlIjoxNzE5MjgwMjQ0OTkwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODM4NDR9.h-28o7WGy_OMAvZNNKF1YArOO5s9W8bEH1dwUgkBEu7nMBBEps8bDYo3jT6pHX3eTaJbsX2q0ptvz96NLGhbMA
+GET http://localhost:8001/recruitment/applicant?page=10
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
 
 ### 면접자 성별 + 이름 조회
 GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남&name=우
@@ -28,7 +28,7 @@ Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 면접자 등록
 POST http://localhost:8001/recruitment/applicant/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzU4MTc5Mjc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjE3Nzl9.infnrZd-gYNbidYMirb2FC9Btd8fLWRT_xc3yksxJ9tXr7IEXFudGNrwNgN_enSodbNx9ixWVxZyYJbgf0yTSg
 Content-Type: application/json
 
 {
@@ -41,12 +41,12 @@ Content-Type: application/json
 }
 
 ### 면접자 상세 조회
-GET http://localhost:8001/recruitment/applicant/1
+GET http://localhost:8001/recruitment/applicant/detail/1
 Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
 
 ### 면접자 수정
-PUT http://localhost:8001/recruitment/applicant/1
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+PUT http://localhost:8001/recruitment/applicant/modify/102
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzU4MTc5Mjc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjE3Nzl9.infnrZd-gYNbidYMirb2FC9Btd8fLWRT_xc3yksxJ9tXr7IEXFudGNrwNgN_enSodbNx9ixWVxZyYJbgf0yTSg
 Content-Type: application/json
 
 {
@@ -59,16 +59,16 @@ Content-Type: application/json
 }
 
 ### 면접자 삭제
-DELETE http://localhost:8001/recruitment/applicant/1
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+DELETE http://localhost:8001/recruitment/applicant/delete/101
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
 
 ### 면접장소 전체 조회
 GET http://localhost:8001/recruitment/place
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mjk3NjIwNDQzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzMDEyMjB9.v2NeCpGrviIf6C4rpov9GUBS_HvG5FHllAhr0bbP6Ux9CsA71lKEppYAesLAbRGFMRxwQKnOJOiOPdJAhxw5iA
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
 
 ### 면접일정 등록
 POST http://localhost:8001/recruitment/interview-schedule/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5MjkzNDEwMTI3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyOTcwMTB9.cByp1OvBNcO-bI_vy-z-gKl0WWp1xJhxyG2C83Z3Ae2tauZ0ZN0np3No6AZpDZyzwzyRo2-7YmO-S4Q3vrYMvw
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
 Content-Type: application/json
 
 {
@@ -90,21 +90,60 @@ Content-Type: application/json
     "employeeId": 201511003
   },
   "applicantList": [
-    {"id": 1},
-    {"id": 2},
-    {"id": 3},
-    {"id": 4},
-    {"id": 5},
-    {"id": 6},
-    {"id": 7},
-    {"id": 8},
-    {"id": 9},
-    {"id": 10}
+    {"id": 21},
+    {"id": 22},
+    {"id": 23},
+    {"id": 24},
+    {"id": 25},
+    {"id": 26},
+    {"id": 27},
+    {"id": 28},
+    {"id": 29},
+    {"id": 30}
   ]
 }
 
 ### 면접일정 상세 조회
-GET http://localhost:8001/recruitment/interview-schedule/1
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mjk3NjIwNDQzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzMDEyMjB9.v2NeCpGrviIf6C4rpov9GUBS_HvG5FHllAhr0bbP6Ux9CsA71lKEppYAesLAbRGFMRxwQKnOJOiOPdJAhxw5iA
+GET http://localhost:8001/recruitment/interview-schedule/detail/2
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
 
-### 면접일정 수정/삭제
+### 면접일정 수정
+PUT http://localhost:8001/recruitment/interview-schedule/modify/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzU4MTc5Mjc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjE3Nzl9.infnrZd-gYNbidYMirb2FC9Btd8fLWRT_xc3yksxJ9tXr7IEXFudGNrwNgN_enSodbNx9ixWVxZyYJbgf0yTSg
+Content-Type: application/json
+
+{
+  "name": "면접 수정 테스트3",
+  "memo": "메모가 안 나온다!!!!",
+  "startDate": "2024-06-24",
+  "endDate": "2024-06-24",
+  "startTime": "09:00",
+  "place": {
+    "id": 2
+  },
+  "employee": {
+    "employeeId": 201514001
+  },
+  "employee2": {
+    "employeeId": 201514002
+  },
+  "employee3": {
+    "employeeId": 201514003
+  },
+  "applicantList": [
+    {"id": 21},
+    {"id": 22},
+    {"id": 23},
+    {"id": 24},
+    {"id": 25},
+    {"id": 26},
+    {"id": 27},
+    {"id": 28},
+    {"id": 29},
+    {"id": 30}
+  ]
+}
+
+### 면접일정 삭제
+DELETE http://localhost:8001/recruitment/interview-schedule/delete/2
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
