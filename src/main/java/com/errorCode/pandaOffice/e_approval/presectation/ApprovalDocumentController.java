@@ -1,23 +1,16 @@
 package com.errorCode.pandaOffice.e_approval.presectation;
 
-import com.errorCode.pandaOffice.auth.type.CustomUser;
-import com.errorCode.pandaOffice.auth.util.TokenUtils;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
-import com.errorCode.pandaOffice.e_approval.domain.entity.DocumentTemplate;
-import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateRepository;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentListResponse;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.CreateApprovalDocumentRequest;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentDetailResponse;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.UpdateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentListResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentDetailResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.UpdateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.e_approval.service.ApprovalDocumentService;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
