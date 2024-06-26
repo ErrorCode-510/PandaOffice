@@ -28,10 +28,12 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     // 분류와 소분류별 공지사항 조회 (페이징 및 정렬) (최신순으로 조회)
     @EntityGraph(attributePaths = {"employee", "employee.job"})
     Page<Notice> findByCategoryAndSubCategory(String category, String subCategory, Pageable pageable);
+    Page<Notice> findByStatus(char status, Pageable pageable);
 
     // 조회수 증가
     @Transactional
     @Modifying
     @Query("UPDATE Notice n SET n.viewCount = n.viewCount + 1 WHERE n.noticeId = :noticeId")
     void incrementViewCount(@Param("noticeId") int noticeId);
+
 }

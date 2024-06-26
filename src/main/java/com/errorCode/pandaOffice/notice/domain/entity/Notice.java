@@ -1,14 +1,10 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
-
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.notice.dto.request.NoticeRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 // 공지사항(게시글) 엔티티 클래스
 @Entity
@@ -36,6 +32,7 @@ public class Notice {
     @Column(name = "sub_category")
     private String subCategory;  // 소분류 (그룹 : 부서별 / 경조사 : 결혼, 부고, 돌찬치)
 
+    @CreatedDate
     @Column(name = "posted_date", nullable = false)
     private LocalDate postedDate;  // 작성일
 
