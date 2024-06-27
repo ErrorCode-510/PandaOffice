@@ -1,20 +1,15 @@
 package com.errorCode.pandaOffice.attendance.service;
 
-import com.errorCode.pandaOffice.attendance.domain.entity.AnnualLeaveCategory;
 import com.errorCode.pandaOffice.attendance.domain.entity.AnnualLeaveRecord;
 import com.errorCode.pandaOffice.attendance.domain.entity.AttendanceRecord;
 import com.errorCode.pandaOffice.attendance.domain.entity.OvertimeRecord;
-import com.errorCode.pandaOffice.attendance.domain.repository.AnnualLeaveCategoryRepository;
 import com.errorCode.pandaOffice.attendance.domain.repository.AnnualLeaveRecordRepository;
 import com.errorCode.pandaOffice.attendance.domain.repository.AttendanceRecordRepository;
 import com.errorCode.pandaOffice.attendance.domain.repository.OvertimeRecordRepository;
-import com.errorCode.pandaOffice.attendance.dto.AnnualLeaveCategory.response.AnnualLeaveCategoryResponse;
 import com.errorCode.pandaOffice.attendance.dto.AnnualLeaveRecord.response.AnnualLeaveRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.AttendanceRecord.response.AttendanceRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.OvertimeRecord.response.OverTimeRecordResponse;
 import com.errorCode.pandaOffice.auth.util.TokenUtils;
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,40 +31,6 @@ public class AttendanceService {
     private final OvertimeRecordRepository overtimeRecordRepository;
 
     private final AnnualLeaveRecordRepository annualLeaveRecordRepository;
-
-    private final AnnualLeaveCategoryRepository annualLeaveCategoryRepository;
-
-    private final EmployeeRepository employeeRepository;
-
-
-    /* 1. 사원의 아이디를 기준으로 모든 근태 기록을 보여주는 기능 */
-    public List<AttendanceRecordResponse> getAttendanceRecord(int employeeId) {
-        List<AttendanceRecord> attendanceRecords = attendanceRecordRepository.findByEmployee_EmployeeId(employeeId);
-
-        return attendanceRecords.stream()
-                .map(attendanceRecord -> new AttendanceRecordResponse(
-                        attendanceRecord.getId(),
-                        attendanceRecord.getDate(),
-                        attendanceRecord.getCheckInTime(),
-                        attendanceRecord.getCheckOutTime(),
-                        attendanceRecord.getTotalLateTime()))
-                .collect(Collectors.toList());
-    }
-
-    /* 2. 사원의 아이디를 기준으로 모든 연장 근무 기록을 보여주는 기능 */
-    public List<OverTimeRecordResponse> getOvertimeRecord(int employeeId) {
-        List<OvertimeRecord> overtimeRecords = overtimeRecordRepository.findByEmployee_EmployeeId(employeeId);
-
-        return overtimeRecords.stream()
-                .map(overtimeRecord -> new OverTimeRecordResponse(
-                        overtimeRecord.getId(),
-                        overtimeRecord.getDate(),
-                        overtimeRecord.getStartTime(),
-                        overtimeRecord.getEndTime(),
-                        overtimeRecord.getType()
-                ))
-                .collect(Collectors.toList());
-    }
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1.내 근태 현황 페이지(Attendance Status)의 기능들 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
@@ -166,7 +127,6 @@ public class AttendanceService {
                 })
                 .collect(Collectors.toList());
     }
-
 
     /* 2-1. 이번 주 누적 근무 시간을 계산하는 메소드 */
     public Map<String, Duration> calculateWeeklyCumulativeTimes(List<AttendanceRecord> attendanceRecords) {
@@ -309,7 +269,6 @@ public class AttendanceService {
         AnnualLeaveRecordResponse response = AnnualLeaveRecordResponse.of(recordList);
 
         return List.of(response);
-
     }
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 3.연차 캘린더(Attendance Calendar)  ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
@@ -367,7 +326,47 @@ public class AttendanceService {
     *  1. 조정항목 : 버튼식이고 누르면 색이 바뀜
        2. 조정 일수 : 플마 눌러서 가능
     *  3. 합계 : 현재 상태(부여 연차, 소진연차)에서 계산된 값이 표시됨
-       4. 저장 : 저장 버튼 누르면 팝업창이 뜨면서 저장이 완료됨*/
+       4. 저장 : 저장 버튼 누르면 팝업창이 뜨면서 저장이 완료됨 */
+    public AnnualLeaveRecordResponse getAnnualLeaveRecordsByHiredYear(int searchYear) {
+
+        int currentYear = LocalDate.now().getYear();
+
+        // 1. 특정 년도에 입사한 사원들의 연차 기록을 가져옵니다.
+        LocalDate startOfHiredYear = LocalDate.of(searchYear, 1, 1); // 해당 년도의 시작일을 설정
+        LocalDate endOfHiredYear = LocalDate.of(searchYear, 12, 31); // 해당 년도의 종료일을 설정
+        List<AnnualLeaveRecord> hiredYearRecords = annualLeaveRecordRepository.findByEmployee_HireDateBetween(startOfHiredYear, endOfHiredYear);
+
+        // 2. 필터링된 사원 목록에서 연차 기록의 변동일이 현재 년도와 같은 연차 기록을 가져옵니다.
+        LocalDate startOfCurrentYear = LocalDate.of(currentYear, 1, 1); // 현재 년도의 시작일을 설정
+        LocalDate endOfCurrentYear = LocalDate.of(currentYear, 12, 31); // 현재 년도의 종료일을 설정
+        List<AnnualLeaveRecord> currentYearRecords = hiredYearRecords.stream()
+                .filter(record -> !record.getDate().isBefore(startOfCurrentYear) && !record.getDate().isAfter(endOfCurrentYear)) // 변동일이 현재 년도 내에 있는지 필터링
+                .collect(Collectors.toList());
+
+        // 3. 연차 기록을 사원 이름 기준으로 그룹화하여 변환합니다.
+        Map<String, List<AnnualLeaveRecord>> groupedByEmployee = currentYearRecords.stream()
+                .collect(Collectors.groupingBy(record -> record.getEmployee().getName())); // 사원 이름을 기준으로 그룹화
+
+        // 4. AnnualLeaveRecordResponse 형태로 변환합니다.
+        return AnnualLeaveRecordResponse.of(currentYearRecords); // 변환된 결과를 AnnualLeaveRecordResponse로 변환하여 반환
+    }
+
+    public AnnualLeaveRecordResponse getGrantAndUsedLeave() {
+
+        /* 토큰에서 사원 ID 가져오는 메소드 */
+        int employeeId = TokenUtils.getEmployeeId();
+
+        int currentYear = LocalDate.now().getYear();
+
+        LocalDate startDate = LocalDate.of(currentYear, 1, 1); // 해당 년도의 시작일을 설정
+        LocalDate endDate = LocalDate.of(currentYear, 12, 31); // 해당 년도의 종료일을 설정
+
+        List<AnnualLeaveRecord> recordList = annualLeaveRecordRepository.findByEmployee_EmployeeIdAndDateBetween(employeeId, startDate, endDate);
+
+        AnnualLeaveRecordResponse response = AnnualLeaveRecordResponse.of(recordList);
+
+        return response;
+    }
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 7.모든 사원 근태 현황(Attendance Status of All Employees) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
 
@@ -377,5 +376,26 @@ public class AttendanceService {
      * 3. 근데 이거 전부 다 프론트라서.. 어카냐 지금..  */
 
     /* 2. 목록 : 이름이랑 직급이랑 같이 나오게 해야하는거 말고는 딱히 신경써야 할 부분이 없어보임 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
