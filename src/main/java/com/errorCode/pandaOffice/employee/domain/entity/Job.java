@@ -1,9 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
@@ -12,6 +9,7 @@ import lombok.Getter;
 
 public class Job {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
     @Column
@@ -19,8 +17,7 @@ public class Job {
 
     protected Job(){}
 
-    public Job(int id, String title) {
-        this.id = id;
+    public Job(String title) {
         this.title = title;
     }
 

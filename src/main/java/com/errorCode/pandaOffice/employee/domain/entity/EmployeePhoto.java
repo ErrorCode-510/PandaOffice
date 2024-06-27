@@ -22,10 +22,8 @@ public class EmployeePhoto {
         this.name = name;
         this.path = path;
     }
-
     public EmployeePhoto() {
 
     }
-
 
 }

@@ -53,7 +53,7 @@ public class Employee {
     private String employmentStatus;
     /* 사원의 연봉 정보 추가 */
     @Column(name="annual_salary")
-    private int annualAalary;
+    private int annualSalary;
     private String refreshToken;
     protected Employee(){}
 

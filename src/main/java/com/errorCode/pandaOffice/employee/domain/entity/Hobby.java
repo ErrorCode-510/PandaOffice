@@ -9,6 +9,7 @@ import lombok.Getter;
 
 public class Hobby {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
     @ManyToOne
@@ -20,8 +21,7 @@ public class Hobby {
 
     }
 
-    public Hobby(int id, Employee employee, String hobby) {
-        this.id = id;
+    public Hobby(Employee employee, String hobby) {
         this.employee = employee;
         this.hobby = hobby;
     }
