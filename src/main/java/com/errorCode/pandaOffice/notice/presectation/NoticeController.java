@@ -1,5 +1,4 @@
 package com.errorCode.pandaOffice.notice.presectation;
-
 import com.errorCode.pandaOffice.common.exception.NotFoundException;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
@@ -13,10 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.net.URI;
-import java.util.List;
+
 
 // 공지사항 컨트롤러 클래스
 @RestController
@@ -55,12 +52,11 @@ public class NoticeController {
     // 특정 공지사항 조회
     @GetMapping("/notices/{noticeId}")
     public ResponseEntity<NoticeResponseDTO> getNoticeById(@PathVariable int noticeId) {
-        final NoticeResponseDTO noticeResponse = noticeService.getNoticeById(noticeId);
-
-        if (noticeResponse != null) {
+        try {
+            final NoticeResponseDTO noticeResponse = noticeService.getNoticeById(noticeId);
             return ResponseEntity.ok(noticeResponse);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (SecurityException e) {
+            return ResponseEntity.notFound().build();  // 공지사항을 찾을 수 없음
         }
     }
 
@@ -75,12 +71,7 @@ public class NoticeController {
     public ResponseEntity<Void> createNotice(
             @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
     ) {
-        if (noticeRequestDTO.getEmployeeId() == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
         final Integer noticeId = noticeService.createNotice(noticeRequestDTO);
-
         return ResponseEntity.created(URI.create("/notice/regist/" + noticeId)).build();
     }
 
@@ -93,7 +84,6 @@ public class NoticeController {
         try {
             noticeService.modifyNotice(noticeId, noticeRequestDTO);
             return ResponseEntity.noContent().build();  // 수정 성공 시 204 No Content 응답
-
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();  // 공지사항을 찾을 수 없을 때 404 Not Found 응답
         }
@@ -102,8 +92,11 @@ public class NoticeController {
     // 공지사항 삭제
     @DeleteMapping("/notices/{noticeId}")
     public ResponseEntity<Void> deleteNotice(@PathVariable int noticeId) {
-        noticeService.deleteNotice(noticeId);
-
-        return ResponseEntity.noContent().build();
+        try {
+            noticeService.deleteNotice(noticeId);
+            return ResponseEntity.noContent().build();  // 삭제 성공 시 204 No Content 응답
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();  // 공지사항을 찾을 수 없을 때 404 Not Found 응답
+        }
     }
 }
