@@ -19,4 +19,6 @@ public interface AnnualLeaveRecordRepository extends JpaRepository<AnnualLeaveRe
     List<AnnualLeaveRecord> findByEmployee_EmployeeIdAndDateBetween(int employeeId, LocalDate startDate, LocalDate endDate);
 
     List<AnnualLeaveRecord> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
+    List<AnnualLeaveRecord> findByEmployee_HireDateBetween(LocalDate startOfJoinYear, LocalDate endOfJoinYear);
 }

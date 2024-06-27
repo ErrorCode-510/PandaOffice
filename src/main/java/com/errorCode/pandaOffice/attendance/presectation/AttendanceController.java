@@ -21,26 +21,6 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService;
 
-    /* 1. 요청 받기 */
-    @GetMapping("/attendance-record")
-    public ResponseEntity<AttendanceRecordResponse> getAttendanceRecord(@RequestParam int employeeId){
-
-        /* 2. 서비스 객체의 getAttendanceRecord 메소드에 사번 전달하여 근태 기록 가져오기 */
-        List<AttendanceRecordResponse> attendanceRecordResponse = attendanceService.getAttendanceRecord(employeeId);
-
-        return null;
-    }
-
-    @GetMapping("/overtime")
-    public ResponseEntity<OverTimeRecordResponse> getOvertimeRecord(@RequestParam int employeeId) {
-
-        /* 3. 서비스 객체의 getOvertimeRecord 메소드에 사번을 전달하여 연장근무 기록 가져오기 */
-        List<OverTimeRecordResponse> overTimeRecordResponses = attendanceService.getOvertimeRecord(employeeId);
-
-        return null;
-
-    }
-
     @GetMapping("/annual-leave")
     public ResponseEntity<AnnualLeaveRecordResponse> getAnnualLeaveRecord(@RequestParam LocalDate searchStartDate,
                                                                           @RequestParam LocalDate searchEndDate) {
