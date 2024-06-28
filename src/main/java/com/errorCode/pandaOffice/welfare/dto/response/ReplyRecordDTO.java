@@ -4,24 +4,25 @@ public class ReplyRecordDTO {
     private int id;
     private int employeeId; //사번(임시작성. 사원 테이블 확정시 이름 변경 )
     private int surveyId; //설문코드
-    private int stAgreeCount; //매우 그렇다 합계 (st -> Strongly '매우')
-    private int agreeCount; //그렇다 합계
-    private int Average; //보통이다 합계
-    private int Disagree; //약간 아니다 합계
-    private int stDisagreeCount; // 매우 아니다 합계 (st -> Strongly '매우')
+    private int stAgree; //매우 그렇다 합계 (st -> Strongly '매우')
+    private int agree; //그렇다 합계
+    private int average; //보통이다 합계
+    private int disagree; //약간 아니다 합계
+    private int stDisagree; // 매우 아니다 합계 (st -> Strongly '매우')
 
     public ReplyRecordDTO(){
 
     }
-    public ReplyRecordDTO(int id, int employeeId, int surveyId, int stAgreeCount, int agreeCount, int average, int disagree, int stDisagreeCount) {
+
+    public ReplyRecordDTO(int id, int employeeId, int surveyId, int stAgree, int agree, int average, int disagree, int stDisagree) {
         this.id = id;
         this.employeeId = employeeId;
         this.surveyId = surveyId;
-        this.stAgreeCount = stAgreeCount;
-        this.agreeCount = agreeCount;
-        Average = average;
-        Disagree = disagree;
-        this.stDisagreeCount = stDisagreeCount;
+        this.stAgree = stAgree;
+        this.agree = agree;
+        this.average = average;
+        this.disagree = disagree;
+        this.stDisagree = stDisagree;
     }
 
     public int getId() {
@@ -48,57 +49,43 @@ public class ReplyRecordDTO {
         this.surveyId = surveyId;
     }
 
-    public int getStAgreeCount() {
-        return stAgreeCount;
+    public int getStAgree() {
+        return stAgree;
     }
 
-    public void setStAgreeCount(int stAgreeCount) {
-        this.stAgreeCount = stAgreeCount;
+    public void setStAgree(int stAgree) {
+        this.stAgree = stAgree;
     }
 
-    public int getAgreeCount() {
-        return agreeCount;
+    public int getAgree() {
+        return agree;
     }
 
-    public void setAgreeCount(int agreeCount) {
-        this.agreeCount = agreeCount;
+    public void setAgree(int agree) {
+        this.agree = agree;
     }
 
     public int getAverage() {
-        return Average;
+        return average;
     }
 
     public void setAverage(int average) {
-        Average = average;
+        this.average = average;
     }
 
     public int getDisagree() {
-        return Disagree;
+        return disagree;
     }
 
     public void setDisagree(int disagree) {
-        Disagree = disagree;
+        this.disagree = disagree;
     }
 
-    public int getStDisagreeCount() {
-        return stDisagreeCount;
+    public int getStDisagree() {
+        return stDisagree;
     }
 
-    public void setStDisagreeCount(int stDisagreeCount) {
-        this.stDisagreeCount = stDisagreeCount;
-    }
-
-    @Override
-    public String toString() {
-        return "ReplyRecordDTO{" +
-                "id=" + id +
-                ", employeeId=" + employeeId +
-                ", surveyId=" + surveyId +
-                ", stAgreeCount=" + stAgreeCount +
-                ", agreeCount=" + agreeCount +
-                ", Average=" + Average +
-                ", Disagree=" + Disagree +
-                ", stDisagreeCount=" + stDisagreeCount +
-                '}';
+    public void setStDisagree(int stDisagree) {
+        this.stDisagree = stDisagree;
     }
 }

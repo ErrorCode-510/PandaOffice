@@ -21,7 +21,6 @@ public class SurveyCategory {
     @Column(name="category_name",length = 255)
     private String categoryName;
 
-
     public SurveyCategory(int id, String categoryName) {
         this.id = id;
         this.categoryName = categoryName;
