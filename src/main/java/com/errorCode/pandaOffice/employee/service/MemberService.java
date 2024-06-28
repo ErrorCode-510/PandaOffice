@@ -2,18 +2,25 @@ package com.errorCode.pandaOffice.employee.service;
 
 
 import com.errorCode.pandaOffice.auth.dto.LoginDto;
+import com.errorCode.pandaOffice.auth.util.EmailUtils;
 import com.errorCode.pandaOffice.common.exception.NotFoundException;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.MemberRepository;
-import com.errorCode.pandaOffice.employee.dto.request.MemberSignupRequest;
+import com.errorCode.pandaOffice.employee.dto.request.AuthRequest;
 import com.errorCode.pandaOffice.employee.dto.response.ProfileResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.errorCode.pandaOffice.common.exception.type.ExceptionCode.NOT_FOUND_REFRESH_TOKEN;
 
@@ -25,6 +32,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailUtils emailUtils;
+    private final Map<String, String> authCodeStore = new HashMap<>(); // In-memory store for auth codes
+
 //    public void signup(final MemberSignupRequest memberRequest) {
 //
 //        final Employee newEmployee = Employee.of(
@@ -83,6 +94,44 @@ public class MemberService {
 
         return employee.getEmployeeId(); // 회원 아이디를 반환합니다.
     }
+    public boolean verifyUserAndSendCode(AuthRequest authRequest) {
+        System.out.println(authRequest.getEmployeeId());
+        System.out.println(authRequest.getEmail());
+        System.out.println(authRequest.getName());
+        Optional<Employee> userOptional = memberRepository.findByEmployeeIdAndNameAndEmail(
+                authRequest.getEmployeeId(),
+                authRequest.getName(),
+                authRequest.getEmail()
+        );
+        if (userOptional.isPresent()) {
+            String code = emailUtils.generateAuthCode();
+            authCodeStore.put(authRequest.getEmail(), code);
+            emailUtils.sendEmailWithCode(authRequest.getEmail(), code);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean verifyAuthCode(String email, String code) {
+        String storedCode = authCodeStore.get(email);
+        return storedCode != null && storedCode.equals(code);
+    }
+    public boolean changePassword(String email, String newPassword) {
+        Optional<Employee> optionalEmployee = memberRepository.findByEmail(email);
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+            employee.changePassword(newPassword);
+            memberRepository.save(employee); // 변경 사항을 데이터베이스에 저장
+            return true;
+        } else {
+            throw new EntityNotFoundException("Employee with email " + email + " not found");
+        }
+    }
+    public List<Employee> getAllEmployees() {
+        return memberRepository.findAll();
+    }
+
+    }
 
 
-}
+

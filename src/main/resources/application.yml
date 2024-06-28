@@ -4,6 +4,18 @@ spring:
     url: jdbc:mysql://localhost:3306/officeerp
     username : panda
     password : panda
+  mail:
+    username: mydogduri@naver.com
+    password: "!k04030228"
+    host: smtp.naver.com
+    port: 587
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   jpa:
     show-sql: true
     database: mysql

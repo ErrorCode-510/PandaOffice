@@ -9,7 +9,7 @@ import lombok.Getter;
 
 public class EmployeePhoto {
     @Id
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="employee_id")
     private Employee employee;
     @Column(name="name")

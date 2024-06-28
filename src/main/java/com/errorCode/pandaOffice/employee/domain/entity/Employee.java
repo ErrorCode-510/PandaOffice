@@ -2,6 +2,7 @@ package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 @Getter
@@ -53,11 +54,11 @@ public class Employee {
     private String employmentStatus;
     /* 사원의 연봉 정보 추가 */
     @Column(name="annual_salary")
-    private int annualAalary;
+    private int annualSalary;
     private String refreshToken;
     protected Employee(){}
 
-    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password) {
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password, int annualSalary) {
         this.employeeId = employeeId;
         this.name = name;
         this.englishName = englishName;
@@ -76,8 +77,15 @@ public class Employee {
         this.selfIntroduction = selfIntroduction;
         this.employmentStatus = employmentStatus;
         this.password = password;
+        this.annualSalary = annualSalary;
     }
 
+
+    // Method to change password
+    public void changePassword(String newPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.password = encoder.encode(newPassword);
+    }
 
 
     public void updateRefreshToken(String refreshToken) {

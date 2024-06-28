@@ -56,10 +56,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     /* 클라이언트가 외부 도메인을 요청하는 경우 웹 브라우저에서 자체적으로 사전 요청(preflight)이 일어난다.
                      * 이 때 OPTIONS 메소드로 서버에 사전 요청을 보내 확인한다. */
-//                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 //                    auth.requestMatchers(HttpMethod.GET, "/productimgs/**").permitAll();
-//                    auth.requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll();
-//                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/signup", "/api/v1/members/login").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/members/**").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/v1/members/**").permitAll();
 //                    auth.requestMatchers("/api/v1/products/*/reviews/**").authenticated();
 //                    auth.requestMatchers("/api/v1/products-management/**", "/api/v1/products/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
