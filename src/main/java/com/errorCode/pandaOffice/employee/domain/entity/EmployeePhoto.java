@@ -9,15 +9,17 @@ import lombok.Getter;
 
 public class EmployeePhoto {
     @Id
-    @ManyToOne
-    @JoinColumn(name="employee_id")
+    private int id;
+    @OneToOne
+    @JoinColumn(name="employee_id", referencedColumnName = "employee_id")
     private Employee employee;
     @Column(name="name")
     private String name;
     @Column(name="path")
     private String path;
 
-    public EmployeePhoto(Employee employee, String name, String path) {
+    public EmployeePhoto(int id, Employee employee, String name, String path) {
+        this.id = id;
         this.employee = employee;
         this.name = name;
         this.path = path;
