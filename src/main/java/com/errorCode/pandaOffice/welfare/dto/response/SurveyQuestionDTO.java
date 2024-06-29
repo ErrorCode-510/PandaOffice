@@ -1,5 +1,7 @@
 package com.errorCode.pandaOffice.welfare.dto.response;
 
+import com.errorCode.pandaOffice.welfare.domain.entity.SurveyQuestion;
+
 public class SurveyQuestionDTO {
     private int id; // 설문 문항 식별코드
     private int surveyId; // 설문지 코드
@@ -14,6 +16,14 @@ public class SurveyQuestionDTO {
         this.surveyId = surveyId;
         this.questionOrder = questionOrder;
         this.question = question;
+    }
+
+    public SurveyQuestionDTO(SurveyQuestion surveyQuestion) {
+        this.id = surveyQuestion.getId();
+        this.questionOrder = surveyQuestion.getQuestionOrder();
+        this.question = surveyQuestion.getQuestion();
+        this.surveyId = surveyQuestion.getSurvey().getId();
+//        this.surveyId = surveyQuestion.getSurvey() != null ? surveyQuestion.getSurvey().getId() : 0; // Survey의 ID를 추가
     }
 
     public int getId() {
