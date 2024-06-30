@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class FamilyMember {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
     @ManyToOne
@@ -37,5 +38,7 @@ public class FamilyMember {
         this.job = job;
     }
 
-
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }

@@ -1,0 +1,20 @@
+package com.errorCode.pandaOffice.employee.dto.request;
+
+import com.errorCode.pandaOffice.employee.domain.entity.CareerHistory;
+import com.errorCode.pandaOffice.employee.domain.entity.EducationHistory;
+import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.entity.FamilyMember;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+@Getter
+@Setter
+public class EmployeeDTO {
+    private Employee employee;
+    private List<FamilyMember> familyMember;
+    private List<CareerHistory> careerHistory;
+    private List<EducationHistory> educationHistory;
+    private String photo;
+
+}

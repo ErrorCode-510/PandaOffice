@@ -4,9 +4,16 @@ package com.errorCode.pandaOffice.employee.service;
 import com.errorCode.pandaOffice.auth.dto.LoginDto;
 import com.errorCode.pandaOffice.auth.util.EmailUtils;
 import com.errorCode.pandaOffice.common.exception.NotFoundException;
+import com.errorCode.pandaOffice.employee.domain.entity.CareerHistory;
+import com.errorCode.pandaOffice.employee.domain.entity.EducationHistory;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.entity.FamilyMember;
+import com.errorCode.pandaOffice.employee.domain.repository.CareerHistoryRepository;
+import com.errorCode.pandaOffice.employee.domain.repository.EducationHistoryRepository;
+import com.errorCode.pandaOffice.employee.domain.repository.FamilyMemberRepository;
 import com.errorCode.pandaOffice.employee.domain.repository.MemberRepository;
 import com.errorCode.pandaOffice.employee.dto.request.AuthRequest;
+import com.errorCode.pandaOffice.employee.dto.request.EmployeeDTO;
 import com.errorCode.pandaOffice.employee.dto.response.ProfileResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +38,14 @@ import static com.errorCode.pandaOffice.common.exception.type.ExceptionCode.NOT_
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    @Autowired
+    private FamilyMemberRepository familyMemberRepository;
+
+    @Autowired
+    private CareerHistoryRepository careerHistoryRepository;
+
+    @Autowired
+    private EducationHistoryRepository educationHistoryRepository;
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private EmailUtils emailUtils;
@@ -130,8 +145,35 @@ public class MemberService {
     public List<Employee> getAllEmployees() {
         return memberRepository.findAll();
     }
+    public Employee saveEmployee(EmployeeDTO employeeDTO) {
+        Employee employee = employeeDTO.getEmployee();
+        Employee savedEmployee = memberRepository.save(employee);
 
+        // Save family members
+        List<FamilyMember> familyMembers = employeeDTO.getFamilyMember();
+        for (FamilyMember familyMember : familyMembers) {
+            familyMember.setEmployee(savedEmployee);
+            familyMemberRepository.save(familyMember);
+        }
+
+        // Save career history
+        List<CareerHistory> careerHistories = employeeDTO.getCareerHistory();
+        for (CareerHistory careerHistory : careerHistories) {
+            careerHistory.setEmployee(savedEmployee);
+            careerHistoryRepository.save(careerHistory);
+        }
+
+        // Save education history
+        List<EducationHistory> educationHistories = employeeDTO.getEducationHistory();
+        for (EducationHistory educationHistory : educationHistories) {
+            educationHistory.setEmployee(savedEmployee);
+            educationHistoryRepository.save(educationHistory);
+        }
+
+        return savedEmployee;
     }
+    }
+
 
 
 

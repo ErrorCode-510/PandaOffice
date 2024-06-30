@@ -5,6 +5,7 @@ import com.errorCode.pandaOffice.auth.service.AuthService;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.dto.request.AuthRequest;
 import com.errorCode.pandaOffice.employee.dto.request.ChangePasswordRequest;
+import com.errorCode.pandaOffice.employee.dto.request.EmployeeDTO;
 import com.errorCode.pandaOffice.employee.dto.request.FindIdRequest;
 import com.errorCode.pandaOffice.employee.dto.response.AuthResponse;
 import com.errorCode.pandaOffice.employee.dto.response.ProfileResponse;
@@ -115,7 +116,17 @@ public class MemberController {
         List<Employee> employees = memberService.getAllEmployees();
         return ResponseEntity.ok(employees);
     }
+    @PostMapping("/newEmployee")
+    public ResponseEntity<Employee> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
+
+        System.out.println(employeeDTO.getEmployee().getName());
+        System.out.println(employeeDTO.getPhoto());
+        Employee savedEmployee = memberService.saveEmployee(employeeDTO);
+        return ResponseEntity.ok(savedEmployee);
     }
+
+
+}
 
 
 

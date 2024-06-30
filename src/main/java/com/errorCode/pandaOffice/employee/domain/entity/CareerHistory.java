@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class CareerHistory {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @ManyToOne
@@ -42,4 +43,7 @@ public class CareerHistory {
         this.workDescription = workDescription;
     }
 
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 }
