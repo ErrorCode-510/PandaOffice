@@ -18,3 +18,14 @@ GET http://localhost:8001/org/job
 
 ### 특정 사원의 취미 조회
 GET http://localhost:8001/org/employee/201511001/hobby
+
+### 특정 사원 정보 수정
+PUT http://localhost:8001/org/employee/201511001
+Access-Token: Bearer eyJkYXRlIjoxNzE5NTYyODA0NzM5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTU2MjgwNH0.6QpKnS4WCbSA-sVq2U4TM5O0875xQgEaEkBgsy-mpShItBjhzuHgDZj6u6py_AzPC_Y_Vx83_iAQjTvt1S_ORA
+Content-Type: application/json
+
+{
+  "email": "123@gmail.com",
+  "selfIntroduction": "안녕하세요",
+  "hobby": ["운동"]
+}

@@ -66,4 +66,11 @@ public class OrganizationController {
         List<Hobby> hobbies = organizationService.getHobbyByEmployee(employeeId);
         return ResponseEntity.ok(hobbies);
     }
+
+    // 사원 정보 수정
+    @PutMapping("/employee/{employeeId}")
+    public ResponseEntity<Void> updateEmployee(@PathVariable int employeeId, @RequestBody OrganizationResponseDTO requestDTO) {
+        organizationService.updateEmployee(employeeId, requestDTO);
+        return ResponseEntity.noContent().build();
+    }
 }

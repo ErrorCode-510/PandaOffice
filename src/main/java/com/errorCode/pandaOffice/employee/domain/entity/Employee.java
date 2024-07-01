@@ -1,7 +1,10 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Getter
@@ -53,9 +56,10 @@ public class Employee {
     private String employmentStatus;
     /* 사원의 연봉 정보 추가 */
     @Column(name="annual_salary")
-    private int annualAalary;
+    private int annualSalary;
     private String refreshToken;
     protected Employee(){}
+
 
     public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password) {
         this.employeeId = employeeId;
@@ -80,5 +84,13 @@ public class Employee {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateSelfIntroduction(String selfIntroduction) {
+        this.selfIntroduction = selfIntroduction;
     }
 }

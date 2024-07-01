@@ -63,6 +63,25 @@ public class OrganizationService {
         return hobbyRepository.findByEmployee(employeeId);
     }
 
+    // 특정 사원의 이메일, 취미, 자기소개를 업데이트
+    public void updateEmployee(int employeeId, OrganizationResponseDTO requestDTO) {
+
+        // 필요한 필드만 업데이트
+        if (requestDTO.getEmail() != null) {
+            employeeRepository.updateEmail(employeeId, requestDTO.getEmail());
+        }
+        if (requestDTO.getSelfIntroduction() != null) {
+            employeeRepository.updateSelfIntroduction(employeeId, requestDTO.getSelfIntroduction());
+        }
+        if (requestDTO.getHobby() != null && !requestDTO.getHobby().isEmpty()) {
+            // 기존 취미 삭제
+            hobbyRepository.deleteByEmployee(employeeId);
+            // 새로운 취미 추가
+            Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+            requestDTO.getHobby().forEach(h -> hobbyRepository.save(new Hobby(0, employee, h)));
+        }
+    }
+
     // Employee 엔티티를 OrganizationResponseDTO 로 변환
     private OrganizationResponseDTO convertToDTO(Employee employee) {
         OrganizationResponseDTO dto = new OrganizationResponseDTO();
@@ -82,7 +101,7 @@ public class OrganizationService {
 
         // Hobby 조회
         List<Hobby> hobbies = hobbyRepository.findByEmployee(employee.getEmployeeId());
-        dto.setHobby(hobbies.isEmpty() ? "N/A" : hobbies.stream().map(Hobby::getHobby).collect(Collectors.joining(", ")));
+        dto.setHobby(hobbies.isEmpty() ? List.of("N/A") : hobbies.stream().map(Hobby::getHobby).collect(Collectors.toList()));
 
         return dto;
     }

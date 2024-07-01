@@ -2,6 +2,7 @@ package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity(name="Hobby")
@@ -11,12 +12,13 @@ public class Hobby {
     @Id
     @Column(name="id")
     private int id;
+
     @ManyToOne
     @JoinColumn(name="employee_id")
     private Employee employee;
     @Column(name="hobby")
     private String hobby;
-    protected Hobby() {
+    public Hobby() {
 
     }
 
@@ -25,8 +27,4 @@ public class Hobby {
         this.employee = employee;
         this.hobby = hobby;
     }
-
-
-
-
 }

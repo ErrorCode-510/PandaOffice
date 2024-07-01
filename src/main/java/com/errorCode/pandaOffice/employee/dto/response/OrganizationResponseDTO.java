@@ -3,6 +3,7 @@ package com.errorCode.pandaOffice.employee.dto.response;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class OrganizationResponseDTO {
 
     private String email;  // 이메일
 
-    private String hobby;  // 취미
+    private List<String> hobby;  // 취미
 
     private String selfIntroduction;  // 자기소개
 
