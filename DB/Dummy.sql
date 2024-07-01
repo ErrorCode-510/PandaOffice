@@ -9,14 +9,15 @@ VALUES (11, '인사'),
        (14, '기획'),
        (15, '마케팅');
 -- job 테이블에 더미 데이터 삽입
-INSERT INTO `job` (`id`, `title`)
-VALUES (0600, '사원'),
-       (0500, '주임'),
-       (0400, '대리'),
-       (0300, '과장'),
-       (0200, '차장'),
-       (0100, '부장'),
-       (0001, '사장');
+INSERT INTO `job` (`id`, `title`, `allowance`)
+VALUES
+    (50, '사원', 0),
+    (40, '주임', 0),
+    (35, '대리', 100000),
+    (30, '과장', 250000),
+    (25, '차장', 300000),
+    (20, '부장', 400000),
+    (11, '사장', 0);
 /* 사원 정보 - 임의 */
 INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
                         `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
