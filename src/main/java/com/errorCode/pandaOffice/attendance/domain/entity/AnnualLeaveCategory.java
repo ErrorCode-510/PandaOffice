@@ -26,9 +26,4 @@ public class AnnualLeaveCategory {
     /* 부여 or 소진 */
     private String type;
 
-    public AnnualLeaveCategory(int id, String name, String type) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-    }
 }
