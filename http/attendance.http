@@ -1,0 +1,4 @@
+GET http://localhost:8001/attendance/management/status?searchDate=2024-06-02
+Access-Token: Bearer eyJkYXRlIjoxNzE5OTA3OTk5MTc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTkwNzk5OX0.FrazB8yM9VPYRoU7A8AvZ4K_9PSE7KBU3savnfZfTrPG3kBiqnVbAv7IhXZvXWB2yWZgkYfATp_QKrHmZkEapA
+
+###
