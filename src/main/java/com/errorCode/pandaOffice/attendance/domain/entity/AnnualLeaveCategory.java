@@ -14,8 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 /* 연차 분류 */
 public class AnnualLeaveCategory {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /* 연차 분류 코드 */
@@ -24,12 +22,8 @@ public class AnnualLeaveCategory {
     /* 연차 분류 이름 */
     private String name;
 
-    /* 연자 분류 변동 수량 */
-    private double amount;
+    /* 연차 분류의 타입 */
+    /* 부여 or 소진 */
+    private String type;
 
-    public AnnualLeaveCategory(int id, String name, double amount) {
-        this.id = id;
-        this.name = name;
-        this.amount = amount;
-    }
 }

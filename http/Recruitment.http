@@ -1,1 +1,149 @@
-GET http://localhost:8001/recruitment/applicant?page=1&gender=남&name=길
+### 면접자 전체 조회
+GET http://localhost:8001/recruitment/applicant?page=10
+Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+
+### 면접자 성별 + 이름 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남&name=우
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+
+### 면접자 성별 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남
+Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+
+### 면접자 주소 + 이름 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도&name=최
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+
+### 면접자 주소 조회
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도
+Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+
+### 면접자 이름 검색
+GET http://localhost:8001/recruitment/applicant/search?page=1&name=성우현
+Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+
+### 면접자 조건 x 전체 조회
+GET http://localhost:8001/recruitment/applicant/search
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+
+### 면접자 등록
+POST http://localhost:8001/recruitment/applicant/regist
+Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+Content-Type: application/json
+
+{
+  "name": "성우현",
+  "birthDate": "1996-09-04",
+  "gender": "남",
+  "phone": "010-4714-7268",
+  "address": "서울특별시",
+  "email": "sunguh0904@gmail.com"
+}
+
+### 면접자 상세 조회
+GET http://localhost:8001/recruitment/applicant/detail/102
+Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
+
+### 면접자 수정
+PUT http://localhost:8001/recruitment/applicant/modify/102
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzU4MTc5Mjc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjE3Nzl9.infnrZd-gYNbidYMirb2FC9Btd8fLWRT_xc3yksxJ9tXr7IEXFudGNrwNgN_enSodbNx9ixWVxZyYJbgf0yTSg
+Content-Type: application/json
+
+{
+  "name": "백다빈",
+  "birthDate": "2000-08-02",
+  "gender": "여",
+  "phone": "010-1234-5678",
+  "address": "강원도",
+  "email": "baekdb0802@gmail.com"
+}
+
+### 면접자 삭제
+DELETE http://localhost:8001/recruitment/applicant/delete/102
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzYzMTE2MDgxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjY3MTZ9.9Pv4_EsStIhCtftK_llMrR9a7rT6D0x6yoJjDH5vRzIsXS2ULSbL1hH0Tj31wea6KfbFY9kzOuQN6mVRLVchBQ
+
+### 면접장소 전체 조회
+GET http://localhost:8001/recruitment/place
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
+
+### 면접일정 등록
+POST http://localhost:8001/recruitment/interview-schedule/regist
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
+Content-Type: application/json
+
+{
+  "name": "면접",
+  "memo": "사장님 아들 면접보러옴",
+  "startDate": "2024-06-24",
+  "endDate": "2024-06-24",
+  "startTime": "13:00",
+  "place": {
+    "id": 1
+  },
+  "employee": {
+    "employeeId": 201511001
+  },
+  "employee2": {
+    "employeeId": 201511002
+  },
+  "employee3": {
+    "employeeId": 201511003
+  },
+  "applicantList": [
+    {"id": 1},
+    {"id": 2},
+    {"id": 3},
+    {"id": 4},
+    {"id": 5},
+    {"id": 6},
+    {"id": 7},
+    {"id": 8},
+    {"id": 9},
+    {"id": 10}
+  ]
+}
+
+### 면접일정 상세 조회
+GET http://localhost:8001/recruitment/interview-schedule/detail/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
+
+### 면접일정 수정
+PUT http://localhost:8001/recruitment/interview-schedule/modify/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzU4MTc5Mjc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNjE3Nzl9.infnrZd-gYNbidYMirb2FC9Btd8fLWRT_xc3yksxJ9tXr7IEXFudGNrwNgN_enSodbNx9ixWVxZyYJbgf0yTSg
+Content-Type: application/json
+
+{
+  "name": "면접 수정 테스트3",
+  "memo": "메모가 안 나온다!!!!",
+  "startDate": "2024-06-24",
+  "endDate": "2024-06-24",
+  "startTime": "09:00",
+  "place": {
+    "id": 2
+  },
+  "employee": {
+    "employeeId": 201514001
+  },
+  "employee2": {
+    "employeeId": 201514002
+  },
+  "employee3": {
+    "employeeId": 201514003
+  },
+  "applicantList": [
+    {"id": 21},
+    {"id": 22},
+    {"id": 23},
+    {"id": 24},
+    {"id": 25},
+    {"id": 26},
+    {"id": 27},
+    {"id": 28},
+    {"id": 29},
+    {"id": 30}
+  ]
+}
+
+### 면접일정 삭제
+DELETE http://localhost:8001/recruitment/interview-schedule/delete/1
+Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g

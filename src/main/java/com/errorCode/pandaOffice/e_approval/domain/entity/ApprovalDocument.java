@@ -2,7 +2,7 @@ package com.errorCode.pandaOffice.e_approval.domain.entity;
 
 import com.errorCode.pandaOffice.e_approval.domain.type.ApprovalStatus;
 import com.errorCode.pandaOffice.e_approval.domain.type.converter.ApprovalStatusConverter;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.CreateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.employee.domain.entity.Department;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
@@ -70,5 +70,9 @@ public class ApprovalDocument {
         approvalDocument.attachments = documentAttachedFileList;
         approvalDocument.approvalLineList = approvalLine;
         return approvalDocument;
+    }
+
+    public void processApproval(ApprovalStatus status) {
+        this.status = status;
     }
 }

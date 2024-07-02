@@ -1,23 +1,16 @@
 package com.errorCode.pandaOffice.e_approval.presectation;
 
-import com.errorCode.pandaOffice.auth.type.CustomUser;
-import com.errorCode.pandaOffice.auth.util.TokenUtils;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
-import com.errorCode.pandaOffice.e_approval.domain.entity.DocumentTemplate;
-import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateRepository;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentListResponse;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.CreateApprovalDocumentRequest;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.ApprovalDocumentDetailResponse;
-import com.errorCode.pandaOffice.e_approval.dto.ApprovalDocument.UpdateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentListResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentDetailResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.UpdateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.e_approval.service.ApprovalDocumentService;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApprovalDocumentController {
     private final ApprovalDocumentService approvalDocumentService;
-    private final DocumentTemplateRepository documentTemplateRepository;
 
     /**
      * 결재 문서를 검색하는 api
@@ -59,7 +51,7 @@ public class ApprovalDocumentController {
             @RequestParam(required = false) final Integer status,
             @RequestParam(required = false) final Integer nowPage,
             @RequestParam(required = false) final Integer pageSize
-    ) throws Exception {
+    ) {
         final Page<ApprovalDocumentListResponse> documents = approvalDocumentService.searchDocuments(
                 startDate,
                 endDate,
@@ -88,14 +80,9 @@ public class ApprovalDocumentController {
      */
     @GetMapping("approval-document/{documentId}")
     public ResponseEntity<ApprovalDocumentDetailResponse> getApprovalDocumentDetail(@PathVariable int documentId) {
-
-        System.out.println("조회된 사번: " + TokenUtils.getEmployeeId());
-
-
-//        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
-//        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
-//        return ResponseEntity.ok(documentDetailResponse);
-        return null;
+        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
+        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
+        return ResponseEntity.ok(documentDetailResponse);
     }
 
 
@@ -118,11 +105,9 @@ public class ApprovalDocumentController {
     public ResponseEntity<Void> createApprovalDocument(
             @RequestPart final CreateApprovalDocumentRequest documentRequest,
             @RequestPart(required = false) final List<MultipartFile> attachedFile) {
-        final DocumentTemplate documentTemplate = documentTemplateRepository.findById(documentRequest.getDocumentTemplateId())
-                .orElseThrow(); /* 익셉션 등록 필요 */
         final int documentId = approvalDocumentService.createApprovalDocument(documentRequest, attachedFile);
         /* 상태코드 201, 문자열 URI 로 반환, ResponseEntity 빌드 */
-        return ResponseEntity.created(URI.create("/approval-document" + documentId)).build();
+        return ResponseEntity.created(URI.create("/approval-document/" + documentId)).build();
     }
 
     /**
@@ -130,21 +115,29 @@ public class ApprovalDocumentController {
      * <p>
      * 결재 처리 종류에 따라 수정되는 사항이 달라진다.
      * </p>
-     *
+     * @param documentRequest 결재선 및 결재 서류 처리에 필요한 request
+     *                        <Ul>
+     *                          <li><code>documentId</code>문서 ID(NotNull)</li>
+     *                          <li><code>approvalLineId</code>결재선 ID</li>
+     *                          <li><code>type</code>결재 분류 (1~9)</li>
+     *                          <li><code>date</code>결재일 (자동으로 초기화)</li>
+     *                          <li><code>comment</code>결재와 함께 오는 코멘트</li>
+     *                        </Ul>
      * @author
      */
     @PutMapping("approval-document")
     public ResponseEntity<Void> updateApprovalDocument(@RequestBody UpdateApprovalDocumentRequest documentRequest) {
-
-//        approvalDocumentService.updateApprovalDocument(documentRequest);
+        approvalDocumentService.updateApprovalDocument(documentRequest);
         return ResponseEntity.noContent().build();
     }
 
     /**
      * 아직 결재처리 되지 않은 서류를 삭제할 수 있다.
+     * @param documentId 서류의 ID
      */
-    @DeleteMapping
-    public ResponseEntity<Void> deleteApprovalDocument() {
-        return null;
+    @DeleteMapping("approval-document/{documentId}")
+    public ResponseEntity<Void> deleteApprovalDocument(@PathVariable int documentId) {
+        approvalDocumentService.deleteApprovalDocument(documentId);
+        return ResponseEntity.noContent().build();
     }
 }

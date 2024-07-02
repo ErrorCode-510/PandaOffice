@@ -28,7 +28,7 @@ public class ApprovalLineTemplate {
     @Column(nullable = false)
     private int folderId;
     /* 결재선 리스트 */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="approval_line_template_id")
     private List<ApprovalLineTemplateOrder> orderLine;
 }

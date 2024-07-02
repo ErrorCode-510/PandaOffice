@@ -1,6 +1,7 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -90,5 +91,13 @@ public class Employee {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateSelfIntroduction(String selfIntroduction) {
+        this.selfIntroduction = selfIntroduction;
     }
 }
