@@ -60,6 +60,23 @@ public class RecruitmentService {
 
         Page<Applicant> applicants = null;
 
+//        LocalDate now = LocalDate.now();
+//        LocalDate startDate = null;
+//        LocalDate endDate = null;
+
+//        if (age != null) {
+//            if (age >= 20 && age < 30) {
+//                startDate = now.minusYears(30).plusDays(1);
+//                endDate = now.minusYears(20);
+//            } else if (age >= 30 && age < 40) {
+//                startDate = now.minusYears(40).plusDays(1);
+//                endDate = now.minusYears(30);
+//            } else if (age >= 40 && age < 50) {
+//                startDate = now.minusYears(50).plusDays(1);
+//                endDate = now.minusYears(40);
+//            }
+//        }
+
         /* 성별 + 이름 조회 */
         if (gender != null && !gender.isEmpty() && name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByGenderAndNameContaining(getPageable(page), gender, name);
@@ -80,6 +97,14 @@ public class RecruitmentService {
         else if (name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByNameContaining(getPageable(page), name);
         }
+//        /* 나이 + 이름 조회 */
+//        else if (age != null && !name.isEmpty()) {
+//            applicants = applicantRepository.findByBirthDateBetweenAndContaining(getPageable(page),name, startDate, endDate);
+//        }
+//        /* 나이 조회 */
+//        else if (age != null) {
+//            applicants = applicantRepository.findByBirthDateBetween(getPageable(page), startDate, endDate);
+//        }
         /* 면접자 전체 조회 */
         else {
             applicants = applicantRepository.findAll(getPageable(page));
@@ -240,7 +265,7 @@ public class RecruitmentService {
         );
     }
 
-    /* 면접일정 삭제 */
+    /* 11. 면접일정 삭제 */
     @Transactional
     public void deleteInterviewSchedule(Integer id) {
         interviewScheduleRepository.deleteById(id);
