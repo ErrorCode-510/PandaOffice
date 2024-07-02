@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -35,7 +36,9 @@ public class DocumentTemplate {
     @ManyToOne
     @JoinColumn(name = "last_editor_id", nullable = false)
     private Employee lastEditor;
-    /* 자동 결재선 ID */
+    /* 최종 수정일 */
+    private LocalDate lastEditDate;
+    /* 자동 결재선 */
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "template_id")
     private List<AutoApprovalLine> autoApprovalLines;
@@ -50,6 +53,7 @@ public class DocumentTemplate {
         templateEntity.document = request.getDocument();
         templateEntity.status = true;
         templateEntity.lastEditor = lastEditorEntity;
+        templateEntity.lastEditDate = LocalDate.now();
         templateEntity.autoApprovalLines = lineEntityList;
         templateEntity.folderId = request.getFolderId();
 
@@ -63,5 +67,10 @@ public class DocumentTemplate {
         this.status = request.isStatus();
         this.folderId = request.getFolderId();
         this.autoApprovalLines = lineEntity;
+    }
+    public void updateStatus(boolean statue, Employee lastEditor){
+        this.lastEditDate = LocalDate.now();
+        this.lastEditor = lastEditor;
+        this.status = statue;
     }
 }
