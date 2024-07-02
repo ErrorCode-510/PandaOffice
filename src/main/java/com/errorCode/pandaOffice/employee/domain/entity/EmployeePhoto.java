@@ -9,15 +9,22 @@ import lombok.Getter;
 
 public class EmployeePhoto {
     @Id
+    @Column(name = "employee_id")
+    private int employeeId;
+
     @OneToOne
-    @JoinColumn(name="employee_id")
+    @MapsId
+    @JoinColumn(name = "employee_id")
     private Employee employee;
-    @Column(name="name")
+
+    @Column(name = "name")
     private String name;
-    @Column(name="path")
+    @Lob
+    @Column(name = "path",columnDefinition = "LONGTEXT")
     private String path;
 
-    public EmployeePhoto(Employee employee, String name, String path) {
+    public EmployeePhoto(int employeeId, Employee employee, String name, String path) {
+        this.employeeId = employeeId;
         this.employee = employee;
         this.name = name;
         this.path = path;

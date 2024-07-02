@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -119,10 +120,17 @@ public class MemberController {
     @PostMapping("/newEmployee")
     public ResponseEntity<Employee> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
 
-        System.out.println(employeeDTO.getEmployee().getName());
-        System.out.println(employeeDTO.getPhoto());
+        System.out.println(employeeDTO.getLicenses());
+
         Employee savedEmployee = memberService.saveEmployee(employeeDTO);
         return ResponseEntity.ok(savedEmployee);
+    }
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long id) {
+
+        EmployeeDTO employeeDTO = memberService.getEmployeeById(id);
+
+        return ResponseEntity.ok(employeeDTO);
     }
 
 

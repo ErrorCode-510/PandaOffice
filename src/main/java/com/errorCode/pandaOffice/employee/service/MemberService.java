@@ -4,14 +4,8 @@ package com.errorCode.pandaOffice.employee.service;
 import com.errorCode.pandaOffice.auth.dto.LoginDto;
 import com.errorCode.pandaOffice.auth.util.EmailUtils;
 import com.errorCode.pandaOffice.common.exception.NotFoundException;
-import com.errorCode.pandaOffice.employee.domain.entity.CareerHistory;
-import com.errorCode.pandaOffice.employee.domain.entity.EducationHistory;
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.employee.domain.entity.FamilyMember;
-import com.errorCode.pandaOffice.employee.domain.repository.CareerHistoryRepository;
-import com.errorCode.pandaOffice.employee.domain.repository.EducationHistoryRepository;
-import com.errorCode.pandaOffice.employee.domain.repository.FamilyMemberRepository;
-import com.errorCode.pandaOffice.employee.domain.repository.MemberRepository;
+import com.errorCode.pandaOffice.employee.domain.entity.*;
+import com.errorCode.pandaOffice.employee.domain.repository.*;
 import com.errorCode.pandaOffice.employee.dto.request.AuthRequest;
 import com.errorCode.pandaOffice.employee.dto.request.EmployeeDTO;
 import com.errorCode.pandaOffice.employee.dto.response.ProfileResponse;
@@ -43,9 +37,13 @@ public class MemberService {
 
     @Autowired
     private CareerHistoryRepository careerHistoryRepository;
+    @Autowired
+    private LicenseRepository licenseRepository;
 
     @Autowired
     private EducationHistoryRepository educationHistoryRepository;
+    @Autowired
+    private EmployeePhotoRepository employeePhotoRepository;
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private EmailUtils emailUtils;
@@ -148,7 +146,11 @@ public class MemberService {
     public Employee saveEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTO.getEmployee();
         Employee savedEmployee = memberRepository.save(employee);
-
+        System.out.println(employeeDTO.getPhotoPath());
+        // Save photo
+        EmployeePhoto employeePhoto = new EmployeePhoto(employeeDTO.getEmployee().getEmployeeId(), savedEmployee, employeeDTO.getPhotoName(), employeeDTO.getPhotoPath());
+        System.out.println(employeePhoto.getPath());
+        employeePhotoRepository.save(employeePhoto);
         // Save family members
         List<FamilyMember> familyMembers = employeeDTO.getFamilyMember();
         for (FamilyMember familyMember : familyMembers) {
@@ -158,6 +160,7 @@ public class MemberService {
 
         // Save career history
         List<CareerHistory> careerHistories = employeeDTO.getCareerHistory();
+
         for (CareerHistory careerHistory : careerHistories) {
             careerHistory.setEmployee(savedEmployee);
             careerHistoryRepository.save(careerHistory);
@@ -169,8 +172,47 @@ public class MemberService {
             educationHistory.setEmployee(savedEmployee);
             educationHistoryRepository.save(educationHistory);
         }
+        List<License> licenses = employeeDTO.getLicenses();
+        for (License license : licenses) {
+            license.setEmployee(savedEmployee);
+            licenseRepository.save(license);
+        }
 
         return savedEmployee;
+    }
+    public EmployeeDTO getEmployeeById(Long id) {
+        Optional<Employee> employeeOptional = memberRepository.findById(id);
+        if (employeeOptional.isPresent()) {
+            Employee employee = employeeOptional.get();
+            EmployeeDTO employeeDTO = new EmployeeDTO();
+            employeeDTO.setEmployee(employee);
+
+            // Fetch and set the photo
+            Optional<EmployeePhoto> photoOptional = employeePhotoRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+            if (photoOptional.isPresent()) {
+                EmployeePhoto photo = photoOptional.get();
+                employeeDTO.setPhotoName(photo.getName());
+                employeeDTO.setPhotoPath(photo.getPath());
+            }
+
+            // Fetch and set family members
+            List<FamilyMember> familyMembers = familyMemberRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+            employeeDTO.setFamilyMember(familyMembers);
+
+            // Fetch and set career history
+            List<CareerHistory> careerHistories = careerHistoryRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+            employeeDTO.setCareerHistory(careerHistories);
+
+            // Fetch and set education history
+            List<EducationHistory> educationHistories = educationHistoryRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+            employeeDTO.setEducationHistory(educationHistories);
+            List<License> licenses = licenseRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+            employeeDTO.setLicenses(licenses);
+
+            return employeeDTO;
+        } else {
+            throw new EntityNotFoundException("Employee not found");
+        }
     }
     }
 

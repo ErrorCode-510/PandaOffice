@@ -23,5 +23,8 @@ public class License {
     @Column(name="name")
     private String name;
     protected License(){}
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
 }
