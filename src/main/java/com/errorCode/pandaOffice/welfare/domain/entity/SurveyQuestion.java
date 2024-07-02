@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 
 //설문 문항
 //연결관계 어노테이션 설정 필요
@@ -34,11 +36,13 @@ public class SurveyQuestion {
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<ReplyRecord> replyRecords;
+
     @Transient
     private EntityManager entityManager;
 
-    public SurveyQuestion(int id, int questionOrder, String question, Survey survey) {
-        this.id = id;
+    public SurveyQuestion(int questionOrder, String question, Survey survey) {
         this.questionOrder = questionOrder;
         this.question = question;
         this.survey = survey;
@@ -66,10 +70,10 @@ public class SurveyQuestion {
         return this;
     }
 
-    // surveyQuestion의 id값과 question의 id값을 일치시키기위한 메서드
-    public void updateQuestionOrder() {
-        this.questionOrder = this.id;
-    }
+//    // surveyQuestion의 id값과 question의 id값을 일치시키기위한 메서드
+//    public void updateQuestionOrder() {
+//        this.questionOrder = this.id;
+//    }
 
 
 }

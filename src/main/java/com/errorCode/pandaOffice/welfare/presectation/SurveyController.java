@@ -1,11 +1,15 @@
 package com.errorCode.pandaOffice.welfare.presectation;
 
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
+import com.errorCode.pandaOffice.welfare.domain.entity.ReplyRecord;
+import com.errorCode.pandaOffice.welfare.domain.entity.SurveyQuestion;
 import com.errorCode.pandaOffice.welfare.domain.repository.ReplyRecordRepository;
 import com.errorCode.pandaOffice.welfare.domain.repository.SurveyRepository;
 import com.errorCode.pandaOffice.welfare.dto.request.CreateSurveyRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.ReplyRecordRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.UpdateSurveyQuestionRequest;
+import com.errorCode.pandaOffice.welfare.dto.response.ReplyRecordDTO;
+import com.errorCode.pandaOffice.welfare.dto.response.SurveyDetailsResponse;
 import com.errorCode.pandaOffice.welfare.dto.response.SurveyQuestionDTO;
 import com.errorCode.pandaOffice.welfare.dto.response.SurveyResponse;
 import com.errorCode.pandaOffice.welfare.service.SurveyService;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,6 +52,8 @@ public class SurveyController {
     }
 
 
+
+
     /* 설문을 등록하는 API */
     @PostMapping("/survey")
     /* (DTO(request)로 정보 받기) */
@@ -60,6 +67,14 @@ public class SurveyController {
          * */
         return ResponseEntity.created(URI.create("/survey/" + surveyId)).build();
     }
+
+    //    응답조 조회
+    @GetMapping("/survey/respondent-count/{surveyId}")
+    public ResponseEntity<Integer> getSurveyRespondentCount(@PathVariable int surveyId) {
+        int respondentCount = surveyService.getSurveyRespondentCount(surveyId);
+        return ResponseEntity.ok(respondentCount);
+    }
+
 
     //질문 수정 API
     @PutMapping("/survey/questions/{id}")
@@ -88,15 +103,39 @@ public class SurveyController {
         }
     }
 
+    //설문조회(질문, 문항 포함 차트 뿌려주기용)
+    @GetMapping("/survey/survey-details/{id}")
+    public ResponseEntity<SurveyDetailsResponse> getSurveyDetails(@PathVariable int id) {
+        SurveyDetailsResponse response = surveyService.getSurveyDetails(id);
+        return ResponseEntity.ok(response);
+    }
 
-    // 설문 응답을 저장하고, 저장된 응답 데이터를 반환합니다.
+
+    // 질문 문항 기록 저장
     @PostMapping("/survey/reply-count")
     public ResponseEntity<Void> saveReplyRecord(@RequestBody ReplyRecordRequest replyRecordDTO) {
+        System.out.println("Received request: " + replyRecordDTO);
         surveyService.saveSurveyReply(replyRecordDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/question/{id}")
+    public ResponseEntity<SurveyQuestionDTO> getSurveyQuestionById(@PathVariable int id) {
+        SurveyQuestionDTO question = surveyService.getSurveyQuestionById(id);
+        return ResponseEntity.ok(question);
+    }
 
 
+//카테고리 ID로 설문 조회
+@GetMapping("/category/{categoryId}")
+public ResponseEntity<List<SurveyResponse>> getSurveysByCategoryId(@PathVariable int categoryId) {
+    System.out.println("Controller: getSurveysByCategoryId 호출됨");
+    List<SurveyResponse> surveys = surveyService.getSurveysByCategoryId(categoryId);
+    if (surveys.isEmpty()) {
+        System.out.println("Controller: No surveys found for category ID " + categoryId);
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(surveys);
+}
 
 }

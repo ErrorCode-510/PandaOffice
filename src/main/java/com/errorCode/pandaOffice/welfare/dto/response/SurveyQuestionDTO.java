@@ -11,6 +11,8 @@ public class SurveyQuestionDTO {
 
     public SurveyQuestionDTO() {}
 
+
+
     public SurveyQuestionDTO(int id, int surveyId, int questionOrder, String question) {
         this.id = id;
         this.surveyId = surveyId;
