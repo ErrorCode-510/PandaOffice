@@ -15,12 +15,15 @@ GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도&
 Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
 
 ### 면접자 주소 조회
-GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원
 Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
 
 ### 면접자 이름 검색
-GET http://localhost:8001/recruitment/applicant/search?page=1&name=성우현
+GET http://localhost:8001/recruitment/applicant/search?page=1&name=성
 Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+
+### 면접자 나이 + 이름 조회
+GET http://localhost:8001/recruitment/applicant/search/?page1=age=20&name=하
 
 ### 면접자 조건 x 전체 조회
 GET http://localhost:8001/recruitment/applicant/search
