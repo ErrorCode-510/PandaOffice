@@ -1,13 +1,15 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Getter
 @Entity(name="FamilyName")
 @Table(name="family_member")
-
+@AllArgsConstructor
 public class FamilyMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,22 +23,14 @@ public class FamilyMember {
     @Column(name="name")
     private String name;
     @Column(name="birth_date")
-    private Date birthDate;
+    private LocalDate birthDate;
     @Column(name="education")
     private String education;
     @Column(name="job")
     private String job;
     protected FamilyMember(){}
 
-    public FamilyMember(int id, Employee employee, String relationship, String name, Date birthDate, String education, String job) {
-        this.id = id;
-        this.employee = employee;
-        this.relationship = relationship;
-        this.name = name;
-        this.birthDate = birthDate;
-        this.education = education;
-        this.job = job;
-    }
+
 
     public void setEmployee(Employee employee) {
         this.employee = employee;

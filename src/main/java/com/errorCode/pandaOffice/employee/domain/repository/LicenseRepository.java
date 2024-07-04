@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface LicenseRepository extends JpaRepository<License, Long> {
     List<License> findByEmployeeEmployeeId(int employeeId);
+
+    void deleteByEmployeeEmployeeId(int employeeId);
 }

@@ -132,6 +132,12 @@ public class MemberController {
 
         return ResponseEntity.ok(employeeDTO);
     }
+    @PutMapping("/updateEmployee")
+    public ResponseEntity<Employee> updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        Employee updatedEmployee = memberService.updateEmployee(employeeDTO);
+        return ResponseEntity.ok(updatedEmployee);
+    }
+
 
 
 }

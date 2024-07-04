@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface EducationHistoryRepository extends JpaRepository<EducationHistory, Long> {
     List<EducationHistory> findByEmployeeEmployeeId(int employeeId);
+
+    void deleteByEmployeeEmployeeId(int employeeId);
 }

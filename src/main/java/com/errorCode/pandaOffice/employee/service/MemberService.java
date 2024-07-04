@@ -143,6 +143,7 @@ public class MemberService {
     public List<Employee> getAllEmployees() {
         return memberRepository.findAll();
     }
+
     public Employee saveEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeDTO.getEmployee();
         Employee savedEmployee = memberRepository.save(employee);
@@ -214,6 +215,77 @@ public class MemberService {
             throw new EntityNotFoundException("Employee not found");
         }
     }
+    @Transactional
+    public Employee updateEmployee(EmployeeDTO employeeDTO) {
+        // 기존 사원 정보 조회
+        Optional<Employee> optionalEmployee = memberRepository.findById((long) employeeDTO.getEmployee().getEmployeeId());
+        if (!optionalEmployee.isPresent()) {
+
+        }
+
+        Employee existingEmployee = optionalEmployee.get();
+
+        // 사원 기본 정보 업데이트
+//        existingEmployee.update(
+//                employeeDTO.getEmployee().getName(),
+//                employeeDTO.getEmployee().getEnglishName(),
+//                employeeDTO.getEmployee().getHanjaName(),
+//                employeeDTO.getEmployee().getDepartment(),
+//                employeeDTO.getEmployee().getJob(),
+//                employeeDTO.getEmployee().getPhone(),
+//                employeeDTO.getEmployee().getPersonalId(),
+//                employeeDTO.getEmployee().getGender(),
+//                employeeDTO.getEmployee().getHireDate(),
+//                employeeDTO.getEmployee().getAddress(),
+//                employeeDTO.getEmployee().getNationality(),
+//                employeeDTO.getEmployee().getBirthDate(),
+//                employeeDTO.getEmployee().getEmail(),
+//                employeeDTO.getEmployee().getEmploymentStatus()
+//        );
+
+        // 사원 정보 저장 (이 부분이 없어야 합니다)
+        // Employee savedEmployee = memberRepository.save(existingEmployee);
+
+        // 사진 정보 업데이트
+        EmployeePhoto employeePhoto = employeePhotoRepository.findByEmployeeEmployeeId(existingEmployee.getEmployeeId())
+                .orElse(new EmployeePhoto(employeeDTO.getEmployee().getEmployeeId(), existingEmployee, employeeDTO.getPhotoName(), employeeDTO.getPhotoPath()));
+        employeePhotoRepository.save(employeePhoto);
+
+        // 가족 구성원 정보 업데이트
+        List<FamilyMember> familyMembers = employeeDTO.getFamilyMember();
+        familyMemberRepository.deleteByEmployeeEmployeeId(existingEmployee.getEmployeeId());
+        for (FamilyMember familyMember : familyMembers) {
+            familyMember.setEmployee(existingEmployee);
+            familyMemberRepository.save(familyMember);
+        }
+
+        // 경력 정보 업데이트
+        List<CareerHistory> careerHistories = employeeDTO.getCareerHistory();
+        careerHistoryRepository.deleteByEmployeeEmployeeId(existingEmployee.getEmployeeId());
+        for (CareerHistory careerHistory : careerHistories) {
+            careerHistory.setEmployee(existingEmployee);
+            careerHistoryRepository.save(careerHistory);
+        }
+
+        // 교육 정보 업데이트
+        List<EducationHistory> educationHistories = employeeDTO.getEducationHistory();
+        educationHistoryRepository.deleteByEmployeeEmployeeId(existingEmployee.getEmployeeId());
+        for (EducationHistory educationHistory : educationHistories) {
+            educationHistory.setEmployee(existingEmployee);
+            educationHistoryRepository.save(educationHistory);
+        }
+
+        // 자격증 정보 업데이트
+        List<License> licenses = employeeDTO.getLicenses();
+        licenseRepository.deleteByEmployeeEmployeeId(existingEmployee.getEmployeeId());
+        for (License license : licenses) {
+            license.setEmployee(existingEmployee);
+            licenseRepository.save(license);
+        }
+
+        return existingEmployee; // 업데이트된 객체 반환
+    }
+
     }
 
 

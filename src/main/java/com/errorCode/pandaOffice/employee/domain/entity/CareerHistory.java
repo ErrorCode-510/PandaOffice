@@ -1,12 +1,15 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Getter
 @Entity(name="CareerHistory")
 @Table(name="career_history")
+@AllArgsConstructor
 
 public class CareerHistory {
     @Id
@@ -21,9 +24,9 @@ public class CareerHistory {
     @Column(name = "department")
     private String department;
     @Column(name = "hire_date")
-    private Date hireDate;
+    private LocalDate hireDate;
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
     @Column(name = "last_position")
     private String lastPosition;
     @Column(name = "work_description")
@@ -32,16 +35,7 @@ public class CareerHistory {
     protected CareerHistory() {
     }
 
-    public CareerHistory(int id, Employee employee, String companyName, String department, Date hireDate, Date endDate, String lastPosition, String workDescription) {
-        this.id = id;
-        this.employee = employee;
-        this.companyName = companyName;
-        this.department = department;
-        this.hireDate = hireDate;
-        this.endDate = endDate;
-        this.lastPosition = lastPosition;
-        this.workDescription = workDescription;
-    }
+
 
     public void setEmployee(Employee employee) {
         this.employee = employee;

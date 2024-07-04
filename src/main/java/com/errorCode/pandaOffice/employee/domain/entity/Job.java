@@ -23,6 +23,9 @@ public class Job {
         this.id = id;
         this.title = title;
     }
+    public Job(String id) {
+        this.id = Integer.parseInt(id);
+    }
 
 
 }
