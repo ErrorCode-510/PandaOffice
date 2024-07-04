@@ -17,6 +17,8 @@ public class Job {
     @Column
     private String title;
 
+
+
     protected Job(){}
 
     public Job(int id, String title) {

@@ -1,6 +1,6 @@
-package com.errorCode.pandaOffice.attendance.dto.overtimeRecord.response;
+package com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response;
 
-import com.errorCode.pandaOffice.attendance.domain.entity.OvertimeRecord;
+import com.errorCode.pandaOffice.attendance.domain.entity.OverTimeAndLatenessRecord;
 import lombok.*;
 
 import java.time.DayOfWeek;
@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class OverTimeRecordResponse {
+public class CalculatedOverTimeAndLatenessRecordResponse {
 
-    private List<CalculatedOverTimeRecord> calculatedOverTimeRecords;
+    private List<CalculatedOverTimeAndLatenessRecord> calculatedOverTimeAndLatenessRecords;
 
-    public static OverTimeRecordResponse of(List<OvertimeRecord> recordList) {
-        OverTimeRecordResponse response = new OverTimeRecordResponse();
+    public static CalculatedOverTimeAndLatenessRecordResponse of(List<OverTimeAndLatenessRecord> recordList) {
+        CalculatedOverTimeAndLatenessRecordResponse response = new CalculatedOverTimeAndLatenessRecordResponse();
 
-        response.calculatedOverTimeRecords = recordList.stream()
-                .map(record -> CalculatedOverTimeRecord.of(record, recordList))
+        response.calculatedOverTimeAndLatenessRecords = recordList.stream()
+                .map(record -> CalculatedOverTimeAndLatenessRecord.of(record, recordList))
                 .collect(Collectors.toList());
 
         return response;
@@ -35,12 +35,12 @@ public class OverTimeRecordResponse {
     @Getter
     @ToString
     @AllArgsConstructor
-    public static class CalculatedOverTimeRecord {
+    public static class CalculatedOverTimeAndLatenessRecord {
 
         private String weeklyOverTime;
         private String monthlyOverTime;
 
-        public static CalculatedOverTimeRecord of(OvertimeRecord record, List<OvertimeRecord> recordList) {
+        public static CalculatedOverTimeAndLatenessRecord of(OverTimeAndLatenessRecord record, List<OverTimeAndLatenessRecord> recordList) {
             Map<String, Duration> weeklyOverTimes = calculateWeeklyOverTimes(recordList, record.getType());
             Map<String, Duration> monthlyOverTimes = calculateMonthlyOverTimes(recordList, record.getType());
 
@@ -53,7 +53,7 @@ public class OverTimeRecordResponse {
             String formattedWeeklyOverTime = formatDuration(weeklyOverTimeDuration);
             String formattedMonthlyOverTime = formatDuration(monthlyOverTimeDuration);
 
-            return new CalculatedOverTimeRecord(
+            return new CalculatedOverTimeAndLatenessRecord(
                     formattedWeeklyOverTime,
                     formattedMonthlyOverTime
             );
@@ -84,13 +84,13 @@ public class OverTimeRecordResponse {
             return date.getYear() + "-" + date.getMonthValue() + "-W" + weekOfMonth;
         }
 
-        public static Map<String, Duration> calculateWeeklyOverTimes(List<OvertimeRecord> overtimeRecords, String type) {
+        public static Map<String, Duration> calculateWeeklyOverTimes(List<OverTimeAndLatenessRecord> overTimeAndLatenessRecords, String type) {
             Map<String, Duration> weeklyOvertimes = new HashMap<>();
 
-            for (OvertimeRecord overtimeRecord : overtimeRecords) {
-                if (overtimeRecord.getType().equals(type)) {
-                    String week = getWeek(overtimeRecord.getDate());
-                    Duration overWorkDuration = Duration.between(overtimeRecord.getStartTime(), overtimeRecord.getEndTime());
+            for (OverTimeAndLatenessRecord overtimeAndLatenessRecord : overTimeAndLatenessRecords) {
+                if (overtimeAndLatenessRecord.getType().equals(type)) {
+                    String week = getWeek(overtimeAndLatenessRecord.getDate());
+                    Duration overWorkDuration = Duration.between(overtimeAndLatenessRecord.getStartTime(), overtimeAndLatenessRecord.getEndTime());
                     weeklyOvertimes.merge(week, overWorkDuration, Duration::plus);
                 }
             }
@@ -98,13 +98,13 @@ public class OverTimeRecordResponse {
             return weeklyOvertimes;
         }
 
-        public static Map<String, Duration> calculateMonthlyOverTimes(List<OvertimeRecord> overtimeRecords, String type) {
+        public static Map<String, Duration> calculateMonthlyOverTimes(List<OverTimeAndLatenessRecord> overTimeAndLatenessRecords, String type) {
             Map<String, Duration> monthlyOverTimes = new HashMap<>();
 
-            for (OvertimeRecord overtimeRecord : overtimeRecords) {
-                if (overtimeRecord.getType().equals(type)) {
-                    String month = overtimeRecord.getDate().getYear() + "-" + overtimeRecord.getDate().getMonthValue();
-                    Duration overWorkDuration = Duration.between(overtimeRecord.getStartTime(), overtimeRecord.getEndTime());
+            for (OverTimeAndLatenessRecord overtimeAndLatenessRecord : overTimeAndLatenessRecords) {
+                if (overtimeAndLatenessRecord.getType().equals(type)) {
+                    String month = overtimeAndLatenessRecord.getDate().getYear() + "-" + overtimeAndLatenessRecord.getDate().getMonthValue();
+                    Duration overWorkDuration = Duration.between(overtimeAndLatenessRecord.getStartTime(), overtimeAndLatenessRecord.getEndTime());
                     monthlyOverTimes.merge(month, overWorkDuration, Duration::plus);
                 }
             }

@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 /* 연장 근무 기록 */
-public class OvertimeRecord {
+public class OverTimeAndLatenessRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
