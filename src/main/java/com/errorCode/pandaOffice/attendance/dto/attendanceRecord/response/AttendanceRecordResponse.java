@@ -6,10 +6,13 @@ import lombok.*;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -39,11 +42,13 @@ public class AttendanceRecordResponse {
         private String weeklyTotalTime;
         private String monthlyTotalTime;
         private String remainingTime;
+        private Map<String, List<String>> weeklyStartEndTimes; // 새로운 필드 추가
 
         public static CalculatedAttendanceRecord of(AttendanceRecord record, List<AttendanceRecord> recordList) {
 
             Map<String, Duration> weeklyTotalTimes = calculateWeeklyTotalTimes(recordList);
             Map<String, Duration> monthlyTotalTimes = calculateMonthlyTotalTimes(recordList);
+            Map<String, List<String>> weeklyStartEndTimes = calculateWeeklyStartEndTimes(recordList); // 새로운 계산 메서드 호출
 
             Duration fortyHours = Duration.ofHours(40);
 
@@ -62,7 +67,8 @@ public class AttendanceRecordResponse {
             return new CalculatedAttendanceRecord(
                     formattedWeeklyTotalTime,
                     formattedMonthlyTotalTime,
-                    formattedRemainingTime
+                    formattedRemainingTime,
+                    weeklyStartEndTimes
             );
         }
 
@@ -114,6 +120,20 @@ public class AttendanceRecordResponse {
 
             return monthlyTotalTimes;
         }
+
+        public static Map<String, List<String>> calculateWeeklyStartEndTimes(List<AttendanceRecord> attendanceRecords) {
+            Map<String, List<String>> weeklyStartEndTimes = new HashMap<>();
+
+            for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                String week = getWeek(attendanceRecord.getDate());
+                String dayOfWeek = attendanceRecord.getDate().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
+                String dateWithDay = attendanceRecord.getDate().toString() + " (" + dayOfWeek + ")";
+                String startTime = attendanceRecord.getCheckInTime().toString();
+                String endTime = attendanceRecord.getCheckOutTime().toString();
+                weeklyStartEndTimes.computeIfAbsent(week, k -> new ArrayList<>()).add(dateWithDay + " " + startTime + " ~ " + endTime);
+            }
+
+            return weeklyStartEndTimes;
+        }
     }
 }
-
