@@ -23,10 +23,6 @@ INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanj
                         `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
                         `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
                         `employment_status`, `annual_salary`)
-INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
-                        `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
-                        `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
-                        `employment_status`, `annual_salary`)
 VALUES
     -- Employees who joined in 2012
     (201211001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김민수', 'Kim Min Su', '金民洙', 11,
