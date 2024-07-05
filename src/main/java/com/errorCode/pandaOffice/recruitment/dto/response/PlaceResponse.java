@@ -2,10 +2,12 @@ package com.errorCode.pandaOffice.recruitment.dto.response;
 
 import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
+@Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceResponse {
 

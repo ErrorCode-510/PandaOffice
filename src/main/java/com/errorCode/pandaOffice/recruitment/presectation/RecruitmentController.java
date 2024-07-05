@@ -111,6 +111,7 @@ public class RecruitmentController {
     public ResponseEntity<Void> registInterviewSchedule(
             @RequestBody InterviewScheduleCreateRequest request
     ) {
+        System.out.println(request);
         final Integer id = recruitmentService.registInterviewSchedule(request);
         return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
     }
