@@ -1,6 +1,7 @@
 package com.errorCode.pandaOffice.payroll.domain.entity;
 
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.payroll.dto.request.PayrollRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,6 +18,21 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class PayrollRecord {
+
+    /*
+     * 들어오는 JSON
+     * {
+     *   {사번: 123142,
+     *   지급: [{지급 항목:1, 금액:인풋값}, {지급 항목:2, 금액:인풋값]
+     *   공제: [{공제 항목:1, 금액:인풋값}, {공제 항목:2, 금액:인풋값]
+     * }
+     *
+     * {
+     *   empId: 123142
+     *   List<지급기록>: [{지급 항목:1, 금액:인풋값}, {지급 항목:2, 금액:인풋값]
+     *   List<공제기록>: [{공제 항목:1, 금액:인풋값}, {공제 항목:2, 금액:인풋값]
+     * }
+     * */
 
     /* 급여코드 */
     @Id
@@ -38,18 +54,33 @@ public class PayrollRecord {
     private String payStubPath;
 
     /* 지급 코드 */
-//    @Column(name = "earning_category_id")
-//    private int earningCategoryId;
-    @OneToMany
-    @JoinColumn(name = "earning_category_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payroll_id")
     private List<EarningRecord> earningRecordList;
 
-
     /* 공제 코드 */
-//    @Column(name = "deducation_category_id")
-//    private int deducationCategoryId;
-    @OneToMany
-    @JoinColumn(name = "deducation_category_id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payroll_id")
     private List<DeductionRecord> deductionRecordList;
 
+    public PayrollRecord(Employee employeeId, LocalDate payrollDate, String payStubPath,
+                         List<EarningRecord> earningRecordList, List<DeductionRecord> deductionRecordList) {
+
+        this.employeeId = employeeId;
+        this.payrollDate = payrollDate;
+        this.payStubPath = payStubPath;
+        this.earningRecordList = earningRecordList;
+        this.deductionRecordList = deductionRecordList;
+    }
+
+
+    public static PayrollRecord of(PayrollRequest payrollRequest, Employee employeeEntity, List<EarningRecord> earningRecordEntityList, List<DeductionRecord> deductionRecordEntityList) {
+        PayrollRecord newRecord = new PayrollRecord();
+        newRecord.employeeId = employeeEntity;
+        newRecord.payrollDate = payrollRequest.getPayrollDate();
+        newRecord.payStubPath = payrollRequest.getPayStubPath();
+        newRecord.earningRecordList = earningRecordEntityList;
+        newRecord.deductionRecordList = deductionRecordEntityList;
+        return newRecord;
+    }
 }

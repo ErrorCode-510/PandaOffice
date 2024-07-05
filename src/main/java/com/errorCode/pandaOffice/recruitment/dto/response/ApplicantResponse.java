@@ -3,6 +3,7 @@ package com.errorCode.pandaOffice.recruitment.dto.response;
 import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
 import jakarta.persistence.Column;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class ApplicantResponse {
 
     /* 면접자 코드 */
