@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +44,7 @@ public class RecruitmentService {
     /* 현재 페이지와 한 페이지당 보여줄 페이지 개수 */
     private Pageable getPageable(final Integer page) {
         /* 페이지 번호는 0부터 시작 */
-        return PageRequest.of(page -1, 10);
+        return PageRequest.of(page -1, 10, Sort.by("id").descending());
     }
 
     /* 1. 면접자 전체 조회 */
@@ -59,6 +60,23 @@ public class RecruitmentService {
     public Page<ApplicantResponse> getSearchApplicant(Integer page, String gender, String address, String name) {
 
         Page<Applicant> applicants = null;
+
+//        LocalDate now = LocalDate.now();
+//        LocalDate startDate = null;
+//        LocalDate endDate = null;
+
+//        if (age != null) {
+//            if (age >= 20 && age < 30) {
+//                startDate = now.minusYears(30).plusDays(1);
+//                endDate = now.minusYears(20);
+//            } else if (age >= 30 && age < 40) {
+//                startDate = now.minusYears(40).plusDays(1);
+//                endDate = now.minusYears(30);
+//            } else if (age >= 40 && age < 50) {
+//                startDate = now.minusYears(50).plusDays(1);
+//                endDate = now.minusYears(40);
+//            }
+//        }
 
         /* 성별 + 이름 조회 */
         if (gender != null && !gender.isEmpty() && name != null && !name.isEmpty()) {
@@ -80,6 +98,14 @@ public class RecruitmentService {
         else if (name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByNameContaining(getPageable(page), name);
         }
+//        /* 나이 + 이름 조회 */
+//        else if (age != null && !name.isEmpty()) {
+//            applicants = applicantRepository.findByBirthDateBetweenAndContaining(getPageable(page),name, startDate, endDate);
+//        }
+//        /* 나이 조회 */
+//        else if (age != null) {
+//            applicants = applicantRepository.findByBirthDateBetween(getPageable(page), startDate, endDate);
+//        }
         /* 면접자 전체 조회 */
         else {
             applicants = applicantRepository.findAll(getPageable(page));
@@ -164,19 +190,19 @@ public class RecruitmentService {
     public Integer registInterviewSchedule(InterviewScheduleCreateRequest request) {
 
         /* id로 면접장소 찾기 및 없을 시 Exception 처리 */
-        Place place = placeRepository.findById(request.getPlace().getId())
+        Place place = placeRepository.findById(request.getPlace())
                 .orElseThrow(() -> new EntityNotFoundException("장소 엔티티가 비어있습니다."));
         /* id로 사원정보 찾기 및 없을 시 Exception 처리 */
-        Employee employee = employeeRepository.findById(request.getEmployee().getEmployeeId())
+        Employee employee = employeeRepository.findById(request.getEmployee())
                 .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
-        Employee employee2 = employeeRepository.findById(request.getEmployee2().getEmployeeId())
+        Employee employee2 = employeeRepository.findById(request.getEmployee2())
                 .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
-        Employee employee3 = employeeRepository.findById(request.getEmployee3().getEmployeeId())
+        Employee employee3 = employeeRepository.findById(request.getEmployee3())
                 .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
         /* id로 면접자 찾기 및 없을 시 Exception 처리 */
         List<Applicant> applicants = new ArrayList<>();
-        for (Applicant applicantId : request.getApplicantList()) {
-            Applicant applicant = applicantRepository.findById(applicantId.getId())
+        for (Integer applicantId : request.getApplicantList()) {
+            Applicant applicant = applicantRepository.findById(applicantId)
                     .orElseThrow( () -> new EntityNotFoundException("면접자 엔티티가 비어있습니다."));
             applicants.add(applicant);
         }
@@ -212,17 +238,21 @@ public class RecruitmentService {
         InterviewSchedule interviewSchedule = interviewScheduleRepository.findById(id)
                 .orElseThrow( () -> new EntityNotFoundException("면접일정이 비어있습니다."));
 
+        /* id로 면접장소 찾기 및 없을 시 Exception 처리 */
+        Place place = placeRepository.findById(request.getPlace())
+                .orElseThrow(() -> new EntityNotFoundException("장소 엔티티가 비어있습니다."));
+
         /* DB에서 세션이 겹치지 않기 위해 사원 조회 */
-        Employee employee = employeeRepository.findById(request.getEmployee().getEmployeeId())
+        Employee employee = employeeRepository.findById(request.getEmployee())
                 .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
-        Employee employee2 = employeeRepository.findById(request.getEmployee2().getEmployeeId())
+        Employee employee2 = employeeRepository.findById(request.getEmployee2())
                 .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
-        Employee employee3 = employeeRepository.findById(request.getEmployee3().getEmployeeId())
+        Employee employee3 = employeeRepository.findById(request.getEmployee3())
                 .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
 
         /* DB에서 세션이 겹치지 않기 위해 면접자 조회 */
         List<Applicant> applicants = request.getApplicantList().stream().map(
-                applicant -> applicantRepository.findById(applicant.getId())
+                applicant -> applicantRepository.findById(applicant)
                         .orElseThrow(() -> new EntityNotFoundException("면접자 엔티티가 비어있습니다."))
         ).collect(Collectors.toList());
 
@@ -232,7 +262,7 @@ public class RecruitmentService {
                 request.getStartDate(),
                 request.getEndDate(),
                 request.getStartTime(),
-                request.getPlace(),
+                place,
                 employee,
                 employee2,
                 employee3,
@@ -240,7 +270,7 @@ public class RecruitmentService {
         );
     }
 
-    /* 면접일정 삭제 */
+    /* 11. 면접일정 삭제 */
     @Transactional
     public void deleteInterviewSchedule(Integer id) {
         interviewScheduleRepository.deleteById(id);

@@ -1,15 +1,15 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
 @Table(name="job")
-
+@EntityListeners(AuditingEntityListener.class)
 public class Job {
     @Id
     @Column(name="id")
@@ -17,15 +17,19 @@ public class Job {
     @Column
     private String title;
 
+    /* 직책수당 */
+    @Column
+    private int allowance;
+
     protected Job(){}
 
-    public Job(int id, String title) {
+    public Job(int id, String title, int allowance) {
         this.id = id;
         this.title = title;
+        this.allowance = allowance;
     }
+
     public Job(String id) {
         this.id = Integer.parseInt(id);
     }
-
-
 }

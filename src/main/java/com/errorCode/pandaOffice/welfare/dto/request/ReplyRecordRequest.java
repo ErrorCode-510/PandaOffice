@@ -9,12 +9,11 @@ import lombok.ToString;
 @ToString
 public class ReplyRecordRequest {
     private int employeeId; // 사번
+    private int jobId;//직급번호
     private int surveyId; // 설문코드
-    private int stAgree; // 매우 그렇다 합계
-    private int agree; // 그렇다 합계
-    private int average; // 보통이다 합계
-    private int disagree; // 약간 아니다 합계
-    private int stDisagree; // 매우 아니다 합계
+    private int questionId;//질문문항
+    private int answer; // 질문
+
 
 
 }

@@ -15,12 +15,15 @@ GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도&
 Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
 
 ### 면접자 주소 조회
-GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원도
+GET http://localhost:8001/recruitment/applicant/search?page=1&address=강원
 Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
 
 ### 면접자 이름 검색
-GET http://localhost:8001/recruitment/applicant/search?page=1&name=성우현
+GET http://localhost:8001/recruitment/applicant/search?page=1&name=성
 Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+
+### 면접자 나이 + 이름 조회
+GET http://localhost:8001/recruitment/applicant/search/?page1=age=20&name=하
 
 ### 면접자 조건 x 전체 조회
 GET http://localhost:8001/recruitment/applicant/search
@@ -41,7 +44,7 @@ Content-Type: application/json
 }
 
 ### 면접자 상세 조회
-GET http://localhost:8001/recruitment/applicant/detail/102
+GET http://localhost:8001/recruitment/applicant/detail/11
 Access-Token: Bearer eyJkYXRlIjoxNzE5Mjc2NTM0NTQyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkyODAxMzR9.zApkGBFCvW1ECV2AxEg-haNZGNlAEeVX_qy_Xzasm4U28e0JsPbujV3qo_Pewq4I4CefRq28_V2dl7eWFRtI2Q
 
 ### 면접자 수정
@@ -68,7 +71,7 @@ Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 면접일정 등록
 POST http://localhost:8001/recruitment/interview-schedule/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjE3MTkzNzYzMTR9.c6JQu6IO_J4o5pKsWZOu8woxqczmb-FIHrkVYbFnNwZ95MAYfcAb4bBmozQxwEYycD9sjbG9pC0-cQoC9CJ21g
+Access-Token: Bearer eyJkYXRlIjoxNzIwMTQ1OTcwNDg3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcyMDE0NTk3MH0.Jgf8WNCQ9MCflKEwCOVxXZTNLPqiP1xVJh3cJm48f3ikmaq5z0WuOh_OpVftqutRur2gg0HZmF7aLll2MLvvfw
 Content-Type: application/json
 
 {
@@ -77,30 +80,11 @@ Content-Type: application/json
   "startDate": "2024-06-24",
   "endDate": "2024-06-24",
   "startTime": "13:00",
-  "place": {
-    "id": 1
-  },
-  "employee": {
-    "employeeId": 201511001
-  },
-  "employee2": {
-    "employeeId": 201511002
-  },
-  "employee3": {
-    "employeeId": 201511003
-  },
-  "applicantList": [
-    {"id": 1},
-    {"id": 2},
-    {"id": 3},
-    {"id": 4},
-    {"id": 5},
-    {"id": 6},
-    {"id": 7},
-    {"id": 8},
-    {"id": 9},
-    {"id": 10}
-  ]
+  "place": 1,
+  "employee": 201511001,
+  "employee2": 201511002,
+  "employee3": 201511003,
+  "applicantList": [11, 12]
 }
 
 ### 면접일정 상세 조회
@@ -118,30 +102,11 @@ Content-Type: application/json
   "startDate": "2024-06-24",
   "endDate": "2024-06-24",
   "startTime": "09:00",
-  "place": {
-    "id": 2
-  },
-  "employee": {
-    "employeeId": 201514001
-  },
-  "employee2": {
-    "employeeId": 201514002
-  },
-  "employee3": {
-    "employeeId": 201514003
-  },
-  "applicantList": [
-    {"id": 21},
-    {"id": 22},
-    {"id": 23},
-    {"id": 24},
-    {"id": 25},
-    {"id": 26},
-    {"id": 27},
-    {"id": 28},
-    {"id": 29},
-    {"id": 30}
-  ]
+  "place": 2,
+  "employee": 201515001,
+  "employee2": 201515002,
+  "employee3": 201515003,
+  "applicantList": [13, 14, 15]
 }
 
 ### 면접일정 삭제
