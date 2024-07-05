@@ -30,14 +30,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    /* 회원 가입 */
-//    @PostMapping("/signup")
-//    public ResponseEntity<Void> signup(@RequestBody @Valid MemberSignupRequest memberRequest) {
-//
-//        memberService.signup(memberRequest);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).build();
-//    }
 
     /* 인증 테스트를 위한 메소드 */
     @GetMapping("/test")
@@ -134,6 +126,8 @@ public class MemberController {
     }
     @PutMapping("/updateEmployee")
     public ResponseEntity<Employee> updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+//        System.out.println(employeeDTO.getEmployee().getName()+"이름");
+//        System.out.println(employeeDTO.getPhotoName()+"사진");
         Employee updatedEmployee = memberService.updateEmployee(employeeDTO);
         return ResponseEntity.ok(updatedEmployee);
     }

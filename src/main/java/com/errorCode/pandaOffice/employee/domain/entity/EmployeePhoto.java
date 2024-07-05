@@ -33,6 +33,10 @@ public class EmployeePhoto {
     public EmployeePhoto() {
 
     }
+    public void updatePhotoDetails(String photoName, String photoPath) {
+        this.name = photoName;
+        this.path = photoPath;
+    }
 
 
 }
