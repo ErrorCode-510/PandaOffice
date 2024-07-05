@@ -1,28 +1,35 @@
 package com.errorCode.pandaOffice.welfare.dto.response;
 
+import com.errorCode.pandaOffice.welfare.domain.entity.ReplyRecord;
+
 public class ReplyRecordDTO {
     private int id;
     private int employeeId; //사번(임시작성. 사원 테이블 확정시 이름 변경 )
+    private int jobId; //직급 코드
+    private int questionId;//질문 id
     private int surveyId; //설문코드
-    private int stAgree; //매우 그렇다 합계 (st -> Strongly '매우')
-    private int agree; //그렇다 합계
-    private int average; //보통이다 합계
-    private int disagree; //약간 아니다 합계
-    private int stDisagree; // 매우 아니다 합계 (st -> Strongly '매우')
+    private int answer; //질문 기록
 
     public ReplyRecordDTO(){
 
     }
 
-    public ReplyRecordDTO(int id, int employeeId, int surveyId, int stAgree, int agree, int average, int disagree, int stDisagree) {
+    public ReplyRecordDTO(ReplyRecord replyRecord) {
+        this.id = replyRecord.getId();
+        this.employeeId = replyRecord.getEmployee().getEmployeeId();
+        this.jobId = replyRecord.getJob().getId();
+        this.surveyId = replyRecord.getSurvey().getId();
+        this.questionId = replyRecord.getQuestion().getId();
+        this.answer = replyRecord.getAnswer();
+    }
+
+    public ReplyRecordDTO(int id, int employeeId, int jobId, int questionId, int surveyId, int answer) {
         this.id = id;
         this.employeeId = employeeId;
+        this.jobId = jobId;
+        this.questionId = questionId;
         this.surveyId = surveyId;
-        this.stAgree = stAgree;
-        this.agree = agree;
-        this.average = average;
-        this.disagree = disagree;
-        this.stDisagree = stDisagree;
+        this.answer = answer;
     }
 
     public int getId() {
@@ -41,6 +48,22 @@ public class ReplyRecordDTO {
         this.employeeId = employeeId;
     }
 
+    public int getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
+    }
+
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
+
     public int getSurveyId() {
         return surveyId;
     }
@@ -49,43 +72,11 @@ public class ReplyRecordDTO {
         this.surveyId = surveyId;
     }
 
-    public int getStAgree() {
-        return stAgree;
+    public int getAnswer() {
+        return answer;
     }
 
-    public void setStAgree(int stAgree) {
-        this.stAgree = stAgree;
-    }
-
-    public int getAgree() {
-        return agree;
-    }
-
-    public void setAgree(int agree) {
-        this.agree = agree;
-    }
-
-    public int getAverage() {
-        return average;
-    }
-
-    public void setAverage(int average) {
-        this.average = average;
-    }
-
-    public int getDisagree() {
-        return disagree;
-    }
-
-    public void setDisagree(int disagree) {
-        this.disagree = disagree;
-    }
-
-    public int getStDisagree() {
-        return stDisagree;
-    }
-
-    public void setStDisagree(int stDisagree) {
-        this.stDisagree = stDisagree;
+    public void setAnswer(int answer) {
+        this.answer = answer;
     }
 }

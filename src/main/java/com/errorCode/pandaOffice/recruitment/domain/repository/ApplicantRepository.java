@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
@@ -24,5 +25,11 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
 
     /* 5. 면접자 이름 조회 */
     Page<Applicant> findByNameContaining(Pageable pageable, String name);
+
+//    /* 6. 면접자 나이 + 이름 조회 */
+//    Page<Applicant> findByBirthDateBetweenAndContaining(Pageable pageable, String name, LocalDate startDate, LocalDate endDate);
+//
+//    /* 7. 나이 조회*/
+//    Page<Applicant> findByBirthDateBetween(Pageable pageable, LocalDate startDate, LocalDate endDate);
 
 }
