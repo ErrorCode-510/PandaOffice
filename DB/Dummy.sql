@@ -110,16 +110,6 @@ VALUES
      50, '010-3550-1003', '20040303-3251567', '남', '2024-03-15', NULL, '서울특별시 강북구', '대한민국', '2004-03-03',
      'chulsu.lee@example.com', NULL, '재직', 57000000);
 
-
-INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
-                        `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
-                        `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
-                        `employment_status`, `annual_salary`)
-VALUES (202314054, '$2a$10$UjIJUhFUnSebRNWkVhqDf.h7NhBAbKhiSLs16Bk9j0CPgwyfKYJdi', '이영희', 'Lee Young Hee', '李英熙', 14,
-        0600, '010-3456-7890', '820303-3456789', '여', '2023-03-27', NULL,
-        '대구광역시 중구', '대한민국', '1982-03-03', 'younghee.lee@example.com', NULL,
-        '재직', 30000000);
--- 비밀번호 lee0hee
 /* 지급항목 - 고정 */
 INSERT INTO `earning_category` (`id`, `name`, `is_tax`)
 VALUES (101, '기본급여', 'Y'),
@@ -131,31 +121,31 @@ VALUES (101, '기본급여', 'Y'),
        (204, '명절상여', 'Y'),
        (205, '직책수당', 'Y');
 /* 공제항목 - 고정*/
-INSERT INTO `deducation_category` (`id`, `name`, `deducation_rate`)
+INSERT INTO deduction_category (`id`, `name`, `deduction_rate`)
 VALUES (501, '국민연금', 4.5),
        (502, '건강보험', 3.545),
        (503, '고용보험', 12.95),
        (504, '장기요양보험', 0.9);
+
 INSERT INTO department_box(department_id, `order`, `name`, last_editor_id, last_edit_date)
-values (11, 1, '부서함', 201511003, '2024-05-06');
+values (11, 1, '부서함', 202311018, '2024-05-06');
 INSERT INTO approval_document_template(id, title, document, `status`, last_editor_id, folder_id)
-VALUES (1, '템플릿 1', "템플릿 테스트", 1, 202113015, 1);
+VALUES (1, '템플릿 1', "템플릿 테스트", 1, 202311018, 1);
 INSERT INTO approval_document (id, document_template_id, title, draft_employee_id, approval_date, last_approval_date,
                                department_id, document, `status`)
-VALUES (1, 1, 'Document 1', 201515003, '2023-01-01', '2023-01-05', 12, 'document1.pdf', 1), -- 승인
-       (2, 1, 'Document 2', 202314054, '2023-02-01', '2023-02-10', 13, 'document2.pdf', 2), -- 반려
-       (3, 1, 'Document 3', 201512002, '2023-03-01', '2023-03-15', 11, 'document3.pdf', 0), -- 진행
-       (4, 1, 'Document 4', 201511003, '2023-04-01', '2023-04-20', 12, 'document4.pdf', 0), -- 진행
-       (5, 1, 'Document 5', 201515002, '2023-05-01', '2023-05-25', 11, 'document5.pdf', 1); -- 승인
+VALUES (1, 1, 'Document 1', 202215017, '2023-01-01', '2023-01-05', 12, 'document1.pdf', 1), -- 승인
+       (2, 1, 'Document 2', 202113015, '2023-02-01', '2023-02-10', 13, 'document2.pdf', 2), -- 반려
+       (3, 1, 'Document 3', 202012014, '2023-03-01', '2023-03-15', 11, 'document3.pdf', 0), -- 진행
+       (4, 1, 'Document 4', 201911013, '2023-04-01', '2023-04-20', 12, 'document4.pdf', 0), -- 진행
+       (5, 1, 'Document 5', 202311018, '2023-05-01', '2023-05-25', 11, 'document5.pdf', 1); -- 승인
 INSERT INTO approval_line (document_id, employee_id, handling_date, id, `order`, `status`)
-VALUES (1, 202314054, '2024-01-01', 1, 1, 2),
-       (1, 201515002, '2024-01-02', 2, 2, 1),
-       (1, 201515003, null, 3, 3, 0);
+VALUES (1, 201911013, '2024-01-01', 1, 1, 2),
+       (1, 202012014, '2024-01-02', 2, 2, 1),
+       (1, 202113015, null, 3, 3, 0);
 INSERT INTO department_document (document_template_id, department_box_id)
 VALUES (1, 1);
 
 
-################################## 근태관리 더미데이터 ##################################
 INSERT INTO annual_leave_category (id, name, type)
 VALUES
     (1, '기본발생', '부여'),
@@ -166,9 +156,8 @@ VALUES
     (6, '1년미만', '소진'),
     (7, '보상', '소진'),
     (8, '대체', '소진'),
-    (9, '유효기간 만료', '소진');
+    (9, '초기화', '소진');
 
--- annual_leave_grant_record 데이터 생성
 INSERT INTO annual_leave_grant_record (id, amount, date, expiration_date, annual_leave_category_id, employee_id)
 VALUES
 -- 2012년에 입사한 사원들
@@ -229,6 +218,7 @@ VALUES
 (48, 1, '2019-07-01', '2020-07-01', 2, 201911013),
 (49, 1, '2019-08-01', '2020-08-01', 2, 201911013),
 (50, 1, '2019-09-01', '2020-09-01', 2, 201911013),
+-- 유효기간 만료
 (51, 1, '2012-06-15', '2013-06-15', 4, 201211001),
 (52, 1, '2012-07-17', '2013-07-17', 4, 202215017),
 (53, 1, '2012-07-19', '2013-07-19', 4, 202312019),
@@ -262,7 +252,6 @@ VALUES
 (81, 1, '2023-09-14', '2024-09-14', 4, 201314004),
 (82, 1, '2023-11-19', '2024-11-19', 4, 202311018),
 (83, 1, '2024-01-14', '2025-01-14', 4, 202312019),
-
 -- 보상 연차
 (84, 1, '2012-06-15', '2013-06-15', 3, 201211001),
 (85, 1, '2012-07-17', '2013-07-17', 3, 202215017),
@@ -282,7 +271,6 @@ VALUES
 (99, 1, '2018-05-14', '2019-05-14', 3, 201714011),
 (100, 1, '2018-06-23', '2019-06-23', 3, 201314004);
 
--- annual_leave_used_record: 대체 연차와 보상 연차 사용
 INSERT INTO annual_leave_used_record (id, used_start_date, used_end_date, leave_session, used_amount, remaining_amount, employee_id, annual_leave_category_id, annual_leave_grant_record_id, approval_document_id)
 VALUES
     -- 기존 연차 사용 데이터
@@ -442,8 +430,6 @@ VALUES
     (49, '2024-02-26', '09:00:00', '18:00:00', 201414005),
     (50, '2024-06-30', '09:00:00', '18:00:00', 201211001);
 
-
-
 INSERT INTO over_time_and_lateness_record (id, type, date, start_time, end_time, approval_document_id, employee_id)
 VALUES
     (1, '연장', '2012-06-15', '18:00:00', '20:00:00', NULL, 201211001),
@@ -496,3 +482,4 @@ VALUES
     (48, '휴일', '2024-01-14', '09:00:00', '13:00:00', NULL, 202312019),
     (49, '지각', '2024-02-16', '09:25:00', '09:25:00', NULL, 201511007),
     (50, '연장', '2024-06-30', '18:00:00', '21:00:00', NULL, 201211001);
+
