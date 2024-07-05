@@ -22,6 +22,9 @@ public class Department {
         this.id = id;
         this.name = name;
     }
+    public Department(String id) {
+        this.id = Integer.parseInt(id);
+    }
 
 
 

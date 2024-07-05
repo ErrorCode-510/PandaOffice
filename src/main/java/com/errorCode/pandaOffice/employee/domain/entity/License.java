@@ -1,13 +1,15 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Getter
 @Entity(name="License")
 @Table(name="license")
-
+@AllArgsConstructor
 public class License {
 
     @Id
@@ -19,9 +21,12 @@ public class License {
     @Column(name="issuing_organization")
     private String issuingOrganization;
     @Column(name="issue_date")
-    private Date issueDate;
+    private LocalDate issueDate;
     @Column(name="name")
     private String name;
     protected License(){}
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
 }
