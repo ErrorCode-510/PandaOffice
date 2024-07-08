@@ -1,6 +1,9 @@
 package com.errorCode.pandaOffice.e_approval.presectation;
 
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.*;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.*;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response.ApprovalDocumentFolderResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response.ApprovalDocumentTemplateResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response.CreateTemplateResponse;
 import com.errorCode.pandaOffice.e_approval.service.ApprovalDocumentTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,16 +39,22 @@ public class ApprovalDocumentTemplateController {
         return ResponseEntity.ok(response);
     }
     @PostMapping("approval-document-template-folder")
-    public ResponseEntity<Void> createApprovalDocumentTemplateFolder(@RequestBody CreateApprovalDocumentFolderRequest request){
-        int folderId = approvalDocumentTemplateService.createNewFolder(request);
-        return ResponseEntity.created(URI.create(folderId +"")).build();
-    }
-    @PutMapping("approval-document-template-status")
-    public ResponseEntity<List<ApprovalDocumentFolderResponse>> modifyApprovalDocumentTemplateStatus(@RequestBody UpdateDocumentTemplateStatusRequest requests){
-        approvalDocumentTemplateService.updateTemplateStatus(requests);
-        List<ApprovalDocumentFolderResponse> response = approvalDocumentTemplateService.getAllApprovalDocumentTemplateFolder();
+    public ResponseEntity<ApprovalDocumentFolderResponse> createApprovalDocumentTemplateFolder(@RequestBody CreateApprovalDocumentFolderRequest request){
+        ApprovalDocumentFolderResponse response = approvalDocumentTemplateService.createNewFolder(request);
         return ResponseEntity.ok(response);
     }
+    @PutMapping("approval-document-template-status")
+    public ResponseEntity<ApprovalDocumentFolderResponse> modifyApprovalDocumentTemplateStatus(@RequestBody UpdateDocumentTemplateStatusRequest requests){
+        ApprovalDocumentFolderResponse response = approvalDocumentTemplateService.updateTemplateStatus(requests);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("approval-document-template/ref-folder")
+    public ResponseEntity<ApprovalDocumentFolderResponse> modifyApprovalDocumentTemplateRefFolder(@RequestBody UpdateDocumentTemplateRefFolderRequest request){
+        ApprovalDocumentFolderResponse response = approvalDocumentTemplateService.updateTemplateRefFolder(request);
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("approval-document-template-folder")
     public ResponseEntity<ApprovalDocumentFolderResponse> modifyApprovalDocumentTemplateFolder(@RequestParam int folderId,
                                                                      @RequestParam String newName){

@@ -33,9 +33,6 @@ import java.util.*;
 public class ApprovalDocumentService {
     private final ApprovalDocumentRepository approvalDocumentRepository;
     private final ApprovalLineRepository approvalLineRepository;
-    private final ApprovalLineTemplateFolderRepository approvalLineTemplateFolderRepository;
-    private final ApprovalLineTemplateOrderRepository approvalLineTemplateOrderRepository;
-    private final ApprovalLineTemplateRepository approvalLineTemplateRepository;
     private final AutoApprovalLineRepository autoApprovalLineRepository;
     private final DepartmentBoxRepository departmentBoxRepository;
     private final DepartmentDocumentRepository departmentDocumentRepository;

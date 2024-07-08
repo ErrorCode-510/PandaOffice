@@ -1,25 +1,23 @@
-package com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate;
+package com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
-@Getter
-@ToString
+
 @RequiredArgsConstructor
-public class UpdateApprovalDocumentTemplateRequest {
-    private final int id;
+@Getter
+public class CreateApprovalDocumentTemplateRequest {
     private final String title;
+    private final String description;
     private final String document;
-    private final boolean status;
-    private final int folderId;
-    private final List<AutoApprovalLine> newApprovalLine;
+    private final List<AutoApprovalLineRequest> autoApprovalLineRequestList;
+    private final Integer folderId = 1;
+
 
     @RequiredArgsConstructor
     @Getter
-    @ToString
-    public static class AutoApprovalLine{
+    public static class AutoApprovalLineRequest{
         private final int order;
         private final Integer employeeId;
         private final Integer jobId;

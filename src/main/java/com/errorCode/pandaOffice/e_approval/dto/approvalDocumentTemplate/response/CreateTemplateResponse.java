@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate;
+package com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response;
 
 import com.errorCode.pandaOffice.employee.domain.entity.Department;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;

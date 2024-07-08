@@ -129,8 +129,8 @@ VALUES (501, '국민연금', 4.5),
 
 INSERT INTO department_box(department_id, `order`, `name`, last_editor_id, last_edit_date)
 values (11, 1, '부서함', 202311018, '2024-05-06');
-INSERT INTO approval_document_template(id, title, document, `status`, last_editor_id, folder_id)
-VALUES (1, '템플릿 1', "템플릿 테스트", 1, 202311018, 1);
+INSERT INTO approval_document_template(id, title, description, document, `status`, last_editor_id, folder_id, last_edit_date)
+VALUES (1, '템플릿 1', "템플릿 설명", '양식등록<div><table style="border: 1px solid black; border-collapse: collapse;"><tbody><tr><td style="border: 1px solid black; padding: 5px;">내용</td></tr></tbody></table>ㄴㅇㄹ</div>', 1, 202311018, 1, '2024-05-06');
 INSERT INTO approval_document (id, document_template_id, title, draft_employee_id, approval_date, last_approval_date,
                                department_id, document, `status`)
 VALUES (1, 1, 'Document 1', 202215017, '2023-01-01', '2023-01-05', 12, 'document1.pdf', 1), -- 승인

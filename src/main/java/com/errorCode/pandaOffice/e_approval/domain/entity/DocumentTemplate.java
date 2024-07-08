@@ -1,7 +1,7 @@
 package com.errorCode.pandaOffice.e_approval.domain.entity;
 
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.CreateApprovalDocumentTemplateRequest;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.UpdateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.CreateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.UpdateApprovalDocumentTemplateRequest;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -26,6 +26,9 @@ public class DocumentTemplate {
     /* 문서 양식 이름 */
     @Column(nullable = false)
     private String title;
+    /* 문서 양식 설명 */
+    @Column(nullable = false)
+    private String description;
     /* 문서 양식 */
     @Column(nullable = false)
     private String document;
@@ -50,6 +53,7 @@ public class DocumentTemplate {
         DocumentTemplate templateEntity = new DocumentTemplate();
 
         templateEntity.title = request.getTitle();
+        templateEntity.description = request.getDescription();
         templateEntity.document = request.getDocument();
         templateEntity.status = true;
         templateEntity.lastEditor = lastEditorEntity;
@@ -72,5 +76,9 @@ public class DocumentTemplate {
         this.lastEditDate = LocalDate.now();
         this.lastEditor = lastEditor;
         this.status = statue;
+    }
+
+    public void updateRefFolder(int afterFolderId) {
+        this.folderId = afterFolderId;
     }
 }
