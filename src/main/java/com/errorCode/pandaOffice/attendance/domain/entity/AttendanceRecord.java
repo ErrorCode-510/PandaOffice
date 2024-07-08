@@ -32,9 +32,6 @@ public class AttendanceRecord {
     /* 근무 퇴근 시간 */
     private LocalTime checkOutTime;
 
-    /* 근무 누적 지각 시간 */
-    private LocalTime totalLateTime;
-
     @ManyToOne
     @JoinColumn(name = "employee_id")
     /* 사번 */

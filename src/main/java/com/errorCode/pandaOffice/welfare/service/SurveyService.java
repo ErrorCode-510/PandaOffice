@@ -1,6 +1,7 @@
 package com.errorCode.pandaOffice.welfare.service;
 
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.entity.Job;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.welfare.domain.entity.ReplyRecord;
 import com.errorCode.pandaOffice.welfare.domain.entity.Survey;
@@ -14,6 +15,7 @@ import com.errorCode.pandaOffice.welfare.dto.request.CreateSurveyRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.ReplyRecordRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.UpdateSurveyQuestionRequest;
 import com.errorCode.pandaOffice.welfare.dto.response.ReplyRecordDTO;
+import com.errorCode.pandaOffice.welfare.dto.response.SurveyDetailsResponse;
 import com.errorCode.pandaOffice.welfare.dto.response.SurveyQuestionDTO;
 import com.errorCode.pandaOffice.welfare.dto.response.SurveyResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -64,6 +67,29 @@ public class SurveyService {
         return surveys.stream().map(
                 surveyEntity->SurveyResponse.of(surveyEntity)
         ).toList();
+    }
+
+//설문조회(질문, 문항 포함 차트 뿌려주기용)
+    public SurveyDetailsResponse getSurveyDetails(int surveyId) {
+        Survey survey = surveyRepository.findById(surveyId)
+                .orElseThrow(() -> new RuntimeException("Survey not found"));
+
+        List<SurveyQuestionDTO> questionDTOs = survey.getQuestion().stream()
+                .map(SurveyQuestionDTO::new)
+                .collect(Collectors.toList());
+
+        List<ReplyRecordDTO> replyDTOs = survey.getReplyRecords().stream()
+                .map(ReplyRecordDTO::new)
+                .collect(Collectors.toList());
+
+        System.out.println("쳌: " + survey +"\n"+questionDTOs +"\n"+replyDTOs );
+
+        return new SurveyDetailsResponse(survey, questionDTOs, replyDTOs);
+    }
+
+//    응답자 수 조회
+    public int getSurveyRespondentCount(int surveyId) {
+        return replyRecordRepository.countDistinctBySurveyId(surveyId);
     }
 
     //질문 수정
@@ -108,39 +134,10 @@ public class SurveyService {
         return !today.isBefore(survey.getStartDate()) && !today.isAfter(survey.getEndDate());
     }
 
-    // 설문 응답을 저장하고, 저장된 응답 데이터를 반환합니다.
-    public List<ReplyRecordDTO> saveReplyRecord(List<ReplyRecordRequest> requests) {
-        List<ReplyRecordDTO> responseList = new ArrayList<>();
-
-        for (ReplyRecordRequest request : requests) {
-            Employee employee = employeeRepository.findById(request.getEmployeeId())
-                    .orElseThrow(() -> new RuntimeException("Employee not found"));
-            Survey survey = surveyRepository.findById(request.getSurveyId())
-                    .orElseThrow(() -> new RuntimeException("Survey not found"));
-
-            ReplyRecord replyRecord = replyRecordRepository.findBySurveyAndEmployee(survey, employee)
-                    .orElse(new ReplyRecord(employee, survey, request.getStAgree(), request.getAgree(),
-                            request.getAverage(), request.getDisagree(), request.getStDisagree()));
-
-            replyRecord.updateCounts(
-                    request.getStAgree(),
-                    request.getAgree(),
-                    request.getAverage(),
-                    request.getDisagree(),
-                    request.getStDisagree()
-            );
-
-            replyRecordRepository.save(replyRecord);
-
-            responseList.add(new ReplyRecordDTO(replyRecord.getId(), request.getEmployeeId(), request.getSurveyId(),
-                    replyRecord.getStAgree(), replyRecord.getAgree(), replyRecord.getAverage(),
-                    replyRecord.getDisagree(), replyRecord.getStDisagree()));
-        }
-
-        return responseList;
-    }
 
 
+
+    // 질문 문항 응답 반환
     public void saveSurveyReply(ReplyRecordRequest replyRecordDTO) {
         Employee employee = employeeRepository.findById(replyRecordDTO.getEmployeeId())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
@@ -148,20 +145,39 @@ public class SurveyService {
         Survey survey = surveyRepository.findById(replyRecordDTO.getSurveyId())
                 .orElseThrow(() -> new RuntimeException("Survey not found"));
 
-        ReplyRecord replyRecord = replyRecordRepository.findBySurveyAndEmployee(survey, employee)
-                .orElse(new ReplyRecord(employee, survey, replyRecordDTO.getStAgree(), replyRecordDTO.getAgree(),
-                        replyRecordDTO.getAverage(), replyRecordDTO.getDisagree(), replyRecordDTO.getStDisagree()));
+        SurveyQuestion question = surveyQuestionRepository.findById(replyRecordDTO.getQuestionId())
+                .orElseThrow(() -> new RuntimeException("Question not found"));
 
-        replyRecord.updateCounts(
-                replyRecordDTO.getStAgree(),
-                replyRecordDTO.getAgree(),
-                replyRecordDTO.getAverage(),
-                replyRecordDTO.getDisagree(),
-                replyRecordDTO.getStDisagree()
-        );
+        Job job = employee.getJob();
+
+        ReplyRecord replyRecord = replyRecordRepository.findBySurveyAndEmployeeAndQuestion(survey, employee, question)
+                .orElse(new ReplyRecord(employee, job, survey, question, replyRecordDTO.getAnswer()));
+
+
+        replyRecord.updateAnswer(replyRecordDTO.getAnswer());
 
         replyRecordRepository.save(replyRecord);
+
     }
+
+
+    // 특정 질문(문항)을 조회
+    public SurveyQuestionDTO getSurveyQuestionById(int questionId) {
+        SurveyQuestion question = surveyQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+        return new SurveyQuestionDTO(question);
+    }
+
+
+
+
+    //카테고리 ID로 설문을 조회
+    public List<SurveyResponse> getSurveysByCategoryId(int categoryId) {
+        System.out.println("이건뜸?");
+        List<Survey> surveys = surveyRepository.findByCategoryId(categoryId);
+        System.out.println("Found " + surveys.size() + " surveys for category ID " + categoryId);
+    return surveys.stream().map(SurveyResponse::of).collect(Collectors.toList());
+}
 
 
 

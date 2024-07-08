@@ -40,11 +40,17 @@ public class ApprovalDocumentTemplateController {
         int folderId = approvalDocumentTemplateService.createNewFolder(request);
         return ResponseEntity.created(URI.create(folderId +"")).build();
     }
+    @PutMapping("approval-document-template-status")
+    public ResponseEntity<List<ApprovalDocumentFolderResponse>> modifyApprovalDocumentTemplateStatus(@RequestBody UpdateDocumentTemplateStatusRequest requests){
+        approvalDocumentTemplateService.updateTemplateStatus(requests);
+        List<ApprovalDocumentFolderResponse> response = approvalDocumentTemplateService.getAllApprovalDocumentTemplateFolder();
+        return ResponseEntity.ok(response);
+    }
     @PutMapping("approval-document-template-folder")
-    public ResponseEntity<String > modifyApprovalDocumentTemplateFolder(@RequestParam int folderId,
+    public ResponseEntity<ApprovalDocumentFolderResponse> modifyApprovalDocumentTemplateFolder(@RequestParam int folderId,
                                                                      @RequestParam String newName){
-        int currentFolderId = approvalDocumentTemplateService.modifyFolder(folderId, newName);
-        return ResponseEntity.ok(newName);
+        ApprovalDocumentFolderResponse currentFolder = approvalDocumentTemplateService.modifyFolder(folderId, newName);
+        return ResponseEntity.ok(currentFolder);
     }
     @DeleteMapping("approval-document-template-folder/{folderId}")
     public ResponseEntity<Void> deleteApprovalDocumentTemplateFolder(@PathVariable final int folderId){
@@ -52,6 +58,13 @@ public class ApprovalDocumentTemplateController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @GetMapping ("approval-document-template/new")
+    public ResponseEntity<CreateTemplateResponse> getInformationForNewTemplate(){
+        CreateTemplateResponse response = approvalDocumentTemplateService.getInformationForNewTemplate();
+        System.out.println(response);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("approval-document-template/{templateId}")
     public ResponseEntity<ApprovalDocumentTemplateResponse> getApprovalDocumentTemplate(@PathVariable int templateId){

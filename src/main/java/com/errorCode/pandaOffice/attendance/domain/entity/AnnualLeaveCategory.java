@@ -22,6 +22,7 @@ public class AnnualLeaveCategory {
     /* 연차 분류 이름 */
     private String name;
 
+    // 이거 안씀
     /* 연차 분류의 타입 */
     /* 부여 or 소진 */
     private String type;

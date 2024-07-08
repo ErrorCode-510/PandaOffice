@@ -3,6 +3,6 @@ POST localhost:8001/login
 Content-Type: application/json
 
 {
-  "memberId" : 201212002,
+  "memberId" : 201211001,
   "memberPassword": "1234"
 }
