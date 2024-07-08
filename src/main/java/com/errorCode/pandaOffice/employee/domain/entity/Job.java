@@ -28,4 +28,8 @@ public class Job {
         this.title = title;
         this.allowance = allowance;
     }
+
+    public Job(String id) {
+        this.id = Integer.parseInt(id);
+    }
 }

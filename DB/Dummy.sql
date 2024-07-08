@@ -23,10 +23,6 @@ INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanj
                         `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
                         `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
                         `employment_status`, `annual_salary`)
-INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
-                        `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
-                        `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
-                        `employment_status`, `annual_salary`)
 VALUES
     -- Employees who joined in 2012
     (201211001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김민수', 'Kim Min Su', '金民洙', 11,
@@ -114,16 +110,6 @@ VALUES
     50, '010-3550-1003', '20040303-3251567', '남', '2024-03-15', NULL, '서울특별시 강북구', '대한민국', '2004-03-03',
     'chulsu.lee@example.com', NULL, '재직', 57000000);
 
-
-INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
-                        `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
-                        `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
-                        `employment_status`, `annual_salary`)
-VALUES (202314054, '$2a$10$UjIJUhFUnSebRNWkVhqDf.h7NhBAbKhiSLs16Bk9j0CPgwyfKYJdi', '이영희', 'Lee Young Hee', '李英熙', 14,
-        0600, '010-3456-7890', '820303-3456789', '여', '2023-03-27', NULL,
-        '대구광역시 중구', '대한민국', '1982-03-03', 'younghee.lee@example.com', NULL,
-        '재직', 30000000);
--- 비밀번호 lee0hee
 /* 지급항목 - 고정 */
 INSERT INTO `earning_category` (`id`, `name`, `is_tax`)
 VALUES (101, '기본급여', 'Y'),
@@ -135,11 +121,12 @@ VALUES (101, '기본급여', 'Y'),
        (204, '명절상여', 'Y'),
        (205, '직책수당', 'Y');
 /* 공제항목 - 고정*/
-INSERT INTO `deducation_category` (`id`, `name`, `deducation_rate`)
+INSERT INTO deduction_category (`id`, `name`, `deduction_rate`)
 VALUES (501, '국민연금', 4.5),
        (502, '건강보험', 3.545),
        (503, '고용보험', 12.95),
        (504, '장기요양보험', 0.9);
+
 INSERT INTO department_box(department_id, `order`, `name`, last_editor_id, last_edit_date)
 values (11, 1, '부서함', 201511003, '2024-05-06');
 INSERT INTO approval_document_template(id, title, document, `status`, last_editor_id, folder_id)
