@@ -99,22 +99,22 @@ public class Employee {
         this.email = email;
         this.employmentStatus = employmentStatus;
     }
-//    public void update(String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, String address, String nationality, LocalDate birthDate, String email, String employmentStatus) {
-//        this.name = name;
-//        this.englishName = englishName;
-//        this.hanjaName = hanjaName;
-//        this.department = department;
-//        this.job = job;
-//        this.phone = phone;
-//        this.personalId = personalId;
-//        this.gender = gender;
-//        this.hireDate = hireDate;
-//        this.address = address;
-//        this.nationality = nationality;
-//        this.birthDate = birthDate;
-//        this.email = email;
-//        this.employmentStatus = employmentStatus;
-//    }
+    public void update(String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, String address, String nationality, LocalDate birthDate, String email, String employmentStatus) {
+        this.name = name;
+        this.englishName = englishName;
+        this.hanjaName = hanjaName;
+        this.department = department;
+        this.job = job;
+        this.phone = phone;
+        this.personalId = personalId;
+        this.gender = gender;
+        this.hireDate = hireDate;
+        this.address = address;
+        this.nationality = nationality;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.employmentStatus = employmentStatus;
+    }
 
     // Method to change password
     public void changePassword(String newPassword) {

@@ -226,30 +226,36 @@ public class MemberService {
         Employee existingEmployee = optionalEmployee.get();
 
         // 사원 기본 정보 업데이트
-//        existingEmployee.update(
-//                employeeDTO.getEmployee().getName(),
-//                employeeDTO.getEmployee().getEnglishName(),
-//                employeeDTO.getEmployee().getHanjaName(),
-//                employeeDTO.getEmployee().getDepartment(),
-//                employeeDTO.getEmployee().getJob(),
-//                employeeDTO.getEmployee().getPhone(),
-//                employeeDTO.getEmployee().getPersonalId(),
-//                employeeDTO.getEmployee().getGender(),
-//                employeeDTO.getEmployee().getHireDate(),
-//                employeeDTO.getEmployee().getAddress(),
-//                employeeDTO.getEmployee().getNationality(),
-//                employeeDTO.getEmployee().getBirthDate(),
-//                employeeDTO.getEmployee().getEmail(),
-//                employeeDTO.getEmployee().getEmploymentStatus()
-//        );
+        existingEmployee.update(
+                employeeDTO.getEmployee().getName(),
+                employeeDTO.getEmployee().getEnglishName(),
+                employeeDTO.getEmployee().getHanjaName(),
+                employeeDTO.getEmployee().getDepartment(),
+                employeeDTO.getEmployee().getJob(),
+                employeeDTO.getEmployee().getPhone(),
+                employeeDTO.getEmployee().getPersonalId(),
+                employeeDTO.getEmployee().getGender(),
+                employeeDTO.getEmployee().getHireDate(),
+                employeeDTO.getEmployee().getAddress(),
+                employeeDTO.getEmployee().getNationality(),
+                employeeDTO.getEmployee().getBirthDate(),
+                employeeDTO.getEmployee().getEmail(),
+                employeeDTO.getEmployee().getEmploymentStatus()
+        );
 
         // 사원 정보 저장 (이 부분이 없어야 합니다)
-        // Employee savedEmployee = memberRepository.save(existingEmployee);
+         Employee savedEmployee = memberRepository.save(existingEmployee);
 
         // 사진 정보 업데이트
         EmployeePhoto employeePhoto = employeePhotoRepository.findByEmployeeEmployeeId(existingEmployee.getEmployeeId())
                 .orElse(new EmployeePhoto(employeeDTO.getEmployee().getEmployeeId(), existingEmployee, employeeDTO.getPhotoName(), employeeDTO.getPhotoPath()));
+
+        // Use encapsulation method to update the fields
+        employeePhoto.updatePhotoDetails(employeeDTO.getPhotoName(), employeeDTO.getPhotoPath());
+
+        // Save the updated entity
         employeePhotoRepository.save(employeePhoto);
+
 
         // 가족 구성원 정보 업데이트
         List<FamilyMember> familyMembers = employeeDTO.getFamilyMember();

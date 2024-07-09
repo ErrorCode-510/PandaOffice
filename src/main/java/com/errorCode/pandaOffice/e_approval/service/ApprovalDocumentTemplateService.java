@@ -7,8 +7,12 @@
     import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateFolderRepository;
     import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateRepository;
     import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.*;
+    import com.errorCode.pandaOffice.employee.domain.entity.Department;
     import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+    import com.errorCode.pandaOffice.employee.domain.entity.Job;
+    import com.errorCode.pandaOffice.employee.domain.repository.DepartmentRepository;
     import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
+    import com.errorCode.pandaOffice.employee.domain.repository.JobRepository;
     import lombok.RequiredArgsConstructor;
     import org.springframework.stereotype.Service;
 
@@ -24,9 +28,8 @@
         private final DocumentTemplateRepository documentTemplateRepository;
         private final DocumentTemplateFolderRepository documentTemplateFolderRepository;
         private final EmployeeRepository employeeRepository;
-
-
-
+        private final JobRepository jobRepository;
+        private final DepartmentRepository departmentRepository;
 
 
         public ApprovalDocumentTemplateResponse getApprovalDocumentTemplate(int templateId) {
@@ -162,6 +165,15 @@
                     .orElseThrow();
             templateEntityList.forEach(entity -> entity.updateStatus(requests.isStatus(), lastEditor));
             documentTemplateRepository.saveAll(templateEntityList);
-            /* 해당 부분 */
+        }
+
+        public CreateTemplateResponse getInformationForNewTemplate() {
+            Employee draftEmployee = employeeRepository.findById(TokenUtils.getEmployeeId())
+                            .orElseThrow();
+            List<Job> jobEntityList = jobRepository.findAll();
+            List<Department> departmentEntityList = departmentRepository.findAll();
+            List<Employee> employeeEntityList = employeeRepository.findAll();
+            CreateTemplateResponse response = CreateTemplateResponse.of(draftEmployee, jobEntityList, departmentEntityList, employeeEntityList);
+            return response;
         }
     }
