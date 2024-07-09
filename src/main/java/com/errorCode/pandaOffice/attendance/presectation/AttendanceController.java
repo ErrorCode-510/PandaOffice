@@ -91,14 +91,14 @@ public class AttendanceController {
 
     /*5. 연차 조정 */
     // 모든 사원의 현재 연도의 모든 연차 기록 반환
-    @GetMapping("/all_leave_record")
+    @GetMapping("/all_leave_adjustment")
     public ResponseEntity<AllLeaveRecordsResponse> getAllLeaveRecordsForCurrentYear() {
         AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForCurrentYear();
         return ResponseEntity.ok(response);
     }
 
     // 특정 연도에 입사한 사원들의 현재 연도의 모든 연차 기록 반환
-    @GetMapping("/all_leave_record/search")
+    @GetMapping("/all_leave_adjustment/search")
     public ResponseEntity<AllLeaveRecordsResponse> getAllLeaveRecordsForEmployeesHiredInYear(
             @RequestParam(value = "hireYear") int hireYear) {
         AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForEmployeesHiredInYear(hireYear);
