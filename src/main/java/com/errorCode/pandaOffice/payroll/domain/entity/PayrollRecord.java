@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -46,8 +47,13 @@ public class PayrollRecord {
     private Employee employeeId;
 
     /* 급여일 */
-    @Column(name = "date")
+    @Column(name = "payroll_date")
     private LocalDate payrollDate;
+
+    /* 생성일 */
+    @CreatedDate
+    @Column(name = "created_date")
+    private LocalDate createdDate;
 
     /* 급여명세서 경로 */
     @Column(name = "pay_stub_path")
@@ -63,11 +69,12 @@ public class PayrollRecord {
     @JoinColumn(name = "payroll_id")
     private List<DeductionRecord> deductionRecordList;
 
-    public PayrollRecord(Employee employeeId, LocalDate payrollDate, String payStubPath,
+    public PayrollRecord(Employee employeeId, LocalDate payrollDate, LocalDate createdDate,String payStubPath,
                          List<EarningRecord> earningRecordList, List<DeductionRecord> deductionRecordList) {
 
         this.employeeId = employeeId;
         this.payrollDate = payrollDate;
+        this.createdDate = createdDate;
         this.payStubPath = payStubPath;
         this.earningRecordList = earningRecordList;
         this.deductionRecordList = deductionRecordList;

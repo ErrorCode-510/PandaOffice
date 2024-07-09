@@ -14,11 +14,10 @@ Access-Token: Bearer eyJkYXRlIjoxNzE5ODMyMTY4MTg1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 등록
 POST http://localhost:8001/payroll/save-emplpay
-Access-Token: Bearer eyJkYXRlIjoxNzIwMDg5NjgwMjcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTIwMDIiLCJleHAiOjM2MDAwMTcyMDA4OTY4MH0.lv-mC_elfQu8U7C_jFxbDs7R39Zvjof_VhFFSxBs6Sl-bvq8MnhmOLGydYkYeO0SXxpUORtSH_jL2EJG2GHkbw
 Content-Type: application/json
 
 {
-  "employeeId": 201211001,
+  "employeeId": 202311018,
   "payrollDate": "2024-07-25",
   "payStubPath": "",
   "earningRecordList": [

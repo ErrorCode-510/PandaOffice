@@ -54,6 +54,7 @@ public class PayrollController {
     /* 사원 급여 등록 */
     @PostMapping("/save-emplpay")
     public ResponseEntity<Void> save(@RequestBody @Valid final PayrollRequest payrollRequest) {
+        System.out.println(payrollRequest);
         Integer id = payrollService.saveEmplPay(payrollRequest); // Use Integer instead of int
 
         if (id != null) {

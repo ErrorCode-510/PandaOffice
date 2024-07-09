@@ -24,6 +24,7 @@ public class PayrollRequest {
     private final List<EarningRequest> earningRecordList;
     private final List<DeductionRequest> deductionRecordList;
 
+
     @RequiredArgsConstructor
     @Getter
     @ToString
