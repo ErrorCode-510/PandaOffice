@@ -1,6 +1,7 @@
 package com.errorCode.pandaOffice.attendance.presectation;
 
 import com.errorCode.pandaOffice.attendance.dto.annualLeaveRecord.response.*;
+import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.request.AttendanceRecordRequest;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.CalculatedAttendanceAndOverTimeRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response.OverTimeAndLatenessAndAnnualLeaveRequestResponse;
 import com.errorCode.pandaOffice.attendance.service.AttendanceService;
@@ -89,7 +90,7 @@ public class AttendanceController {
         return ResponseEntity.ok(response);
     }
 
-    /*5. 연차 조정 */
+    /*5.연차 조정 */
     // 모든 사원의 현재 연도의 모든 연차 기록 반환
     @GetMapping("/all_leave_adjustment")
     public ResponseEntity<AllLeaveRecordsResponse> getAllLeaveRecordsForCurrentYear() {
@@ -104,5 +105,20 @@ public class AttendanceController {
         AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForEmployeesHiredInYear(hireYear);
         return ResponseEntity.ok(response);
     }
+
+    /*6.출퇴근 등록 */
+    @PostMapping("/check-in")
+    public ResponseEntity<Void> checkIn(@RequestBody AttendanceRecordRequest request) {
+        attendanceService.saveCheckInTime(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/check-out")
+    public ResponseEntity<Void> checkOut(@RequestBody AttendanceRecordRequest request) {
+        attendanceService.saveCheckOutTime(request);
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }

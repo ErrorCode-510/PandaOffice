@@ -37,4 +37,27 @@ public class AttendanceRecord {
     /* 사번 */
     private Employee employee;
 
+    public static AttendanceRecord create(LocalDate date, LocalTime checkInTime, LocalTime checkOutTime, Employee employee) {
+        AttendanceRecord attendanceRecord = new AttendanceRecord();
+        attendanceRecord.date = date;
+        attendanceRecord.checkInTime = checkInTime;
+        attendanceRecord.checkOutTime = checkOutTime;
+        attendanceRecord.employee = employee;
+        return attendanceRecord;
+    }
+
+    public void setCheckInTime(LocalTime checkInTime) {
+        if (this.checkInTime != null) {
+            throw new IllegalStateException("Check-in time is already set.");
+        }
+        this.checkInTime = checkInTime;
+    }
+
+    public void setCheckOutTime(LocalTime checkOutTime) {
+        if (this.checkOutTime != null) {
+            throw new IllegalStateException("Check-out time is already set.");
+        }
+        this.checkOutTime = checkOutTime;
+    }
+
 }

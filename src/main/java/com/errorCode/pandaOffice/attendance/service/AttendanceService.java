@@ -9,6 +9,7 @@ import com.errorCode.pandaOffice.attendance.domain.repository.AnnualLeaveUsedRec
 import com.errorCode.pandaOffice.attendance.domain.repository.AttendanceRecordRepository;
 import com.errorCode.pandaOffice.attendance.domain.repository.OverTimeAndLatenessRecordRepository;
 import com.errorCode.pandaOffice.attendance.dto.annualLeaveRecord.response.*;
+import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.request.AttendanceRecordRequest;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.CalculatedAttendanceAndOverTimeRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.AttendanceRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.AttendanceSummaryResponse;
@@ -16,6 +17,9 @@ import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.respon
 import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response.OverTimeAndLatenessAndAnnualLeaveRequestResponse;
 import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response.OverTimeAndLatenessRecordRequestResponse;
 import com.errorCode.pandaOffice.auth.util.TokenUtils;
+import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +36,8 @@ public class AttendanceService {
     private final OverTimeAndLatenessRecordRepository overTimeAndLatenessRecordRepository;
     private final AnnualLeaveGrantRecordRepository annualLeaveGrantRecordRepository;
     private final AnnualLeaveUsedRecordRepository annualLeaveUsedRecordRepository;
+
+    private final EmployeeRepository employeeRepository;
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1.내 근태 현황 페이지(Attendance Status) - 끝 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
     /* 확인 사항
@@ -224,5 +230,28 @@ public class AttendanceService {
         List<AnnualLeaveGrantRecord> grantRecords = annualLeaveGrantRecordRepository.findByEmployee_NameInAndDateBetween(employeeNames, currentYearStart, currentYearEnd);
 
         return AllLeaveRecordsResponse.of(grantRecords, usedRecords);
+    }
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 5.출퇴근 등록(Attendance Regist ) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    public void saveCheckInTime(AttendanceRecordRequest request) {
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+
+        AttendanceRecord attendanceRecord = attendanceRecordRepository.findByDateAndEmployee(request.getDate(), employee)
+                .orElseGet(() -> AttendanceRecord.create(request.getDate(), request.getTime(), null, employee));
+
+        attendanceRecord.setCheckInTime(request.getTime());
+        attendanceRecordRepository.save(attendanceRecord);
+    }
+
+    public void saveCheckOutTime(AttendanceRecordRequest request) {
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+
+        AttendanceRecord attendanceRecord = attendanceRecordRepository.findByDateAndEmployee(request.getDate(), employee)
+                .orElseThrow();
+
+        attendanceRecord.setCheckOutTime(request.getTime());
+        attendanceRecordRepository.save(attendanceRecord);
     }
 }
