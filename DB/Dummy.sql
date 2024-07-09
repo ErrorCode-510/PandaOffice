@@ -19,10 +19,6 @@ VALUES
     (20, '부장', 400000),
     (11, '사장', 0);
 /* 사원 정보 - 임의 */
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
                         `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
                         `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
@@ -148,9 +144,6 @@ VALUES (1, 201911013, '2024-01-01', 1, 1, 2),
        (1, 202113015, null, 3, 3, 0);
 INSERT INTO department_document (document_template_id, department_box_id)
 VALUES (1, 1);
-<<<<<<< HEAD
-=======
-
 
 INSERT INTO annual_leave_category (id, name, type)
 VALUES
@@ -488,5 +481,3 @@ VALUES
     (48, '휴일', '2024-01-14', '09:00:00', '13:00:00', NULL, 202312019),
     (49, '지각', '2024-02-16', '09:25:00', '09:25:00', NULL, 201511007),
     (50, '연장', '2024-06-30', '18:00:00', '21:00:00', NULL, 201211001);
-
->>>>>>> master
