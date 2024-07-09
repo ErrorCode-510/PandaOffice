@@ -1,6 +1,6 @@
 ### 면접자 전체 조회
 GET http://localhost:8001/recruitment/applicant?page=10
-Access-Token: Bearer eyJkYXRlIjoxNzE5NDQ1NzczMTc4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTQ0NTc3M30.BHTIM9I3RoOtg8uyEj8wb7c2RM3UUyQFTbmhz1sSWoElZ3Ri4Sg3mLPXqtnJXUHNpFwf1FCdUQNf0MpIUM6uiw
+Access-Token: Bearer eyJkYXRlIjoxNzE5ODIyNTAxODAzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTgyMjUwMX0.IvajN6g-3-c6oLd-R9Pvau-REAtjiZyPxw__VhmtOJvSQr7rs1NkjmKUG_tUMhKCALxccbPTxwyRUka8nt6_Vg
 
 ### 면접자 성별 + 이름 조회
 GET http://localhost:8001/recruitment/applicant/search?page=1&gender=남&name=우

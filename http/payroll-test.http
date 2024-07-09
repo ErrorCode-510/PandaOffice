@@ -1,24 +1,23 @@
 ### 사원 전체 조회
-GET http://localhost:8001/payroll/allemplpayroll
+GET http://localhost:8001/payroll/all-emplpayroll
 Access-Token: Bearer eyJkYXRlIjoxNzE5ODMyMTY4MTg1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTIwMDIiLCJleHAiOjM2MDAwMTcxOTgzMjE2OH0.8MkmkShERPnlxbsROe71Gx3ucNjSLR9CUMYoEGu50mbJmb3yp7HNMmdol0RTbaW8pNDbyHTw2VZ2MXV3ybz70Q
 
 ### 지급 항목 조회
-GET http://localhost:8001/payroll/earningcategory
+GET http://localhost:8001/payroll/earning-category
 
 ### 공제 항목 조회
-GET http://localhost:8001/payroll/deductioncategory
+GET http://localhost:8001/payroll/deduction-category
 
 ### 사원 개별 조회
 GET http://localhost:8001/payroll/mypay/201211001
 Access-Token: Bearer eyJkYXRlIjoxNzE5ODMyMTY4MTg1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTIwMDIiLCJleHAiOjM2MDAwMTcxOTgzMjE2OH0.8MkmkShERPnlxbsROe71Gx3ucNjSLR9CUMYoEGu50mbJmb3yp7HNMmdol0RTbaW8pNDbyHTw2VZ2MXV3ybz70Q
 
 ### 등록
-POST http://localhost:8001/payroll/allemplpayroll
-Access-Token: Bearer eyJkYXRlIjoxNzIwMDg5NjgwMjcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTIwMDIiLCJleHAiOjM2MDAwMTcyMDA4OTY4MH0.lv-mC_elfQu8U7C_jFxbDs7R39Zvjof_VhFFSxBs6Sl-bvq8MnhmOLGydYkYeO0SXxpUORtSH_jL2EJG2GHkbw
+POST http://localhost:8001/payroll/save-emplpay
 Content-Type: application/json
 
 {
-  "employeeId": 201211001,
+  "employeeId": 202311018,
   "payrollDate": "2024-07-25",
   "payStubPath": "",
   "earningRecordList": [
