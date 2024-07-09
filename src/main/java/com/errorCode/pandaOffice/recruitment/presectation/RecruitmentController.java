@@ -111,9 +111,9 @@ public class RecruitmentController {
     public ResponseEntity<Void> registInterviewSchedule(
             @RequestBody InterviewScheduleCreateRequest request
     ) {
-        System.out.println(request);
-        final Integer id = recruitmentService.registInterviewSchedule(request);
-        return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@" + request);
+        recruitmentService.registInterviewSchedule(request);
+        return ResponseEntity.created(URI.create("/recruitment/interview-schedule" )).build();
     }
 
     /* 9. 면접일정 상세 조회 */
@@ -138,5 +138,12 @@ public class RecruitmentController {
     public ResponseEntity<Void> deleteInterviewSchedule(@PathVariable Integer id) {
         recruitmentService.deleteInterviewSchedule(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /* 12. 면접일정 전체 조회 */
+    @GetMapping("/interview-schedule")
+    public ResponseEntity<List<InterviewScheduleResponse>> getInterviewSchedule() {
+        List<InterviewScheduleResponse> interviewScheduleResponse = recruitmentService.getInterviewSchedule();
+        return ResponseEntity.ok(interviewScheduleResponse);
     }
 }

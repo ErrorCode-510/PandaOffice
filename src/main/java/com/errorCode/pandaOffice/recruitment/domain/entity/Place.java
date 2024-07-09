@@ -22,6 +22,6 @@ public class Place {
     private String name;
 
     /* 장소 위치 */
-    @Column(nullable = false, unique = true)
-    private String position;
+//    @Column(nullable = false, unique = true)
+//    private String position;
 }

@@ -1,9 +1,9 @@
 use officeerp;
 
-INSERT INTO place (NAME, POSITION) VALUES
-    ('면접1실', '판다빌딩 7층 1호'),
-    ('면접2실', '판다빌딩 7층 2호'),
-    ('면접3실', '판다빌딩 7층 3호');
+INSERT INTO place (NAME) VALUES
+    ('면접1실'),
+    ('면접2실'),
+    ('면접3실');
 
 INSERT INTO applicant (name, birth_date, gender, phone, address, email, interview_schedule_id) VALUES
     ('홍길동', '1990-01-01', '남', '010-1234-0001', '서울', 'hong1@gmail.com', null),
