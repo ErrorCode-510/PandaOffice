@@ -71,18 +71,18 @@ Access-Token: Bearer eyJkYXRlIjoxNzE5MzcyNzE0MTYyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 
 ### 면접일정 등록
 POST http://localhost:8001/recruitment/interview-schedule/regist
-Access-Token: Bearer eyJkYXRlIjoxNzIwMzA2NjY5Mzk2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDMwNjY2OX0.9RjAKbomqSpogcYAFL9GeW2ZaG78tgdvTKXNBcvuA7ibHXY9bcQaoCYIsSuViJxZDBLv0IuaWTsTiQJJzVBr5w
+Access-Token: Bearer eyJkYXRlIjoxNzIwNTIyMzMzODMxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDUyMjMzM30.0l7qahTPOeFfhEC-KYVzPfea2kFiIh6WRUNtEqV4sVAW7mcqrTHma4dgd-DksKLuKIMLZZcsjjyXHrTU82gSXw
 Content-Type: application/json
 
 {
-  "name": "회계 면접",
+  "name": "특채 면접",
   "memo": "비고 없음",
-  "startDate": "2024-07-26",
-  "endDate": "2024-07-28",
+  "startDate": "2024-07-29",
+  "endDate": "2024-07-29",
   "startTime": "11:00",
   "place": 3,
   "employee": 202412023,
-  "applicantList": [11, 12, 13, 14, 15]
+  "applicantList": [100]
 }
 
 ### 면접일정 상세 조회
@@ -90,19 +90,19 @@ GET http://localhost:8001/recruitment/interview-schedule/detail/1
 Access-Token: Bearer eyJkYXRlIjoxNzIwNDM5ODgwNDk1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDQzOTg4MH0.Oxe7Z0VLCxHO9x-QWmQod14WMTNhwFUCwrrq9G4zQDBcim7kQknEFbBnrNuiEcSfMjXRpEBlTvFMh1YpsaofGA
 
 ### 면접일정 수정
-PUT http://localhost:8001/recruitment/interview-schedule/modify/2
+PUT http://localhost:8001/recruitment/interview-schedule/modify/3
 Access-Token: Bearer eyJkYXRlIjoxNzIwNDM5ODgwNDk1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDQzOTg4MH0.Oxe7Z0VLCxHO9x-QWmQod14WMTNhwFUCwrrq9G4zQDBcim7kQknEFbBnrNuiEcSfMjXRpEBlTvFMh1YpsaofGA
 Content-Type: application/json
 
 {
-  "name": "공채 면접",
-  "memo": "메모가 안 나온다!!!!",
-  "startDate": "2024-07-06",
-  "endDate": "2024-07-09",
-  "startTime": "09:00",
-  "place": 1,
-  "employee": 201211001,
-  "applicantList": [21, 22, 23, 24, 25]
+  "name": "인사 면접",
+  "memo": "비고 없음",
+  "startDate": "2024-07-15",
+  "endDate": "2024-07-18",
+  "startTime": "11:00",
+  "place": 3,
+  "employee": 202412023,
+  "applicantList": [6, 7, 8, 9, 10]
 }
 
 ### 면접일정 삭제

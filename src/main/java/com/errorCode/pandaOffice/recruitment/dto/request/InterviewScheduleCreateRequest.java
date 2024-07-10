@@ -17,8 +17,6 @@ import java.util.List;
 @ToString
 public class InterviewScheduleCreateRequest {
 
-    /* 면접 일정 코드 */
-//    private final int id;
 
     /* 일정명 */
     private final String name;
@@ -41,12 +39,6 @@ public class InterviewScheduleCreateRequest {
 
     /* 면접관들 */
     private final Integer employee;
-
-//    /* 면접관들 2 */
-//    private final Integer employee2;
-//
-//    /* 면접관들 3 */
-//    private final Integer employee3;
 
     /* 면접자들 */
     private final List<Integer> applicantList;

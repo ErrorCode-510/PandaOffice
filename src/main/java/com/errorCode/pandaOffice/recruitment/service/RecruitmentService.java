@@ -190,7 +190,7 @@ public class RecruitmentService {
     public Integer registInterviewSchedule(InterviewScheduleCreateRequest request) {
 
         /* id로 면접장소 찾기 및 없을 시 Exception 처리 */
-        Place place = placeRepository.findById(request.getPlace())
+        Place place = placeRepository.findById(request.getPlace()) // 너 null 값이라고함 뒤졌으
                 .orElseThrow(() -> new EntityNotFoundException("장소 엔티티가 비어있습니다."));
         /* id로 사원정보 찾기 및 없을 시 Exception 처리 */
         Employee employee = employeeRepository.findById(request.getEmployee())
