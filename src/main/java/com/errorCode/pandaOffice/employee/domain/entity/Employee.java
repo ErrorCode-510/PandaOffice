@@ -134,4 +134,11 @@ public class Employee {
     public void updateSelfIntroduction(String selfIntroduction) {
         this.selfIntroduction = selfIntroduction;
     }
+    public void formedEmployeeId(int formedEmployeeId) {
+        this.employeeId = formedEmployeeId;
+    }
+
+    public void setDefaultPwd(String encodedPassword) {
+        this.password=encodedPassword;
+    }
 }

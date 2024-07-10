@@ -12,7 +12,7 @@ public class EmployeePhoto {
     @Column(name = "employee_id")
     private int employeeId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "employee_id")
     private Employee employee;

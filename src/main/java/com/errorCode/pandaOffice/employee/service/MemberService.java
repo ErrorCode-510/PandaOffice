@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,8 +146,34 @@ public class MemberService {
     }
 
     public Employee saveEmployee(EmployeeDTO employeeDTO) {
+
+        int hiredYear = employeeDTO.getEmployee().getHireDate().getYear();
+        int depId = employeeDTO.getEmployee().getDepartment().getId();
+
+// 전체 사원 수 조회
+        Long totalEmployees = memberRepository.count();
+        System.out.println(totalEmployees);
+
+// 새 아이디 생성
+        int newEmployeeId;
+        if (totalEmployees != null && totalEmployees > 0) {
+            newEmployeeId = Integer.parseInt(String.format("%04d%02d%03d", hiredYear, depId, totalEmployees + 1));
+        } else {
+            newEmployeeId = Integer.parseInt(String.format("%04d%02d001", hiredYear, depId));
+        }
+
+
+// 사원 객체에 아이디 설정
         Employee employee = employeeDTO.getEmployee();
+        employee.formedEmployeeId(newEmployeeId);
+        String defaultPwd = employee.getPhone().substring(employee.getPhone().length() - 4);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String encodedPassword = encoder.encode(defaultPwd);
+        employee.setDefaultPwd(encodedPassword);
         Employee savedEmployee = memberRepository.save(employee);
+        employeeDTO.setEmployee(savedEmployee);
+
         System.out.println(employeeDTO.getPhotoPath());
         // Save photo
         EmployeePhoto employeePhoto = new EmployeePhoto(employeeDTO.getEmployee().getEmployeeId(), savedEmployee, employeeDTO.getPhotoName(), employeeDTO.getPhotoPath());
