@@ -1,5 +1,6 @@
 package com.errorCode.pandaOffice.notice.domain.entity;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.notice.dto.request.NoticeRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,7 +11,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "notice")
 @Getter
-@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Notice {
@@ -39,8 +39,8 @@ public class Notice {
     @Column(name = "view_count", nullable = false)
     private int viewCount;  // 조회수
 
-    @Column(name = "status", nullable = false, length = 1)
-    private char status;  // 공개여부 (Y/N)
+    @Column(name = "status", nullable = false)
+    private char status = 'Y';  // 공개여부 (Y/N)
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -49,8 +49,7 @@ public class Notice {
     public Notice(
             String title, String content, String category,
             String subCategory, LocalDate postedDate, int viewCount, char status,
-            Employee employee
-    ) {
+            Employee employee) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -61,24 +60,21 @@ public class Notice {
         this.employee = employee;
     }
 
-    public static Notice of (
-            final String title, final String content, final String category, final String subCategory, final LocalDate postedDate,
-            final int viewCount, final char status, final Employee employee
-    ) {
-        return new Notice (
-                title,
-                content,
-                category,
-                subCategory,
-                postedDate,
-                viewCount,
-                status,
-                employee
-        );
+    public static Notice of(NoticeRequestDTO noticeRequest, Employee employeeEntity) {
+        Notice newNotice = new Notice();
+        newNotice.title = noticeRequest.getTitle();
+        newNotice.content = noticeRequest.getContent();
+        newNotice.category = noticeRequest.getCategory();
+        newNotice.subCategory = noticeRequest.getSubCategory();
+        newNotice.viewCount = noticeRequest.getViewCount();
+        newNotice.status = noticeRequest.getStatus() != '\0' ? noticeRequest.getStatus() : 'Y';
+        newNotice.employee = employeeEntity;
+
+        return newNotice;
     }
 
     // 공지사항 업데이트 메소드
-    public void updateNotice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, Employee employee) {
+    public void updateNotice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, int employeeId) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -86,7 +82,11 @@ public class Notice {
         this.postedDate = postedDate;
         this.viewCount = viewCount;
         this.status = status;
-        this.employee = employee;
+        this.employee = new Employee();
+        this.employee.setEmployeeId(employeeId);
     }
 
+    public Integer getEmployeeId() {
+        return employee.getEmployeeId();
+    }
 }

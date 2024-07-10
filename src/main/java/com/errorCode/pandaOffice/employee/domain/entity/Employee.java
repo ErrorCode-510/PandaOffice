@@ -58,7 +58,7 @@ public class Employee {
     @Column(name="annual_salary")
     private int annualSalary;
     private String refreshToken;
-    protected Employee(){}
+    public Employee(){}
 
 
     public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password) {
@@ -93,4 +93,5 @@ public class Employee {
     public void updateSelfIntroduction(String selfIntroduction) {
         this.selfIntroduction = selfIntroduction;
     }
+
 }
