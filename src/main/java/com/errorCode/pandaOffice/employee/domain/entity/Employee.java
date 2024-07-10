@@ -86,12 +86,4 @@ public class Employee {
         this.refreshToken = refreshToken;
     }
 
-    public void updateEmail(String email) {
-        this.email = email;
-    }
-
-    public void updateSelfIntroduction(String selfIntroduction) {
-        this.selfIntroduction = selfIntroduction;
-    }
-
 }

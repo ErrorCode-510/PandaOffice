@@ -74,7 +74,8 @@ public class Notice {
     }
 
     // 공지사항 업데이트 메소드
-    public void updateNotice(String title, String content, String category, String subCategory, LocalDate postedDate, int viewCount, char status, int employeeId) {
+    public void updateNotice(String title, String content, String category, String subCategory,
+                             LocalDate postedDate, int viewCount, char status, Employee employee) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -82,8 +83,7 @@ public class Notice {
         this.postedDate = postedDate;
         this.viewCount = viewCount;
         this.status = status;
-        this.employee = new Employee();
-        this.employee.setEmployeeId(employeeId);
+        this.employee = employee;
     }
 
     public Integer getEmployeeId() {
