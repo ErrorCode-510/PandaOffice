@@ -10,8 +10,10 @@ import com.errorCode.pandaOffice.recruitment.dto.response.ApplicantResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.InterviewScheduleResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
 import com.errorCode.pandaOffice.recruitment.service.RecruitmentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,9 +113,15 @@ public class RecruitmentController {
     public ResponseEntity<Void> registInterviewSchedule(
             @RequestBody InterviewScheduleCreateRequest request
     ) {
-        System.out.println(request);
-        final Integer id = recruitmentService.registInterviewSchedule(request);
-        return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
+        try {
+            System.out.println("Received request: " + request);
+            recruitmentService.registInterviewSchedule(request);
+            return ResponseEntity.created(URI.create("/recruitment/interview-schedule")).build();
+        } catch (Exception e) {
+            System.err.println("Error processing request: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /* 9. 면접일정 상세 조회 */
@@ -138,5 +146,12 @@ public class RecruitmentController {
     public ResponseEntity<Void> deleteInterviewSchedule(@PathVariable Integer id) {
         recruitmentService.deleteInterviewSchedule(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /* 12. 면접일정 전체 조회 */
+    @GetMapping("/interview-schedule")
+    public ResponseEntity<List<InterviewScheduleResponse>> getInterviewSchedule() {
+        List<InterviewScheduleResponse> interviewScheduleResponse = recruitmentService.getInterviewSchedule();
+        return ResponseEntity.ok(interviewScheduleResponse);
     }
 }

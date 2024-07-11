@@ -145,7 +145,6 @@ VALUES (1, 201911013, '2024-01-01', 1, 1, 2),
 INSERT INTO department_document (document_template_id, department_box_id)
 VALUES (1, 1);
 
-
 INSERT INTO annual_leave_category (id, name, type)
 VALUES
     (1, '기본발생', '부여'),
@@ -482,4 +481,3 @@ VALUES
     (48, '휴일', '2024-01-14', '09:00:00', '13:00:00', NULL, 202312019),
     (49, '지각', '2024-02-16', '09:25:00', '09:25:00', NULL, 201511007),
     (50, '연장', '2024-06-30', '18:00:00', '21:00:00', NULL, 201211001);
-

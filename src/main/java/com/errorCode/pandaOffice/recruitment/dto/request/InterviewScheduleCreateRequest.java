@@ -17,10 +17,9 @@ import java.util.List;
 @ToString
 public class InterviewScheduleCreateRequest {
 
-    /* 면접 일정 코드 */
-    private final int id;
 
     /* 일정명 */
+    @NotNull
     private final String name;
 
     /* 메모 */
@@ -28,26 +27,25 @@ public class InterviewScheduleCreateRequest {
     private final String memo;
 
     /* 일정 시작일 */
+    @NotNull
     private final LocalDate startDate;
 
     /* 일정 종료일 */
+    @NotNull
     private final LocalDate endDate;
 
     /* 일정 시작 일시 */
+    @NotNull
     private final LocalTime startTime;
 
     /* 면접 장소 */
+    @NotNull
     private final Integer place;
-
     /* 면접관들 */
+    @NotNull
     private final Integer employee;
 
-    /* 면접관들 2 */
-    private final Integer employee2;
-
-    /* 면접관들 3 */
-    private final Integer employee3;
-
     /* 면접자들 */
+    @NotNull
     private final List<Integer> applicantList;
 }

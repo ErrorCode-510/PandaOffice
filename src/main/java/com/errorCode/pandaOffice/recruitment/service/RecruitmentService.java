@@ -190,15 +190,13 @@ public class RecruitmentService {
     public Integer registInterviewSchedule(InterviewScheduleCreateRequest request) {
 
         /* id로 면접장소 찾기 및 없을 시 Exception 처리 */
-        Place place = placeRepository.findById(request.getPlace())
+        Place place = placeRepository.findById(request.getPlace()) // 너 null 값이라고함 뒤졌으
                 .orElseThrow(() -> new EntityNotFoundException("장소 엔티티가 비어있습니다."));
+
         /* id로 사원정보 찾기 및 없을 시 Exception 처리 */
         Employee employee = employeeRepository.findById(request.getEmployee())
                 .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
-        Employee employee2 = employeeRepository.findById(request.getEmployee2())
-                .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
-        Employee employee3 = employeeRepository.findById(request.getEmployee3())
-                .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
+
         /* id로 면접자 찾기 및 없을 시 Exception 처리 */
         List<Applicant> applicants = new ArrayList<>();
         for (Integer applicantId : request.getApplicantList()) {
@@ -214,8 +212,6 @@ public class RecruitmentService {
                 request.getStartTime(),
                 place,
                 employee,
-                employee2,
-                employee3,
                 applicants
         );
         final InterviewSchedule interviewSchedule = interviewScheduleRepository.save(newInterviewSchedule);
@@ -245,10 +241,10 @@ public class RecruitmentService {
         /* DB에서 세션이 겹치지 않기 위해 사원 조회 */
         Employee employee = employeeRepository.findById(request.getEmployee())
                 .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
-        Employee employee2 = employeeRepository.findById(request.getEmployee2())
-                .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
-        Employee employee3 = employeeRepository.findById(request.getEmployee3())
-                .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
+//        Employee employee2 = employeeRepository.findById(request.getEmployee2())
+//                .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
+//        Employee employee3 = employeeRepository.findById(request.getEmployee3())
+//                .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
 
         /* DB에서 세션이 겹치지 않기 위해 면접자 조회 */
         List<Applicant> applicants = request.getApplicantList().stream().map(
@@ -264,8 +260,8 @@ public class RecruitmentService {
                 request.getStartTime(),
                 place,
                 employee,
-                employee2,
-                employee3,
+//                employee2,
+//                employee3,
                 applicants
         );
     }
@@ -274,5 +270,15 @@ public class RecruitmentService {
     @Transactional
     public void deleteInterviewSchedule(Integer id) {
         interviewScheduleRepository.deleteById(id);
+    }
+
+    /* 12. 면접일정 전체 조회 */
+    public List<InterviewScheduleResponse> getInterviewSchedule() {
+        List<InterviewSchedule> interviewScheduleList = interviewScheduleRepository.findAll();
+        List<InterviewScheduleResponse> responses = interviewScheduleList
+                .stream()
+                .map(entity-> InterviewScheduleResponse.from(entity))
+                .collect(Collectors.toList());
+        return responses;
     }
 }

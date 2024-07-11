@@ -41,11 +41,11 @@ public class InterviewScheduleModifyRequest {
     /* 면접관들 */
     private final Integer employee;
 
-    /* 면접관들 2 */
-    private final Integer employee2;
-
-    /* 면접관들 3 */
-    private final Integer employee3;
+//    /* 면접관들 2 */
+//    private final Integer employee2;
+//
+//    /* 면접관들 3 */
+//    private final Integer employee3;
 
     /* 면접자들 */
     private final List<Integer> applicantList;
