@@ -11,7 +11,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"date", "employee_id"})
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -20,24 +22,19 @@ public class AttendanceRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    /* 근무 기록 코드 */
     private int id;
 
-    /* 근무 기록 날짜 */
     private LocalDate date;
 
-    /* 근무 출근 시간 */
     private LocalTime checkInTime;
 
-    /* 근무 퇴근 시간 */
     private LocalTime checkOutTime;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    /* 사번 */
     private Employee employee;
 
-    public static AttendanceRecord create(LocalDate date, LocalTime checkInTime, LocalTime checkOutTime, Employee employee) {
+    public static AttendanceRecord of(LocalDate date, LocalTime checkInTime, LocalTime checkOutTime, Employee employee) {
         AttendanceRecord attendanceRecord = new AttendanceRecord();
         attendanceRecord.date = date;
         attendanceRecord.checkInTime = checkInTime;
@@ -46,18 +43,17 @@ public class AttendanceRecord {
         return attendanceRecord;
     }
 
-    public void setCheckInTime(LocalTime checkInTime) {
-        if (this.checkInTime != null) {
-            throw new IllegalStateException("Check-in time is already set.");
-        }
+    // DTO를 통해 엔티티 수정
+    public static AttendanceRecord updateCheckOutTime(AttendanceRecord existingRecord, LocalTime checkOutTime) {
+        return new AttendanceRecord(existingRecord.id, existingRecord.date, existingRecord.checkInTime, checkOutTime, existingRecord.employee);
+    }
+
+    // 필요한 경우 모든 필드를 초기화하는 생성자 추가
+    private AttendanceRecord(int id, LocalDate date, LocalTime checkInTime, LocalTime checkOutTime, Employee employee) {
+        this.id = id;
+        this.date = date;
         this.checkInTime = checkInTime;
-    }
-
-    public void setCheckOutTime(LocalTime checkOutTime) {
-        if (this.checkOutTime != null) {
-            throw new IllegalStateException("Check-out time is already set.");
-        }
         this.checkOutTime = checkOutTime;
+        this.employee = employee;
     }
-
 }

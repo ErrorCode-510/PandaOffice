@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecord, Integer> {
     List<AttendanceRecord> findByEmployee_EmployeeIdAndDateBetween(int employeeId, LocalDate startDate, LocalDate endDate);
+    Optional<AttendanceRecord> findByEmployeeAndDate(Employee employee, LocalDate date);
 
-    Optional<AttendanceRecord> findByDateAndEmployee(LocalDate date, Employee employee);
+    boolean existsByEmployeeAndDate(Employee employee, LocalDate date);
 }

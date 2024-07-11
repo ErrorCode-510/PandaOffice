@@ -1,7 +1,6 @@
 package com.errorCode.pandaOffice.attendance.dto.attendanceRecord.request;
 
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -11,11 +10,12 @@ import java.time.LocalTime;
 
 @Getter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AttendanceRecordRequest {
 
-    private final LocalDate date;
+    private LocalDate checkInDate;
+    private LocalTime checkInTime;
+    private LocalTime checkOutTime;
 
-    private final LocalTime time;
 
 }
