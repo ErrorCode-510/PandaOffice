@@ -44,6 +44,10 @@ public class OverTimeAndLatenessRecordRequestResponse {
         private String status;
 
         public static OverTimeRecordDetail of(OverTimeAndLatenessRecord record) {
+            if (record.getStartTime() == null || record.getEndTime() == null) {
+                throw new IllegalArgumentException("Start time or end time is null for record: " + record);
+            }
+
             String dateRange = record.getDate() + " " + record.getStartTime() + " ~ " + record.getEndTime();
             Duration duration = Duration.between(record.getStartTime(), record.getEndTime());
             String formattedDuration = formatDuration(duration);
@@ -82,6 +86,10 @@ public class OverTimeAndLatenessRecordRequestResponse {
         private final String status;
 
         public static LateRecordDetail of(OverTimeAndLatenessRecord record) {
+            if (record.getStartTime() == null || record.getEndTime() == null) {
+                throw new IllegalArgumentException("Start time or end time is null for record: " + record);
+            }
+
             Duration duration = Duration.between(record.getStartTime(), record.getEndTime());
             String formattedDuration = formatDuration(duration);
 
@@ -108,5 +116,4 @@ public class OverTimeAndLatenessRecordRequestResponse {
             return hours + "시간 " + minutes + "분";
         }
     }
-
 }
