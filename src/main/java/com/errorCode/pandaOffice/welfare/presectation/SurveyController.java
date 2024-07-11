@@ -2,16 +2,14 @@ package com.errorCode.pandaOffice.welfare.presectation;
 
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.welfare.domain.entity.ReplyRecord;
+import com.errorCode.pandaOffice.welfare.domain.entity.SurveyCategory;
 import com.errorCode.pandaOffice.welfare.domain.entity.SurveyQuestion;
 import com.errorCode.pandaOffice.welfare.domain.repository.ReplyRecordRepository;
 import com.errorCode.pandaOffice.welfare.domain.repository.SurveyRepository;
 import com.errorCode.pandaOffice.welfare.dto.request.CreateSurveyRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.ReplyRecordRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.UpdateSurveyQuestionRequest;
-import com.errorCode.pandaOffice.welfare.dto.response.ReplyRecordDTO;
-import com.errorCode.pandaOffice.welfare.dto.response.SurveyDetailsResponse;
-import com.errorCode.pandaOffice.welfare.dto.response.SurveyQuestionDTO;
-import com.errorCode.pandaOffice.welfare.dto.response.SurveyResponse;
+import com.errorCode.pandaOffice.welfare.dto.response.*;
 import com.errorCode.pandaOffice.welfare.service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,24 +31,18 @@ public class SurveyController {
     private final ReplyRecordRepository replyRecordRepository;
     private final EmployeeRepository employeeRepository;
 
+//    모든 설문 카테고리를 가져오는 API 엔드포인트
+        @GetMapping("/survey/categories")
+        public List<SurveyCategoryDTO> getAllCategories() {
+            return surveyService.getAllCategories();
+        }
+
     /* Entity내의 참조, Entity 연관관계, cascade시 동시 저장 되는것 주의*/
     @GetMapping("/survey")
     public ResponseEntity<List<SurveyResponse>> getSurveyList() {
         List<SurveyResponse> response = surveyService.getAllSurvey();
         return ResponseEntity.ok(response);
     }
-
-    /*설문 ID에 해당하는 설문이 현재 활성 상태인지 확인하고, 활성 상태인 경우 설문 데이터를 반환.
-    비활성 상태인 경우에는 접근을 금지*/
-    @GetMapping("/survey/{id}")
-    public ResponseEntity<SurveyResponse> getSurvey(@PathVariable int id) {
-        if (!surveyService.isSurveyActive(id)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        SurveyResponse response = surveyService.getSurveyById(id);
-        return ResponseEntity.ok(response);
-    }
-
 
 
 
@@ -103,6 +95,20 @@ public class SurveyController {
         }
     }
 
+
+    //대시보드에서 사용(열려있는 설문 가져오는 용도)
+    @GetMapping("/survey/active")
+    public ResponseEntity<SurveyResponse> getActiveSurvey() {
+        try {
+            SurveyResponse response = surveyService.getActiveSurvey();
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+    }
+
+
+
     //설문조회(질문, 문항 포함 차트 뿌려주기용)
     @GetMapping("/survey/survey-details/{id}")
     public ResponseEntity<SurveyDetailsResponse> getSurveyDetails(@PathVariable int id) {
@@ -114,9 +120,13 @@ public class SurveyController {
     // 질문 문항 기록 저장
     @PostMapping("/survey/reply-count")
     public ResponseEntity<Void> saveReplyRecord(@RequestBody ReplyRecordRequest replyRecordDTO) {
-        System.out.println("Received request: " + replyRecordDTO);
-        surveyService.saveSurveyReply(replyRecordDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        try {
+            surveyService.saveSurveyReply(replyRecordDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (RuntimeException e) {
+            // 예외 발생 시 HTTP 상태 코드와 함께 빈 응답 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/question/{id}")

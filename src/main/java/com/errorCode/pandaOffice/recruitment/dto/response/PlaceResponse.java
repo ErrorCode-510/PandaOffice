@@ -18,13 +18,13 @@ public class PlaceResponse {
     private final String name;
 
     /* 장소 위치 */
-    private final String position;
+//    private final String position;
 
     public static PlaceResponse from(final Place place) {
         return new PlaceResponse(
                 place.getId(),
-                place.getName(),
-                place.getPosition()
+                place.getName()
+//                place.getPosition()
         );
     };
 }
