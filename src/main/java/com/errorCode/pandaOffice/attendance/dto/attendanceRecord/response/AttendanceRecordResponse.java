@@ -80,7 +80,7 @@ public class AttendanceRecordResponse {
 
         public static String getWeek(LocalDate date) {
             WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
-            int weekOfMonth = date.get(weekFields.weekOfMonth()) + 1;
+            int weekOfMonth = date.get(weekFields.weekOfMonth());
 
             if (weekOfMonth == 0) {
                 LocalDate lastDayOfLastMonth = date.with(TemporalAdjusters.firstDayOfMonth()).minusDays(1);
@@ -89,7 +89,7 @@ public class AttendanceRecordResponse {
 
             LocalDate lastDayOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
 
-            if (weekOfMonth == lastDayOfMonth.get(weekFields.weekOfMonth()) + 1 && lastDayOfMonth.getDayOfWeek().compareTo(DayOfWeek.THURSDAY) < 0) {
+            if (weekOfMonth == lastDayOfMonth.get(weekFields.weekOfMonth()) && lastDayOfMonth.getDayOfWeek().compareTo(DayOfWeek.THURSDAY) < 0) {
                 LocalDate firstDayOfNextMonth = lastDayOfMonth.plusDays(1);
                 return getWeek(firstDayOfNextMonth);
             }
@@ -99,7 +99,7 @@ public class AttendanceRecordResponse {
 
         public static int getWeekOfMonth(LocalDate date) {
             WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
-            return date.get(weekFields.weekOfMonth()) + 1;
+            return date.get(weekFields.weekOfMonth()) ;
         }
 
         public static Map<String, Duration> calculateWeeklyTotalTimes(List<AttendanceRecord> attendanceRecords) {
