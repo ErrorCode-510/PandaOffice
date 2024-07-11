@@ -10,7 +10,6 @@ import com.errorCode.pandaOffice.recruitment.dto.response.ApplicantResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.InterviewScheduleResponse;
 import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
 import com.errorCode.pandaOffice.recruitment.service.RecruitmentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -52,8 +51,6 @@ public class RecruitmentController {
             @RequestParam(required = false) final String address,
             /* 이름 검색( 이름은 있을 수 있고 없을 수 있음 ) */
             @RequestParam(required = false) final String name
-//            /* 나이 검색 */
-//            @RequestParam(required = false) final Integer age
     ) {
         /* 모든 데이터를 받아온 후 엔티티 타입을 DTO 타입으로 변환 후 받을거고, 페이징처리 하겠다. */
         final Page<ApplicantResponse> applicants = recruitmentService.getSearchApplicant(page, gender, address, name);

@@ -23,13 +23,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -61,23 +58,6 @@ public class RecruitmentService {
 
         Page<Applicant> applicants = null;
 
-//        LocalDate now = LocalDate.now();
-//        LocalDate startDate = null;
-//        LocalDate endDate = null;
-
-//        if (age != null) {
-//            if (age >= 20 && age < 30) {
-//                startDate = now.minusYears(30).plusDays(1);
-//                endDate = now.minusYears(20);
-//            } else if (age >= 30 && age < 40) {
-//                startDate = now.minusYears(40).plusDays(1);
-//                endDate = now.minusYears(30);
-//            } else if (age >= 40 && age < 50) {
-//                startDate = now.minusYears(50).plusDays(1);
-//                endDate = now.minusYears(40);
-//            }
-//        }
-
         /* 성별 + 이름 조회 */
         if (gender != null && !gender.isEmpty() && name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByGenderAndNameContaining(getPageable(page), gender, name);
@@ -98,14 +78,6 @@ public class RecruitmentService {
         else if (name != null && !name.isEmpty()) {
             applicants = applicantRepository.findByNameContaining(getPageable(page), name);
         }
-//        /* 나이 + 이름 조회 */
-//        else if (age != null && !name.isEmpty()) {
-//            applicants = applicantRepository.findByBirthDateBetweenAndContaining(getPageable(page),name, startDate, endDate);
-//        }
-//        /* 나이 조회 */
-//        else if (age != null) {
-//            applicants = applicantRepository.findByBirthDateBetween(getPageable(page), startDate, endDate);
-//        }
         /* 면접자 전체 조회 */
         else {
             applicants = applicantRepository.findAll(getPageable(page));
@@ -241,10 +213,6 @@ public class RecruitmentService {
         /* DB에서 세션이 겹치지 않기 위해 사원 조회 */
         Employee employee = employeeRepository.findById(request.getEmployee())
                 .orElseThrow(() -> new EntityNotFoundException("사원 엔티티가 비어있습니다."));
-//        Employee employee2 = employeeRepository.findById(request.getEmployee2())
-//                .orElseThrow(() -> new EntityNotFoundException("사원2 엔티티가 비어있습니다."));
-//        Employee employee3 = employeeRepository.findById(request.getEmployee3())
-//                .orElseThrow(() -> new EntityNotFoundException("사원3 엔티티가 비어있습니다."));
 
         /* DB에서 세션이 겹치지 않기 위해 면접자 조회 */
         List<Applicant> applicants = request.getApplicantList().stream().map(
@@ -260,8 +228,6 @@ public class RecruitmentService {
                 request.getStartTime(),
                 place,
                 employee,
-//                employee2,
-//                employee3,
                 applicants
         );
     }
