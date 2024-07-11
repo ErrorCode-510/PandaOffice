@@ -9,17 +9,22 @@ import lombok.Getter;
 
 public class EmployeePhoto {
     @Id
-    private int id;
+    @Column(name = "employee_id")
+    private int employeeId;
+
     @OneToOne
-    @JoinColumn(name="employee_id", referencedColumnName = "employee_id")
+    @MapsId
+    @JoinColumn(name = "employee_id")
     private Employee employee;
-    @Column(name="name")
+
+    @Column(name = "name")
     private String name;
-    @Column(name="path")
+    @Lob
+    @Column(name = "path",columnDefinition = "LONGTEXT")
     private String path;
 
-    public EmployeePhoto(int id, Employee employee, String name, String path) {
-        this.id = id;
+    public EmployeePhoto(int employeeId, Employee employee, String name, String path) {
+        this.employeeId = employeeId;
         this.employee = employee;
         this.name = name;
         this.path = path;
@@ -27,6 +32,10 @@ public class EmployeePhoto {
 
     public EmployeePhoto() {
 
+    }
+    public void updatePhotoDetails(String photoName, String photoPath) {
+        this.name = photoName;
+        this.path = photoPath;
     }
 
 

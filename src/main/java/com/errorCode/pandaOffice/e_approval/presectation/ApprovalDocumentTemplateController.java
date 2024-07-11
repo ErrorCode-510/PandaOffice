@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,6 +58,13 @@ public class ApprovalDocumentTemplateController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @GetMapping ("approval-document-template/new")
+    public ResponseEntity<CreateTemplateResponse> getInformationForNewTemplate(){
+        CreateTemplateResponse response = approvalDocumentTemplateService.getInformationForNewTemplate();
+        System.out.println(response);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("approval-document-template/{templateId}")
     public ResponseEntity<ApprovalDocumentTemplateResponse> getApprovalDocumentTemplate(@PathVariable int templateId){

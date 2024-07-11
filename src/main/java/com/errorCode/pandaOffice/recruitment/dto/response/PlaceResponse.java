@@ -2,10 +2,12 @@ package com.errorCode.pandaOffice.recruitment.dto.response;
 
 import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
+@Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlaceResponse {
 
@@ -16,13 +18,13 @@ public class PlaceResponse {
     private final String name;
 
     /* 장소 위치 */
-    private final String position;
+//    private final String position;
 
     public static PlaceResponse from(final Place place) {
         return new PlaceResponse(
                 place.getId(),
-                place.getName(),
-                place.getPosition()
+                place.getName()
+//                place.getPosition()
         );
     };
 }

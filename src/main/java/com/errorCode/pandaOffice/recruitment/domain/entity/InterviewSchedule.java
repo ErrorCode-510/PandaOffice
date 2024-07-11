@@ -49,18 +49,8 @@ public class InterviewSchedule {
 
     /* 면접관 */
     @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "interviewer_id")
+    @JoinColumn(name = "interviewer_id", nullable = true)
     private Employee employee;
-
-    /* 면접관 2 */
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "interviewer_id2")
-    private Employee employee2;
-
-    /* 면접관 3 */
-    @ManyToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "interviewer_id3")
-    private Employee employee3;
 
     /* 면접자들 */
     @OneToMany
@@ -69,7 +59,7 @@ public class InterviewSchedule {
 
     public InterviewSchedule(
             String name, String memo, LocalDate startDate, LocalDate endDate, LocalTime startTime,
-            Place place, Employee employee, Employee employee2, Employee employee3, List<Applicant> applicantsList
+            Place place, Employee employee, List<Applicant> applicantsList
     ) {
         this.name = name;
         this.memo = memo;
@@ -78,15 +68,15 @@ public class InterviewSchedule {
         this.startTime = startTime;
         this.place = place;
         this.employee = employee;
-        this.employee2 = employee2;
-        this.employee3 = employee3;
+//        this.employee2 = employee2;
+//        this.employee3 = employee3;
         this.applicantsList = applicantsList;
     }
 
     /* 면접일정 등록 */
     public static InterviewSchedule of(
             final String name, final String memo, final LocalDate startDate, final LocalDate endDate, final LocalTime startTime,
-            final Place place, final Employee employee, final Employee employee2, final Employee employee3,
+            final Place place, final Employee employee,
             final List<Applicant> applicantsList
     ) {
         return new InterviewSchedule(
@@ -97,8 +87,8 @@ public class InterviewSchedule {
                 startTime,
                 place,
                 employee,
-                employee2,
-                employee3,
+//                employee2,
+//                employee3,
                 applicantsList
         );
     }
@@ -106,7 +96,7 @@ public class InterviewSchedule {
     /* 면접일정 수정 */
     public void modify(
             String name, String memo, LocalDate startDate, LocalDate endDate, LocalTime startTime,
-            Place place, Employee employee, Employee employee2, Employee employee3, List<Applicant> applicantsList
+            Place place, Employee employee, List<Applicant> applicantsList
     ) {
         this.name = name;
         this.memo = memo;
@@ -115,8 +105,8 @@ public class InterviewSchedule {
         this.startTime = startTime;
         this.place = place;
         this.employee = employee;
-        this.employee2 = employee2;
-        this.employee3 = employee3;
+//        this.employee2 = employee2;
+//        this.employee3 = employee3;
         this.applicantsList = applicantsList;
     }
 }
