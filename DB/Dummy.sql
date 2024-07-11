@@ -1,13 +1,15 @@
 use
-    officeerp;
+officeerp;
 
 -- department 테이블에 더미 데이터 삽입
 INSERT INTO `department` (`id`, `name`)
-VALUES (11, '인사'),
+VALUES (1, 'CEO'),
+       (11, '인사'),
        (12, '회계'),
        (13, '영업'),
        (14, '기획'),
        (15, '마케팅');
+
 -- job 테이블에 더미 데이터 삽입
 INSERT INTO `job` (`id`, `title`, `allowance`)
 VALUES
@@ -18,11 +20,23 @@ VALUES
     (25, '차장', 300000),
     (20, '부장', 400000),
     (11, '사장', 0);
+
+-- 새로운 사장 데이터를 삽입
+INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
+                        `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
+                        `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
+                        `employment_status`, `annual_salary`)
+VALUES
+    (1, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '권은지', 'Kwon Eun Ji', '權恩智', 1,
+     11, '010-1234-5678', '820101-1234567', '여', '2024-07-10', NULL, '서울특별시 종로구', '대한민국', '1982-01-01',
+     'eodlf333@gmail.com', NULL, '재직', 100000000);
+
 /* 사원 정보 - 임의 */
 INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
                         `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
                         `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
                         `employment_status`, `annual_salary`)
+
 VALUES
     -- Employees who joined in 2012
     (201211001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김민수', 'Kim Min Su', '金民洙', 11,
@@ -109,6 +123,7 @@ VALUES
     (202413024, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '이철수', 'Lee Chul Su', '李哲洙', 13,
      50, '010-3550-1003', '20040303-3251567', '남', '2024-03-15', NULL, '서울특별시 강북구', '대한민국', '2004-03-03',
      'chulsu.lee@example.com', NULL, '재직', 57000000);
+
 
 /* 지급항목 - 고정 */
 INSERT INTO `earning_category` (`id`, `name`, `is_tax`)
