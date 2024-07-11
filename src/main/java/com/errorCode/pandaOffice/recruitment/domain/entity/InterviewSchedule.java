@@ -51,16 +51,6 @@ public class InterviewSchedule {
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "interviewer_id", nullable = true)
     private Employee employee;
-//
-//    /* 면접관 2 */
-//    @ManyToOne(cascade = CascadeType.DETACH)
-//    @JoinColumn(name = "interviewer_id2", nullable = true)
-//    private Employee employee2;
-//
-//    /* 면접관 3 */
-//    @ManyToOne(cascade = CascadeType.DETACH)
-//    @JoinColumn(name = "interviewer_id3", nullable = true)
-//    private Employee employee3;
 
     /* 면접자들 */
     @OneToMany
