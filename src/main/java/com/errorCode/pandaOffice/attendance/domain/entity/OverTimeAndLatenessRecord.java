@@ -46,5 +46,14 @@ public class OverTimeAndLatenessRecord {
     /* 사번 */
     private Employee employee;
 
-
+    public static OverTimeAndLatenessRecord of(String type, LocalDate date, LocalTime startTime, LocalTime endTime, Employee employee, ApprovalDocument approvalDocument) {
+        OverTimeAndLatenessRecord overTimeRecord = new OverTimeAndLatenessRecord();
+        overTimeRecord.type = type;
+        overTimeRecord.date = date;
+        overTimeRecord.startTime = startTime;
+        overTimeRecord.endTime = endTime;
+        overTimeRecord.employee = employee;
+        overTimeRecord.approvalDocument = approvalDocument;
+        return overTimeRecord;
+    }
 }
