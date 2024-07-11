@@ -3,7 +3,7 @@ GET http://localhost:8001/notice/notices
 
 ### POST 요청 확인
 POST http://localhost:8001/notice/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mzk2NzEzMjE3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjM2MDAwMTcxOTM5NjcxM30.8bEejRLGbNxot9t8TUbEqcB6VjOrblwZobnA4je-WKcdgVrhdQJRGxHf8AibJG3WmHTOPtFl-Ijb_iwFR-9fwA
+#Access-Token: Bearer eyJkYXRlIjoxNzE5Mzk2NzEzMjE3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjM2MDAwMTcxOTM5NjcxM30.8bEejRLGbNxot9t8TUbEqcB6VjOrblwZobnA4je-WKcdgVrhdQJRGxHf8AibJG3WmHTOPtFl-Ijb_iwFR-9fwA
 Content-Type:application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type:application/json
   "viewCount": 0,
   "status": "Y",
   "employeeId": {
-    "employeeId": 201511004
+    "employeeId": 201211001
   }
 }
 

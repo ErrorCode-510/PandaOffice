@@ -13,7 +13,4 @@ public class ReplyRecordRequest {
     private int surveyId; // 설문코드
     private int questionId;//질문문항
     private int answer; // 질문
-
-
-
 }

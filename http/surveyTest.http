@@ -1,0 +1,133 @@
+#()안에 v체크는 정상적으로 작동한다는 의미
+### POST 설문 등록 테스트(v)
+POST localhost:8001/survey
+Access-Token: Bearer eyJkYXRlIjoxNzE5OTA5Mzc4MTI5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTMwMDMiLCJleHAiOjE3MTk5MTI5Nzh9.20IxPa-POlL-U_3C4B38NJ-ReH-H5AXAMlN0eQv0T7pCAAl4vW6axjBQI8u-9RySXE4WyphDEW4vcBu9up9psg
+Content-Type: application/json
+
+//당신은 현재 회사에서 근무하는 동료들과의 업무 환경에 만족하십니까?
+//동료들 간의 협력과 의사 소통에 대해 어떻게 평가하시나요?
+//회사 내 동료들이 서로를 존중하고 배려하는 분위기라고 생각하십니까?
+//동료들과의 관계가 업무 수행에 긍정적인 영향을 미치고 있다고 느끼십니까?
+//동료들이 문제 발생 시 함께 해결하려는 자세를 보이는지 어떻게 생각하십니까?
+//회사 내 동료 간 지식 공유와 정보 교환에 만족하십니까?
+//동료들이 업무 프로세스를 개선하기 위해 제안하는 것에 대해 어떻게 평가하십니까?
+//동료들 간의 팀워크와 협업이 회사의 전략적 목표 달성에 얼마나 중요하다고 생각하십니까?
+//회사 내 동료들과의 관계가 업무 만족도에 어떤 영향을 미치는지 설명해 주실 수 있나요?
+
+{
+  "title": "꿀빨러 설문",
+  "categoryId": 3,
+  "startDate": "2024-07-01",
+  "endDate": "2024-07-05",
+  "question": [
+    {
+      "order": 1,
+      "question": "꿀벌1"
+    },
+    {
+      "order": 2,
+      "question": "꿀벌2"
+    },
+    {
+      "order": 3,
+      "question": "꿀벌3"
+    },
+    {
+      "order": 4,
+      "question": "꿀벌4"
+    },
+    {
+      "order": 5,
+      "question": "꿀벌5"
+    },
+    {
+      "order": 6,
+      "question": "꿀벌6"
+    },
+    {
+      "order": 7,
+      "question": "꿀벌7"
+    },
+    {
+      "order": 8,
+      "question": "꿀벌8"
+    },
+    {
+      "order": 9,
+      "question": "꿀벌9"
+    }
+
+  ]
+}
+
+### GET 날짜 활성화된 설문 가져오기
+GET http://localhost:8001//survey/active
+Access-Token: Bearer eyJkYXRlIjoxNzIwNTI5NjI1Mzg3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDI0MTEwMjIiLCJleHAiOjM2MDAwMTcyMDUyOTYyNX0.KKnDxl81XZTkYSQQwvchTUJkF3kGdn6eY33y97EA80ct7j4mcJkHjeRNYqx4ORE1FbW_ufoxZmsw9wySguk1uA
+Content-Type: application/json
+
+### GET 카테고리 조회
+GET http://localhost:8001/survey/categories/1
+Access-Token: Bearer eyJkYXRlIjoxNzIwMDYwNTk0MTgzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcyMDA2MDU5NH0.72MdqtVX5OEiwU-iJhYttGcz_ErUuassT4FU0JB-oO7eaEK65bKhsSZEihPb72YLfZ0iMb_h1b12WPP6SrxN6A
+Content-Type: application/json
+
+### GET 응답자수 조회(v)
+GET http://localhost:8001/survey/respondent-count/2
+Access-Token: Bearer eyJkYXRlIjoxNzE5ODkyNjUyODMyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTMwMDMiLCJleHAiOjE3MTk4OTYyNTJ9.SnLCIg4lTuFWvHui0SCN0O2T0E9n9Sz6fibrRr8mLtZA6KmtOWgHxrntyaEoUCXT6eeLlnhBXIaaWJPp2R-CwQ
+Content-Type: application/json
+
+
+#### POST 질문 문항 카운트 테스트(ReplyRecord)(v)
+POST localhost:8001/survey/reply-count
+Access-Token: Bearer eyJkYXRlIjoxNzIwMTczNzc4NzIwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDE3Mzc3OH0.XgrN2dQRdXbhDpeoKzPCUTNzgcPL1o7xv0cgJvDgkrvC9oP7ON1KRLf_Y7AqE4lO8dXjBEm07b4_WwDM1nVI9w
+Content-Type: application/json
+
+{
+  "employeeId": 201211001,
+  "jobId": 40,
+  "surveyId": 2,
+  "questionId": 11,
+  "answer": 4
+}
+
+#### 카테고리 id로 설문조회
+#GET http://localhost:8001/survey/category/1
+#Access-Token: Bearer eyJkYXRlIjoxNzE5ODI4Mjc5OTAyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTMwMDMiLCJleHAiOjE3MTk4MzE4Nzl9.gHUgLDxBFSRCM2vYuLRpxv_okh2iqvlXMbPdSsSieD9_8BgxKejO3VDCVA5F5BQdAn1SHPyrCv5_KkrHr1nQWA
+#Content-Type: application/json
+#
+
+### GET 특정 질문 조회
+GET http://localhost:8001/survey/question/2
+Access-Token: Bearer eyJkYXRlIjoxNzE5OTk3MjEzNjczLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTEwMDEiLCJleHAiOjM2MDAwMTcxOTk5NzIxM30.-ftNDbFMDKavBUgXQAV8JOd4v5Or0BWt1lYpzNKvHyoWkdKzU6-j2T08PxywA9dJWP8tGpubGM15BMs_V3ZfFw
+Content-Type: application/json
+
+
+#### GET 특정 설문 조회(특정 설문 질문, 문항 조회, v)
+GET http://localhost:8001/survey/survey-details/11
+Access-Token: Bearer eyJkYXRlIjoxNzIwNDA5MjkyODAwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDI0MTEwMjIiLCJleHAiOjM2MDAwMTcyMDQwOTI5Mn0.-4lcORanPCE--YGxGFVHzUsmRMDCEhdR7CklArZ34DHb91mvlB82g2PpezC27jktBxFrgE2n4i78nywEDelSaw
+Content-Type: application/json
+
+
+### GET 설문 등록 테스트(전체 설문 조회,v)
+GET localhost:8001/survey/date/7
+Access-Token: Bearer eyJkYXRlIjoxNzE5ODg4OTI1NTExLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTMwMDMiLCJleHAiOjE3MTk4OTI1MjV9.RuliDgKTywpG9ZkyTsr0ymlFZ7vQgnrl8hVVU4m0lxKeEGmUScoQvW02zcfmt51YSNQiYr0qxHWmqOfC1n4lIQ
+Content-Type: application/json
+
+### PUT SurveyQuestion 업데이트 테스트(v)
+PUT localhost:8001/survey/questions/13
+Access-Token: Bearer eyJkYXRlIjoxNzE5ODIxOTQ4MjkyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTMwMDMiLCJleHAiOjE3MTk4MjU1NDh9.dUtVflgsd_XFuryQPYW3gXJHGZxRPUGw7Wc1I0KnaDE7-DGjOEfrKmnT40MrQpM8zH0BMIICOiW-ZjJGDMs5tg
+Content-Type: application/json
+
+{
+  "questionOrder": 1,
+  "question": "아 집가고싶다222",
+  "surveyId": 2
+}
+
+### DELETE 질문삭제 테스트(v)
+DELETE localhost:8001/survey/questions/3
+Access-Token: Bearer eyJkYXRlIjoxNzE5ODg2OTQxOTMzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTMwMDMiLCJleHAiOjE3MTk4OTA1NDF9.PznY7UiZ1TJkEs-MjiGESSkT7bzLFuRGrzeLaKFxarrKiz8tWLN9onzAT3Rquf1TGdLJ93zWCrxh9qvBFpyZnA
+Content-Type: application/json
+
+
+
+
