@@ -26,8 +26,7 @@ public class NoticeController {
     // 전체 공지사항 조회
     @GetMapping("/notices")
     public ResponseEntity<PagingResponse> getAllNotices(
-            @RequestParam(defaultValue = "1") final Integer page
-    ) {
+            @RequestParam(defaultValue = "1") final Integer page) {
         final Page<NoticeResponseDTO> notices = noticeService.getAllNotices(page);
         final PagingButtonInfo pagingButtonInfo = Pagination.getPagingButtonInfo(notices);
         final PagingResponse pagingResponse = PagingResponse.of(notices.getContent(), pagingButtonInfo);

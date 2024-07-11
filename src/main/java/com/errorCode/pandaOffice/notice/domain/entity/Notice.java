@@ -43,7 +43,7 @@ public class Notice {
     private char status = 'Y';  // 공개여부 (Y/N)
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;  // 사원 코드(FK)
 
     public Notice(
@@ -61,6 +61,9 @@ public class Notice {
     }
 
     public static Notice of(NoticeRequestDTO noticeRequest, Employee employeeEntity) {
+        if (employeeEntity == null) {
+            throw new IllegalArgumentException("Employee entity cannot be null");
+        }
         Notice newNotice = new Notice();
         newNotice.title = noticeRequest.getTitle();
         newNotice.content = noticeRequest.getContent();
@@ -86,7 +89,4 @@ public class Notice {
         this.employee = employee;
     }
 
-    public Integer getEmployeeId() {
-        return employee.getEmployeeId();
-    }
 }

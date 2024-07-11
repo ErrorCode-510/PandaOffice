@@ -1,6 +1,5 @@
 package com.errorCode.pandaOffice.notice.domain.repository;
 
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;

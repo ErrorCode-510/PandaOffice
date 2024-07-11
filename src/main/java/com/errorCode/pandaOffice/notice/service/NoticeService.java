@@ -1,4 +1,5 @@
 package com.errorCode.pandaOffice.notice.service;
+import com.errorCode.pandaOffice.auth.util.TokenUtils;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
@@ -76,13 +77,9 @@ public class NoticeService {
     // 공지사항 등록 메소드
     @Transactional
     public Integer createNotice(final NoticeRequestDTO noticeRequestDTO) {
-        Employee employee = employeeRepository.findById(noticeRequestDTO.getEmployeeId())
-                .orElseThrow(() -> new EntityNotFoundException("Notice NotFound" + noticeRequestDTO.getEmployeeId()));
-
-        char status = 'Y';
-        if (noticeRequestDTO.getStatus() != '\0' && noticeRequestDTO.getStatus() == 'N') {
-            status = noticeRequestDTO.getStatus();
-        }
+        /* 작성자 */
+        Employee employee = employeeRepository.findById(TokenUtils.getEmployeeId())
+                .orElseThrow();
 
         Notice newNotice = Notice.of(noticeRequestDTO, employee);
         Notice saveNotice = noticeRepository.save(newNotice);
@@ -117,24 +114,6 @@ public class NoticeService {
     public void deleteNotice(final int noticeId) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(NoSuchElementException::new);
         noticeRepository.delete(notice);
-    }
-
-    // Notice 엔티티를 NoticeResponseDTO로 변환하는 메소드
-    private NoticeResponseDTO convertToDto(Notice notice) {
-        Employee employee = employeeRepository.findById(notice.getEmployeeId()).orElseThrow();
-        return new NoticeResponseDTO(
-                notice.getNoticeId(),
-                notice.getTitle(),
-                notice.getContent(),
-                notice.getCategory(),
-                notice.getSubCategory(),
-                notice.getPostedDate(),
-                notice.getViewCount(),
-                notice.getStatus(),
-                employee.getEmployeeId(),
-                employee.getName(),
-                employee.getJob().getTitle()
-        );
     }
 
 }

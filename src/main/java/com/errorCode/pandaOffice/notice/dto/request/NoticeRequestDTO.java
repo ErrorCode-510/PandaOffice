@@ -3,6 +3,8 @@ package com.errorCode.pandaOffice.notice.dto.request;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import lombok.*;
 
+import java.util.List;
+
 
 // 공지사항 요청 DTO 클래스
 @Getter
@@ -16,6 +18,5 @@ public class NoticeRequestDTO {
     private final String subCategory;  // 소분류(그룹 : 부서별 / 경조사 : 결혼, 부고, 돌잔치)
     private final int viewCount;  // 조회수
     private final char status;  // 공개여부(Y/N)
-    private final int employeeId;  // 사원 코드
 
 }
