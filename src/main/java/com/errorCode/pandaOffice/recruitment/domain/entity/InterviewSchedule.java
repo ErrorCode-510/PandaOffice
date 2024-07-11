@@ -68,8 +68,6 @@ public class InterviewSchedule {
         this.startTime = startTime;
         this.place = place;
         this.employee = employee;
-//        this.employee2 = employee2;
-//        this.employee3 = employee3;
         this.applicantsList = applicantsList;
     }
 
@@ -87,8 +85,6 @@ public class InterviewSchedule {
                 startTime,
                 place,
                 employee,
-//                employee2,
-//                employee3,
                 applicantsList
         );
     }
@@ -105,8 +101,6 @@ public class InterviewSchedule {
         this.startTime = startTime;
         this.place = place;
         this.employee = employee;
-//        this.employee2 = employee2;
-//        this.employee3 = employee3;
         this.applicantsList = applicantsList;
     }
 }

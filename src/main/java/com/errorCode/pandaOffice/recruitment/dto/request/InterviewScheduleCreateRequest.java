@@ -1,8 +1,5 @@
 package com.errorCode.pandaOffice.recruitment.dto.request;
 
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
-import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
