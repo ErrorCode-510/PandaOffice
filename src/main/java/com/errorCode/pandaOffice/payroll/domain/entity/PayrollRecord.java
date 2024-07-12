@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /* 급여 기록 Entity */
@@ -44,7 +45,7 @@ public class PayrollRecord {
     /* 사번 */
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employeeId;
+    private Employee employee;
 
     /* 급여일 */
     @Column(name = "payroll_date")
@@ -62,28 +63,25 @@ public class PayrollRecord {
     /* 지급 코드 */
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "payroll_id")
-    private List<EarningRecord> earningRecordList;
+    private List<EarningRecord> earningRecordList = new ArrayList<>();;
 
     /* 공제 코드 */
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "payroll_id")
-    private List<DeductionRecord> deductionRecordList;
+    private List<DeductionRecord> deductionRecordList = new ArrayList<>();;
 
-    public PayrollRecord(Employee employeeId, LocalDate payrollDate, LocalDate createdDate,String payStubPath,
-                         List<EarningRecord> earningRecordList, List<DeductionRecord> deductionRecordList) {
-
-        this.employeeId = employeeId;
+    public PayrollRecord(Employee employee, LocalDate payrollDate, String payStubPath,
+                         List<EarningRecord> earningRecords, List<DeductionRecord> deductionRecords) {
+        this.employee = employee;
         this.payrollDate = payrollDate;
-        this.createdDate = createdDate;
         this.payStubPath = payStubPath;
-        this.earningRecordList = earningRecordList;
-        this.deductionRecordList = deductionRecordList;
+        this.earningRecordList = earningRecords;
+        this.deductionRecordList = deductionRecords;
     }
-
 
     public static PayrollRecord of(PayrollRequest payrollRequest, Employee employeeEntity, List<EarningRecord> earningRecordEntityList, List<DeductionRecord> deductionRecordEntityList) {
         PayrollRecord newRecord = new PayrollRecord();
-        newRecord.employeeId = employeeEntity;
+        newRecord.employee = employeeEntity;
         newRecord.payrollDate = payrollRequest.getPayrollDate();
         newRecord.payStubPath = payrollRequest.getPayStubPath();
         newRecord.earningRecordList = earningRecordEntityList;
