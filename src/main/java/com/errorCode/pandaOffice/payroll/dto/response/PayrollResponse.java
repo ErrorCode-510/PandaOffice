@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public class PayrollResponse {
 
     private final int employeeId;
-    private final String name;
+    private final String employeeName;
+    private final String jobTitle;
+    private final String departmentName;
     private final LocalDate payrollDate;
     private final String payStubPath;
     private final List<EarningResponse> earningRecordList;
@@ -32,6 +34,8 @@ public class PayrollResponse {
         return new PayrollResponse(
                 payroll.getEmployee().getEmployeeId(),
                 payroll.getEmployee().getName(),
+                payroll.getEmployee().getJob().getTitle(),
+                payroll.getEmployee().getDepartment().getName(),
                 payroll.getPayrollDate(),
                 payroll.getPayStubPath(),
                 earningResponses,
