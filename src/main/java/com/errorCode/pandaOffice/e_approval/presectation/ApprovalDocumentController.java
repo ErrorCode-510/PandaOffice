@@ -3,10 +3,10 @@ package com.errorCode.pandaOffice.e_approval.presectation;
 import com.errorCode.pandaOffice.common.paging.Pagination;
 import com.errorCode.pandaOffice.common.paging.PagingButtonInfo;
 import com.errorCode.pandaOffice.common.paging.PagingResponse;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentListResponse;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.CreateApprovalDocumentRequest;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.ApprovalDocumentDetailResponse;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.UpdateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.response.ApprovalDocumentDetailResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.response.ApprovalDocumentListResponse;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.request.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.request.UpdateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.e_approval.service.ApprovalDocumentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,30 +41,33 @@ public class ApprovalDocumentController {
      * @version 1
      * @see com.errorCode.pandaOffice.e_approval.domain.type.ApprovalStatus status ENUM
      */
-    @GetMapping("/approval-document")
+    @GetMapping("/approval-documents")
     public ResponseEntity<PagingResponse> getApprovalDocuments(
             @RequestParam(required = false) final LocalDate startDate,
             @RequestParam(required = false) final LocalDate endDate,
-            @RequestParam(required = false) final Integer templateId,
-            @RequestParam(required = false) final String title,
+            @RequestParam(required = false) final String templateName,
+            @RequestParam(required = false) final String name,
             @RequestParam(required = false) final String draftEmployeeName,
-            @RequestParam(required = false) final Integer status,
+            @RequestParam(required = false) final Integer documentStatus,
+            @RequestParam(required = false) final Integer approvalStatus,
             @RequestParam(required = false) final Integer nowPage,
-            @RequestParam(required = false) final Integer pageSize
+            @RequestParam(required = false) final boolean mine,
+            @RequestParam(required = false) final boolean handling
     ) {
         final Page<ApprovalDocumentListResponse> documents = approvalDocumentService.searchDocuments(
                 startDate,
                 endDate,
-                templateId,
-                title,
+                templateName,
+                name,
                 draftEmployeeName,
-                status,
+                documentStatus,
+                approvalStatus,
                 nowPage,
-                pageSize
+                mine,
+                handling
         );
         final PagingButtonInfo pagingButtonInfo = Pagination.getPagingButtonInfo(documents);
         final PagingResponse pagingResponse = PagingResponse.of(documents.getContent(), pagingButtonInfo);
-
         return ResponseEntity.ok(pagingResponse);
     }
 
@@ -80,9 +83,8 @@ public class ApprovalDocumentController {
      */
     @GetMapping("approval-document/{documentId}")
     public ResponseEntity<ApprovalDocumentDetailResponse> getApprovalDocumentDetail(@PathVariable int documentId) {
-        final ApprovalDocumentDetailResponse documentDetailResponse = approvalDocumentService.getDocumentDetail(documentId);
-        /* ok 메소드는 객체 반환하므로 build 생략. 파라미터는 반환 response body */
-        return ResponseEntity.ok(documentDetailResponse);
+        ApprovalDocumentDetailResponse response = approvalDocumentService.findByDocumentId(documentId);
+        return ResponseEntity.ok(response);
     }
 
 

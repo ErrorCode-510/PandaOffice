@@ -51,7 +51,7 @@ public class AnnualLeaveUsedRecordResponse {
             String approvalDate = null;
             String status = null;
             if (usedRecord.getApprovalDocument() != null) {
-                approvalDate = usedRecord.getApprovalDocument().getApprovalDate().toString();
+                approvalDate = usedRecord.getApprovalDocument().getDraftDate().toString();
                 status = usedRecord.getApprovalDocument().getStatus().toString();
             }
 

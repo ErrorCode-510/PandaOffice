@@ -1,7 +1,7 @@
 package com.errorCode.pandaOffice.e_approval.domain.entity;
 
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.CreateApprovalDocumentTemplateRequest;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.UpdateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.CreateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.UpdateApprovalDocumentTemplateRequest;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,10 +22,18 @@ public class DocumentTemplate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    /* 문서 양식 이름 */
+    /* 문서 양식 별칭 */
+    @Column(nullable = false)
+    private String name;
+    /* 문서 수정 코멘트 */
+    @Column
+    private String lastEditComment;
+    /* 문서 양식 타이틀 */
     @Column(nullable = false)
     private String title;
+    /* 문서 양식 설명 */
+    @Column(nullable = false)
+    private String description;
     /* 문서 양식 */
     @Column(nullable = false)
     private String document;
@@ -45,11 +53,17 @@ public class DocumentTemplate {
     /* 양식 상위 폴더 */
     @Column(nullable = false)
     private int folderId;
+    @ManyToOne
+    @JoinColumn(name = "integrateFeatureId")
+    private ApprovalIntegrateFeature approvalIntegrateFeature;
 
     public static DocumentTemplate of(CreateApprovalDocumentTemplateRequest request, List<AutoApprovalLine> lineEntityList, Employee lastEditorEntity) {
         DocumentTemplate templateEntity = new DocumentTemplate();
 
+        templateEntity.name = request.getName();
+        templateEntity.lastEditComment = request.getLastEditComment();
         templateEntity.title = request.getTitle();
+        templateEntity.description = request.getDescription();
         templateEntity.document = request.getDocument();
         templateEntity.status = true;
         templateEntity.lastEditor = lastEditorEntity;
@@ -72,5 +86,9 @@ public class DocumentTemplate {
         this.lastEditDate = LocalDate.now();
         this.lastEditor = lastEditor;
         this.status = statue;
+    }
+
+    public void updateRefFolder(int afterFolderId) {
+        this.folderId = afterFolderId;
     }
 }
