@@ -3,21 +3,23 @@ package com.errorCode.pandaOffice.payroll.service;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.payroll.domain.entity.*;
-import com.errorCode.pandaOffice.payroll.domain.repository.*;
+import com.errorCode.pandaOffice.payroll.domain.repository.DeductionCategoryRepository;
+import com.errorCode.pandaOffice.payroll.domain.repository.EarningCategoryRepository;
+import com.errorCode.pandaOffice.payroll.domain.repository.PayrollRepository;
 import com.errorCode.pandaOffice.payroll.dto.request.PayrollRequest;
 import com.errorCode.pandaOffice.payroll.dto.response.DeductionCategoryResponse;
 import com.errorCode.pandaOffice.payroll.dto.response.EarningCategoryResponse;
 import com.errorCode.pandaOffice.payroll.dto.response.EmplPayrollResponse;
-import com.errorCode.pandaOffice.recruitment.domain.entity.InterviewSchedule;
+import com.errorCode.pandaOffice.payroll.dto.response.PayrollResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,46 +68,65 @@ public class PayrollService {
         return responses;
     }
 
-    /* 사원 개별 조회(수정 해야함) */
+    /* 사원 급여 조회 */
     @Transactional(readOnly = true)
-    public EmplPayrollResponse getEmplPayrollByEmployeeId(int employeeId) {
-        Employee employee = employeeRepository.findById(employeeId)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + employeeId));
+    public PayrollResponse getEmployeePayroll(int employeeId) {
+        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
+        if (employeeOptional.isEmpty()) {
+            throw new IllegalArgumentException("Employee with ID " + employeeId + " not found");
+        }
 
-        return EmplPayrollResponse.from(employee);
+        Employee employee = employeeOptional.get();
+        PayrollRecord payrollRecord = payrollRepository.findByEmployee(employee);
+        if (payrollRecord == null) {
+            throw new IllegalArgumentException("Payroll record not found for employee with ID " + employeeId);
+        }
+
+        return PayrollResponse.from(payrollRecord);
     }
 
 
     /* 사원 급여 등록 */
     /* payrollRequest: 프론트에서 입력받은 정보가 들어있음 (누가? 얼마를? 공제금액은?
-    *  엔티티 타입으로 생성자(of: new 연산자 대신 사용 가능한 간결?한 생성자)를 만들어서 payrollRequest에 있는 정보를 엔티티에 삽입
-    *  사원 급여를 등록하는 데 필요한 필드(?) 사원아이디, 급여*/
+     *  엔티티 타입으로 생성자(of: new 연산자 대신 사용 가능한 간결?한 생성자)를 만들어서 payrollRequest에 있는 정보를 엔티티에 삽입
+     *  사원 급여를 등록하는 데 필요한 필드(?) 사원아이디, 급여*/
     @Transactional
-    public int saveEmplPay(PayrollRequest payrollRequest) {
-        Objects.requireNonNull(payrollRequest, "payrollRequest must not be null");
+    public Integer saveEmplPay(List<PayrollRequest> payrollRequests) {
+        Objects.requireNonNull(payrollRequests, "payrollRequests must not be null");
 
-        Employee employeeEntity = employeeRepository.findById(payrollRequest.getEmployeeId())
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id: " + payrollRequest.getEmployeeId()));
+        List<PayrollRecord> savedRecords = new ArrayList<>();
 
-        List<EarningRecord> earningRecordEntityList = payrollRequest.getEarningRecordList().stream()
-                .map(request -> {
-                    EarningCategory categoryEntity = earningCategoryRepository.findById(request.getEarningCategoryId())
-                            .orElseThrow(() -> new EntityNotFoundException("Earning category not found with id: " + request.getEarningCategoryId()));
-                    EarningRecord recordEntity = EarningRecord.of(request, categoryEntity);
-                    return recordEntity;
-                }).collect(Collectors.toList());
+        for (PayrollRequest payrollRequest : payrollRequests) {
+            Employee employeeEntity = employeeRepository.findById(payrollRequest.getEmployeeId())
+                    .orElseThrow(() -> new EntityNotFoundException("해당 ID로 직원을 찾을 수 없습니다: " + payrollRequest.getEmployeeId()));
 
-        List<DeductionRecord> deductionRecordEntityList = payrollRequest.getDeductionRecordList().stream()
-                .map(request -> {
-                    DeductionCategory categoryEntity = deductionCategoryRepository.findById(request.getDeductionCategoryId())
-                            .orElseThrow(() -> new EntityNotFoundException("Deduction category not found with id: " + request.getDeductionCategoryId()));
-                    DeductionRecord recordEntity = DeductionRecord.of(request, categoryEntity);
-                    return recordEntity;
-                }).collect(Collectors.toList());
+            List<EarningRecord> earningRecordEntityList = payrollRequest.getEarningRecordList().stream()
+                    .map(request -> {
+                        EarningCategory categoryEntity = earningCategoryRepository.findById(request.getEarningCategoryId())
+                                .orElseThrow(() -> new EntityNotFoundException("Earning category not found with id: " + request.getEarningCategoryId()));
+                        EarningRecord recordEntity = EarningRecord.of(request, categoryEntity);
+                        return recordEntity;
+                    }).collect(Collectors.toList());
 
-        PayrollRecord newRecord = PayrollRecord.of(payrollRequest, employeeEntity, earningRecordEntityList, deductionRecordEntityList);
-        PayrollRecord savedRecord = payrollRepository.save(newRecord);
+            List<DeductionRecord> deductionRecordEntityList = payrollRequest.getDeductionRecordList().stream()
+                    .map(request -> {
+                        DeductionCategory categoryEntity = deductionCategoryRepository.findById(request.getDeductionCategoryId())
+                                .orElseThrow(() -> new EntityNotFoundException("Deduction category not found with id: " + request.getDeductionCategoryId()));
+                        DeductionRecord recordEntity = DeductionRecord.of(request, categoryEntity);
+                        return recordEntity;
+                    }).collect(Collectors.toList());
 
-        return savedRecord.getId();
+            PayrollRecord newRecord = new PayrollRecord(employeeEntity,
+                    payrollRequest.getPayrollDate(),
+                    payrollRequest.getPayStubPath(),
+                    earningRecordEntityList,
+                    deductionRecordEntityList);
+
+            PayrollRecord savedRecord = payrollRepository.save(newRecord);
+            savedRecords.add(savedRecord);
+        }
+
+        // 간단히 첫 번째 저장된 레코드의 ID를 반환하는 것으로 가정
+        return savedRecords.isEmpty() ? null : savedRecords.get(0).getId();
     }
 }

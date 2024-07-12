@@ -4,11 +4,10 @@ import com.errorCode.pandaOffice.payroll.dto.request.PayrollRequest;
 import com.errorCode.pandaOffice.payroll.dto.response.DeductionCategoryResponse;
 import com.errorCode.pandaOffice.payroll.dto.response.EarningCategoryResponse;
 import com.errorCode.pandaOffice.payroll.dto.response.EmplPayrollResponse;
+import com.errorCode.pandaOffice.payroll.dto.response.PayrollResponse;
 import com.errorCode.pandaOffice.payroll.service.PayrollService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,16 +43,16 @@ public class PayrollController {
         return ResponseEntity.ok(deductionCategories);
     }
 
-    /* 개인조회 */
+    /* 개인급여조회 */
     @GetMapping("/mypay/{employeeId}")
-    public ResponseEntity<EmplPayrollResponse> getEmplPayrollByEmployeeId(@PathVariable int employeeId) {
-        EmplPayrollResponse response = payrollService.getEmplPayrollByEmployeeId(employeeId);
+    public ResponseEntity<PayrollResponse> getEmployeePayroll(@PathVariable int employeeId) {
+        PayrollResponse response = payrollService.getEmployeePayroll(employeeId);
         return ResponseEntity.ok(response);
     }
 
     /* 사원 급여 등록 */
     @PostMapping("/save-emplpay")
-    public ResponseEntity<Void> save(@RequestBody @Valid final PayrollRequest payrollRequest) {
+    public ResponseEntity<Void> save(@RequestBody @Valid final List<PayrollRequest> payrollRequest) {
         System.out.println(payrollRequest);
         Integer id = payrollService.saveEmplPay(payrollRequest); // Use Integer instead of int
 
