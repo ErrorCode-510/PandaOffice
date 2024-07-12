@@ -1,21 +1,28 @@
 package com.errorCode.pandaOffice.attendance.presectation;
 
 import com.errorCode.pandaOffice.attendance.dto.annualLeaveRecord.response.*;
+import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.request.AttendanceRecordRequest;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.CalculatedAttendanceAndOverTimeRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response.OverTimeAndLatenessAndAnnualLeaveRequestResponse;
 import com.errorCode.pandaOffice.attendance.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/attendance/*")
+@Slf4j
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
@@ -89,20 +96,37 @@ public class AttendanceController {
         return ResponseEntity.ok(response);
     }
 
-    /*5. 연차 조정 */
+    /*5.연차 조정 */
     // 모든 사원의 현재 연도의 모든 연차 기록 반환
-    @GetMapping("/all_leave_record")
-    public ResponseEntity<AllLeaveRecordsResponse> getAllLeaveRecordsForCurrentYear() {
-        AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForCurrentYear();
-        return ResponseEntity.ok(response);
+    @GetMapping("/all_leave_adjustment")
+    public ResponseEntity<?> getAllLeaveRecords(
+            @RequestParam(value = "hireYear", required = false) Integer hireYear) {
+        if (hireYear != null) {
+            AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForEmployeesHiredInYear(hireYear);
+            if (response.getAllLeaveRecords().isEmpty()) {
+                return ResponseEntity.ok("해당년도에 입사한 사원이 없습니다");
+            }
+            return ResponseEntity.ok(response);
+        } else {
+            AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForCurrentYear();
+            return ResponseEntity.ok(response);
+        }
     }
 
-    // 특정 연도에 입사한 사원들의 현재 연도의 모든 연차 기록 반환
-    @GetMapping("/all_leave_record/search")
-    public ResponseEntity<AllLeaveRecordsResponse> getAllLeaveRecordsForEmployeesHiredInYear(
-            @RequestParam(value = "hireYear") int hireYear) {
-        AllLeaveRecordsResponse response = attendanceService.getAllLeaveRecordsForEmployeesHiredInYear(hireYear);
-        return ResponseEntity.ok(response);
+    /*6.출퇴근 등록 */
+    @PostMapping("/check-in")
+    public ResponseEntity<Void> checkIn(@RequestBody AttendanceRecordRequest attendanceRecordRequest) {
+        final int attendanceRecordId = attendanceService.saveCheckInTime(attendanceRecordRequest.getCheckInDate(), attendanceRecordRequest.getCheckInTime());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PutMapping("/check-out")
+    public ResponseEntity<Void> checkOut(@RequestBody AttendanceRecordRequest attendanceRecordRequest) {
+        final int attendanceRecordId = attendanceService.saveCheckOutTime(attendanceRecordRequest.getCheckInDate(), attendanceRecordRequest.getCheckOutTime());
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+
+
 
 }

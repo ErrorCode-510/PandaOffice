@@ -42,13 +42,13 @@ public class AttendanceRecordResponse {
         private String weeklyTotalTime;
         private String monthlyTotalTime;
         private String remainingTime;
-        private Map<String, List<String>> weeklyStartEndTimes; // 새로운 필드 추가
+        private Map<String, List<Map<String, String>>> weeklyStartEndTimes;
 
         public static CalculatedAttendanceRecord of(AttendanceRecord record, List<AttendanceRecord> recordList) {
 
             Map<String, Duration> weeklyTotalTimes = calculateWeeklyTotalTimes(recordList);
             Map<String, Duration> monthlyTotalTimes = calculateMonthlyTotalTimes(recordList);
-            Map<String, List<String>> weeklyStartEndTimes = calculateWeeklyStartEndTimes(recordList); // 새로운 계산 메서드 호출
+            Map<String, List<Map<String, String>>> weeklyStartEndTimes = calculateWeeklyStartEndTimes(recordList);
 
             Duration fortyHours = Duration.ofHours(40);
 
@@ -80,7 +80,7 @@ public class AttendanceRecordResponse {
 
         public static String getWeek(LocalDate date) {
             WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
-            int weekOfMonth = date.get(weekFields.weekOfMonth());
+            int weekOfMonth = date.get(weekFields.weekOfMonth()) + 1;
 
             if (weekOfMonth == 0) {
                 LocalDate lastDayOfLastMonth = date.with(TemporalAdjusters.firstDayOfMonth()).minusDays(1);
@@ -89,7 +89,7 @@ public class AttendanceRecordResponse {
 
             LocalDate lastDayOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
 
-            if (weekOfMonth == lastDayOfMonth.get(weekFields.weekOfMonth()) && lastDayOfMonth.getDayOfWeek().compareTo(DayOfWeek.THURSDAY) < 0) {
+            if (weekOfMonth == lastDayOfMonth.get(weekFields.weekOfMonth()) + 1 && lastDayOfMonth.getDayOfWeek().compareTo(DayOfWeek.THURSDAY) < 0) {
                 LocalDate firstDayOfNextMonth = lastDayOfMonth.plusDays(1);
                 return getWeek(firstDayOfNextMonth);
             }
@@ -97,10 +97,19 @@ public class AttendanceRecordResponse {
             return date.getYear() + "-" + date.getMonthValue() + "-W" + weekOfMonth;
         }
 
+        public static int getWeekOfMonth(LocalDate date) {
+            WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
+            return date.get(weekFields.weekOfMonth()) + 1;
+        }
+
         public static Map<String, Duration> calculateWeeklyTotalTimes(List<AttendanceRecord> attendanceRecords) {
             Map<String, Duration> weeklyTotalTimes = new HashMap<>();
 
             for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                if (attendanceRecord.getCheckInTime() == null || attendanceRecord.getCheckOutTime() == null) {
+                    continue;
+                }
+
                 String week = getWeek(attendanceRecord.getDate());
                 Duration workDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
                 weeklyTotalTimes.merge(week, workDuration, Duration::plus);
@@ -113,6 +122,10 @@ public class AttendanceRecordResponse {
             Map<String, Duration> monthlyTotalTimes = new HashMap<>();
 
             for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                if (attendanceRecord.getCheckInTime() == null || attendanceRecord.getCheckOutTime() == null) {
+                    continue;
+                }
+
                 String month = attendanceRecord.getDate().getYear() + "-" + attendanceRecord.getDate().getMonthValue();
                 Duration workDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
                 monthlyTotalTimes.merge(month, workDuration, Duration::plus);
@@ -121,16 +134,26 @@ public class AttendanceRecordResponse {
             return monthlyTotalTimes;
         }
 
-        public static Map<String, List<String>> calculateWeeklyStartEndTimes(List<AttendanceRecord> attendanceRecords) {
-            Map<String, List<String>> weeklyStartEndTimes = new HashMap<>();
+        public static Map<String, List<Map<String, String>>> calculateWeeklyStartEndTimes(List<AttendanceRecord> attendanceRecords) {
+            Map<String, List<Map<String, String>>> weeklyStartEndTimes = new HashMap<>();
 
             for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                if (attendanceRecord.getCheckInTime() == null || attendanceRecord.getCheckOutTime() == null) {
+                    continue;
+                }
+
                 String week = getWeek(attendanceRecord.getDate());
-                String dayOfWeek = attendanceRecord.getDate().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.KOREAN);
-                String dateWithDay = attendanceRecord.getDate().toString() + " (" + dayOfWeek + ")";
-                String startTime = attendanceRecord.getCheckInTime().toString();
-                String endTime = attendanceRecord.getCheckOutTime().toString();
-                weeklyStartEndTimes.computeIfAbsent(week, k -> new ArrayList<>()).add(dateWithDay + " " + startTime + " ~ " + endTime);
+                int weekOfMonth = getWeekOfMonth(attendanceRecord.getDate());
+                String weekKey = week + ": " + weekOfMonth;
+                Map<String, String> recordMap = new HashMap<>();
+                recordMap.put("week", String.valueOf(weekOfMonth));
+                recordMap.put("date", String.valueOf(attendanceRecord.getDate().getDayOfMonth()));
+                recordMap.put("day", attendanceRecord.getDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN));
+                recordMap.put("start", attendanceRecord.getCheckInTime().toString());
+                recordMap.put("end", attendanceRecord.getCheckOutTime().toString());
+                Duration dayDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
+                recordMap.put("dayDuration", formatDuration(dayDuration));
+                weeklyStartEndTimes.computeIfAbsent(weekKey, k -> new ArrayList<>()).add(recordMap);
             }
 
             return weeklyStartEndTimes;

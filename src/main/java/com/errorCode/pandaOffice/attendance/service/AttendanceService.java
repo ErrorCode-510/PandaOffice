@@ -9,6 +9,7 @@ import com.errorCode.pandaOffice.attendance.domain.repository.AnnualLeaveUsedRec
 import com.errorCode.pandaOffice.attendance.domain.repository.AttendanceRecordRepository;
 import com.errorCode.pandaOffice.attendance.domain.repository.OverTimeAndLatenessRecordRepository;
 import com.errorCode.pandaOffice.attendance.dto.annualLeaveRecord.response.*;
+import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.request.AttendanceRecordRequest;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.CalculatedAttendanceAndOverTimeRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.AttendanceRecordResponse;
 import com.errorCode.pandaOffice.attendance.dto.attendanceRecord.response.AttendanceSummaryResponse;
@@ -16,10 +17,17 @@ import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.respon
 import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response.OverTimeAndLatenessAndAnnualLeaveRequestResponse;
 import com.errorCode.pandaOffice.attendance.dto.overTimeAndLatenessRecord.response.OverTimeAndLatenessRecordRequestResponse;
 import com.errorCode.pandaOffice.auth.util.TokenUtils;
+import com.errorCode.pandaOffice.e_approval.domain.entity.ApprovalDocument;
+import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +40,8 @@ public class AttendanceService {
     private final OverTimeAndLatenessRecordRepository overTimeAndLatenessRecordRepository;
     private final AnnualLeaveGrantRecordRepository annualLeaveGrantRecordRepository;
     private final AnnualLeaveUsedRecordRepository annualLeaveUsedRecordRepository;
+
+    private final EmployeeRepository employeeRepository;
 
     /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 1.내 근태 현황 페이지(Attendance Status) - 끝 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
     /* 확인 사항
@@ -138,7 +148,7 @@ public class AttendanceService {
         return AnnualLeaveRecordCalendarsResponse.of(usedRecords);
     }
 
-    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 4.내 근태 신청 현황(Attendance Input Status) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 4.내 근태 신청 현황(Attendance Request Status) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
     /* 확인 사항
      * 1. 처음에 페이지 들어갔을 때 현재 날짜의 기록이 나오는가?
      * 2. 검색 받은 날짜를 기준으로 기록이 나오는가? */
@@ -204,7 +214,6 @@ public class AttendanceService {
         return AllLeaveRecordsResponse.of(grantRecords, usedRecords);
     }
 
-    // 특정 연도에 입사한 사원들의 현재 연도의 모든 연차 기록 반환
     public AllLeaveRecordsResponse getAllLeaveRecordsForEmployeesHiredInYear(int hireYear) {
         LocalDate hireStartDate = LocalDate.of(hireYear, 1, 1);
         LocalDate hireEndDate = LocalDate.of(hireYear, 12, 31);
@@ -224,5 +233,39 @@ public class AttendanceService {
         List<AnnualLeaveGrantRecord> grantRecords = annualLeaveGrantRecordRepository.findByEmployee_NameInAndDateBetween(employeeNames, currentYearStart, currentYearEnd);
 
         return AllLeaveRecordsResponse.of(grantRecords, usedRecords);
+    }
+
+    /* ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 6.출퇴근 등록(Attendance Regist ) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ */
+    public int saveCheckInTime(LocalDate date, LocalTime checkInTime) {
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "사원을 찾을 수 없습니다."));
+
+        boolean exists = attendanceRecordRepository.existsByEmployeeAndDate(employee, date);
+        if (exists) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 해당 날짜에 출근 기록이 존재합니다.");
+        }
+
+        AttendanceRecord newRecord = AttendanceRecord.of(date, checkInTime, null, employee);
+        final AttendanceRecord attendanceRecord = attendanceRecordRepository.save(newRecord);
+        return attendanceRecord.getId();
+    }
+
+    public int saveCheckOutTime(LocalDate date, LocalTime checkOutTime) {
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "사원을 찾을 수 없습니다."));
+
+        AttendanceRecord existingRecord = attendanceRecordRepository.findByEmployeeAndDate(employee, date)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "출근 기록을 찾을 수 없습니다."));
+
+        if (existingRecord.getCheckInTime() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "출근 시간이 없습니다. 출근하지 않고 퇴근할 수 없습니다.");
+        }
+
+        // DTO를 통해 엔티티 수정
+        AttendanceRecord updatedRecord = AttendanceRecord.updateCheckOutTime(existingRecord, checkOutTime);
+        final AttendanceRecord savedRecord = attendanceRecordRepository.save(updatedRecord);
+        return savedRecord.getId();
     }
 }

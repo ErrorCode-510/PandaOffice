@@ -1,9 +1,5 @@
 package com.errorCode.pandaOffice.recruitment.dto.request;
 
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
-import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +36,6 @@ public class InterviewScheduleModifyRequest {
 
     /* 면접관들 */
     private final Integer employee;
-
-    /* 면접관들 2 */
-    private final Integer employee2;
-
-    /* 면접관들 3 */
-    private final Integer employee3;
 
     /* 면접자들 */
     private final List<Integer> applicantList;

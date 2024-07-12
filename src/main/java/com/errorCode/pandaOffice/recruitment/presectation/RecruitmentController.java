@@ -12,6 +12,7 @@ import com.errorCode.pandaOffice.recruitment.dto.response.PlaceResponse;
 import com.errorCode.pandaOffice.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,8 +51,6 @@ public class RecruitmentController {
             @RequestParam(required = false) final String address,
             /* 이름 검색( 이름은 있을 수 있고 없을 수 있음 ) */
             @RequestParam(required = false) final String name
-//            /* 나이 검색 */
-//            @RequestParam(required = false) final Integer age
     ) {
         /* 모든 데이터를 받아온 후 엔티티 타입을 DTO 타입으로 변환 후 받을거고, 페이징처리 하겠다. */
         final Page<ApplicantResponse> applicants = recruitmentService.getSearchApplicant(page, gender, address, name);
@@ -111,9 +110,15 @@ public class RecruitmentController {
     public ResponseEntity<Void> registInterviewSchedule(
             @RequestBody InterviewScheduleCreateRequest request
     ) {
-        System.out.println(request);
-        final Integer id = recruitmentService.registInterviewSchedule(request);
-        return ResponseEntity.created(URI.create("recruitment/interview-schedule/" + id)).build();
+        try {
+            System.out.println("Received request: " + request);
+            recruitmentService.registInterviewSchedule(request);
+            return ResponseEntity.created(URI.create("/recruitment/interview-schedule")).build();
+        } catch (Exception e) {
+            System.err.println("Error processing request: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /* 9. 면접일정 상세 조회 */
@@ -138,5 +143,12 @@ public class RecruitmentController {
     public ResponseEntity<Void> deleteInterviewSchedule(@PathVariable Integer id) {
         recruitmentService.deleteInterviewSchedule(id);
         return ResponseEntity.noContent().build();
+    }
+
+    /* 12. 면접일정 전체 조회 */
+    @GetMapping("/interview-schedule")
+    public ResponseEntity<List<InterviewScheduleResponse>> getInterviewSchedule() {
+        List<InterviewScheduleResponse> interviewScheduleResponse = recruitmentService.getInterviewSchedule();
+        return ResponseEntity.ok(interviewScheduleResponse);
     }
 }

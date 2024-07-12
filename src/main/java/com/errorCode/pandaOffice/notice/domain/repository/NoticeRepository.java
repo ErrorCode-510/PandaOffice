@@ -1,6 +1,8 @@
 package com.errorCode.pandaOffice.notice.domain.repository;
 
+import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -19,16 +21,30 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
 
     // 특정 공지사항 조회
     @EntityGraph(attributePaths = {"employee", "employee.job"})
+    @NonNull
     Optional<Notice> findById(int id);
 
     // 전체 공지사항을 최신순으로 조회
     @EntityGraph(attributePaths = {"employee", "employee.job"})
-    Page<Notice> findAll(Pageable pageable);
+    @Query("SELECT n FROM Notice n")
+    @NonNull
+    Page<Notice> findAllNotices(Pageable pageable);
 
-    // 분류와 소분류별 공지사항 조회 (페이징 및 정렬) (최신순으로 조회)
+    // 카테고리와 서브카테고리로 조   회 (페이징 및 정렬) (최신순으로 조회)
     @EntityGraph(attributePaths = {"employee", "employee.job"})
-    Page<Notice> findByCategoryAndSubCategory(String category, String subCategory, Pageable pageable);
-    Page<Notice> findByStatus(char status, Pageable pageable);
+    @NonNull
+    Page<Notice> findByCategoryAndSubCategory(@NonNull String category,@NonNull String subCategory,@NonNull Pageable pageable);
+
+    // 카테고리가 없으면 전체조회 출력
+    @EntityGraph(attributePaths = {"employee", "employee.job"})
+    @NonNull
+    Page<Notice> findAll(@NonNull Pageable pageable);
+
+
+    // 카테고리로 조회 (최신순으로 조회)
+    @EntityGraph(attributePaths = {"employee", "employee.job"})
+    @NonNull
+    Page<Notice> findByCategory(@NonNull String category,@NonNull Pageable pageable);
 
     // 조회수 증가
     @Transactional

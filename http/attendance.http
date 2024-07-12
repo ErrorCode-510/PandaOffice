@@ -14,11 +14,26 @@ Access-Token: Bearer eyJkYXRlIjoxNzIwMDAwMDIwODA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 GET http://localhost:8001/attendance/request_status?startDate=2010-01-01&endDate=2024-07-01
 Access-Token: Bearer eyJkYXRlIjoxNzIwMDAwMDIwODA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDAwMDAyMH0.XDlx8zfQYD9vhameFeITUUrB8d9OuYzrHA2Hun6dIU3AjuY276f3C0vavIOueyf8Ws6umgwVNIbx_0trDf-XwQ
 
-### 5.연차 조정 첫페이지
-GET http://localhost:8001/attendance/all_leave_record
+### 5.연차 조정
+GET http://localhost:8001/attendance/all_leave_adjustment
 Access-Token: Bearer eyJkYXRlIjoxNzIwMDAwMDIwODA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDAwMDAyMH0.XDlx8zfQYD9vhameFeITUUrB8d9OuYzrHA2Hun6dIU3AjuY276f3C0vavIOueyf8Ws6umgwVNIbx_0trDf-XwQ
 
-### 6.연차 조정 검색페이지
-GET http://localhost:8001/attendance/all_leave_record/search?hireYear=2012
-Access-Token: Bearer eyJkYXRlIjoxNzIwMDAwMDIwODA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDAwMDAyMH0.XDlx8zfQYD9vhameFeITUUrB8d9OuYzrHA2Hun6dIU3AjuY276f3C0vavIOueyf8Ws6umgwVNIbx_0trDf-XwQ
+###6-1.출근 등록
+POST http://localhost:8001/attendance/check-in
+Access-Token: Bearer eyJkYXRlIjoxNzIwNTg0MTkyMjY0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDU4NDE5Mn0.4_ETjMpVryPF1lvaEvMiB7mAsKxzrmO2CEYqyux9zn4Iwf6fpKN7_bDk4FrzHfzbhLY9YEIPYtwSvAnxC8riFQ
+Content-Type: application/json
 
+{
+  "checkInDate": "2024-07-26",
+  "checkInTime": "09:00:00"
+}
+
+###6-2.퇴근 등록
+PUT http://localhost:8001/attendance/check-out
+Access-Token: Bearer eyJkYXRlIjoxNzIwNTg0MTkyMjY0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDU4NDE5Mn0.4_ETjMpVryPF1lvaEvMiB7mAsKxzrmO2CEYqyux9zn4Iwf6fpKN7_bDk4FrzHfzbhLY9YEIPYtwSvAnxC8riFQ
+Content-Type: application/json
+
+{
+  "checkInDate": "2024-07-26",
+  "checkOutTime": "18:00:00"
+}

@@ -1,11 +1,5 @@
 package com.errorCode.pandaOffice.payroll.dto.request;
 
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.payroll.domain.entity.DeductionRecord;
-import com.errorCode.pandaOffice.payroll.domain.entity.EarningRecord;
-import com.errorCode.pandaOffice.payroll.dto.response.DeductionResponse;
-import com.errorCode.pandaOffice.payroll.dto.response.EarningResponse;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -38,7 +32,5 @@ public class PayrollRequest {
     public static class DeductionRequest {
         private final int deductionCategoryId;
         private final int amount;
-
     }
-
 }

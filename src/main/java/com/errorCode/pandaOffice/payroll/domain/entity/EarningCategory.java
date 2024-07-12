@@ -1,6 +1,5 @@
 package com.errorCode.pandaOffice.payroll.domain.entity;
 
-import com.errorCode.pandaOffice.welfare.dto.request.UpdateSurveyQuestionRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
