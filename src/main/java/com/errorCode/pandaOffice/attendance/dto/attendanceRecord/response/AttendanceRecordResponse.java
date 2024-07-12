@@ -42,13 +42,13 @@ public class AttendanceRecordResponse {
         private String weeklyTotalTime;
         private String monthlyTotalTime;
         private String remainingTime;
-        private Map<String, List<Map<String, String>>> weeklyStartEndTimes; // 새로운 필드 추가
+        private Map<String, List<Map<String, String>>> weeklyStartEndTimes;
 
         public static CalculatedAttendanceRecord of(AttendanceRecord record, List<AttendanceRecord> recordList) {
 
             Map<String, Duration> weeklyTotalTimes = calculateWeeklyTotalTimes(recordList);
             Map<String, Duration> monthlyTotalTimes = calculateMonthlyTotalTimes(recordList);
-            Map<String, List<Map<String, String>>> weeklyStartEndTimes = calculateWeeklyStartEndTimes(recordList); // 새로운 계산 메서드 호출
+            Map<String, List<Map<String, String>>> weeklyStartEndTimes = calculateWeeklyStartEndTimes(recordList);
 
             Duration fortyHours = Duration.ofHours(40);
 
@@ -99,13 +99,17 @@ public class AttendanceRecordResponse {
 
         public static int getWeekOfMonth(LocalDate date) {
             WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
-            return date.get(weekFields.weekOfMonth());
+            return date.get(weekFields.weekOfMonth()) ;
         }
 
         public static Map<String, Duration> calculateWeeklyTotalTimes(List<AttendanceRecord> attendanceRecords) {
             Map<String, Duration> weeklyTotalTimes = new HashMap<>();
 
             for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                if (attendanceRecord.getCheckInTime() == null || attendanceRecord.getCheckOutTime() == null) {
+                    continue;
+                }
+
                 String week = getWeek(attendanceRecord.getDate());
                 Duration workDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
                 weeklyTotalTimes.merge(week, workDuration, Duration::plus);
@@ -118,6 +122,10 @@ public class AttendanceRecordResponse {
             Map<String, Duration> monthlyTotalTimes = new HashMap<>();
 
             for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                if (attendanceRecord.getCheckInTime() == null || attendanceRecord.getCheckOutTime() == null) {
+                    continue;
+                }
+
                 String month = attendanceRecord.getDate().getYear() + "-" + attendanceRecord.getDate().getMonthValue();
                 Duration workDuration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
                 monthlyTotalTimes.merge(month, workDuration, Duration::plus);
@@ -130,6 +138,10 @@ public class AttendanceRecordResponse {
             Map<String, List<Map<String, String>>> weeklyStartEndTimes = new HashMap<>();
 
             for (AttendanceRecord attendanceRecord : attendanceRecords) {
+                if (attendanceRecord.getCheckInTime() == null || attendanceRecord.getCheckOutTime() == null) {
+                    continue;
+                }
+
                 String week = getWeek(attendanceRecord.getDate());
                 int weekOfMonth = getWeekOfMonth(attendanceRecord.getDate());
                 String weekKey = week + ": " + weekOfMonth;

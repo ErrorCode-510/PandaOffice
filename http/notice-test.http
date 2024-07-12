@@ -1,40 +1,41 @@
 ### GET 요청 확인
 GET http://localhost:8001/notice/notices
 
+### 게시글 상세 조회
+GET http://localhost:8001/notice/notices/1
+
+### 카테고리별 공지목록 조회(사이드바)
+GET http://localhost:8001/notice/category/group/accounting
+
 ### POST 요청 확인
 POST http://localhost:8001/notice/regist
-Access-Token: Bearer eyJkYXRlIjoxNzE5Mzk2NzEzMjE3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjM2MDAwMTcxOTM5NjcxM30.8bEejRLGbNxot9t8TUbEqcB6VjOrblwZobnA4je-WKcdgVrhdQJRGxHf8AibJG3WmHTOPtFl-Ijb_iwFR-9fwA
+Access-Token: Bearer eyJkYXRlIjoxNzIwNTg2MDc2MjE2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDU4NjA3Nn0.dYlJKpeF9YFcLVE6lw5ec42Gb2c1L8hQg9nXSJQVK0Xrp9zuWf_96TMwDVeLR3AjZC_cHnXZV6bmHExADtA1wA
 Content-Type:application/json
 
 {
-  "title": "전체회식안내",
+  "title": "그룹회식안내",
   "content": "장소 : 하남돼지집 본점\n시간 : 금일 오후5시",
-  "category": "전체공지",
-  "subCategory": null,
-  "postedDate": "2024-06-26",
+  "category": "group",
+  "subCategory": "sales",
   "viewCount": 0,
   "status": "Y",
-  "employeeId": {
-    "employeeId": 201511004
-  }
+  "employeeId": 201211001
 }
 
 ### PUT 요청 확인
-PUT http://localhost:8001/notice/notices/7
+PUT http://localhost:8001/notice/notices/8
 Access-Token: Bearer eyJkYXRlIjoxNzE5MzY2MTQ0ODcwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDE1MTUwMDMiLCJleHAiOjM2MDAwMTcxOTM2NjE0NH0.78Zi-K-Pn8vUQksH4xXiEL9Xn6O_5MhLpcm_FH7XmHJK4WxsJy45I1LAJjv0mF-H_dcFxZ4oXf--S3WBK6SQ0A
 Content-Type:application/json
 
 {
   "title": "그룹회식안내",
   "content": "장소 : 하남돼지집 본점\n시간 : 금일 오후7시",
-  "category": "전체공지",
+  "category": "main",
   "subCategory": null,
   "postedDate": "2021-06-26",
   "viewCount": 0,
   "status": "Y",
-  "employeeId": {
-    "employeeId": 201511001
-  }
+  "employeeId": 201511001
 }
 
 ### DELETE 요청 확인
