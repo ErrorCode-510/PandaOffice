@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,9 @@ public class AllLeaveRecordsResponse {
         AllLeaveRecordsResponse response = new AllLeaveRecordsResponse();
 
         // 연차 부여 기록을 이름별로 그룹화
-        Map<String, List<AnnualLeaveGrantRecord>> grantRecordMap = grantRecordList.stream()
+        Map<String, List<AnnualLeaveGrantRecord>> grantRecordMap = grantRecordList == null
+                ? Collections.emptyMap()
+                : grantRecordList.stream()
                 .collect(Collectors.groupingBy(record -> record.getEmployee().getName()));
 
         // 연차 소진 기록을 이름별로 그룹화하고 AllLeaveRecord 객체로 변환하여 설정
@@ -97,6 +100,12 @@ public class AllLeaveRecordsResponse {
         private double rewardUsed;
         // 소진 - 대체
         private double replaceUsed;
+
+        /* 1. 소진 연차 상세 정보 */
+        private List<UsedLeaveDetail> usedLeaveDetails;
+
+        /* 2. 부여 연차 상세 정보 */
+        private List<GrantedLeaveDetail> grantedLeaveDetails;
 
         public static AllLeaveRecord of(List<AnnualLeaveUsedRecord> usedRecords,
                                         List<AnnualLeaveGrantRecord> grantRecords) {
@@ -176,7 +185,52 @@ public class AllLeaveRecordsResponse {
             response.totalUsedLeave = totalUsed;
             response.remainingLeave = remainingLeave;
 
+            response.usedLeaveDetails = usedRecords.stream()
+                    .map(UsedLeaveDetail::of)
+                    .collect(Collectors.toList());
+
+            response.grantedLeaveDetails = grantRecords == null ? Collections.emptyList() : grantRecords.stream()
+                    .map(GrantedLeaveDetail::of)
+                    .collect(Collectors.toList());
+
             return response;
+        }
+
+        @Getter
+        @RequiredArgsConstructor
+        public static class UsedLeaveDetail {
+            private final String usedType;
+            private final LocalDate usedStartDate;
+            private final LocalDate usedEndDate;
+            private final double usedAmount;
+            private final String leaveSession;
+
+            public static UsedLeaveDetail of(AnnualLeaveUsedRecord usedRecord) {
+                return new UsedLeaveDetail(
+                        usedRecord.getAnnualLeaveGrantRecord().getAnnualLeaveCategory().getName(),
+                        usedRecord.getUsedStartDate(),
+                        usedRecord.getUsedEndDate(),
+                        usedRecord.getUsedAmount(),
+                        usedRecord.getLeaveSession()
+                );
+            }
+        }
+
+        @Getter
+        @RequiredArgsConstructor
+        public static class GrantedLeaveDetail {
+            private final double amount;
+            private final LocalDate date;
+            private final String grantCategory;
+
+            public static GrantedLeaveDetail of(AnnualLeaveGrantRecord grantRecord) {
+
+                return new GrantedLeaveDetail(
+                        grantRecord.getAmount(),
+                        grantRecord.getDate(),
+                        grantRecord.getAnnualLeaveCategory().getName()
+                );
+            }
         }
     }
 }
