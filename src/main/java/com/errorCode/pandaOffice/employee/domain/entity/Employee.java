@@ -28,6 +28,11 @@ public class Employee {
     @JoinColumn(name="department_id")
     private Department department;
 
+    /* 계좌정보 추가 */
+    @OneToOne
+    @JoinColumn(name="account_id")
+    private Account account;
+
     @ManyToOne
     @JoinColumn(name="job_id")
     private Job job;
