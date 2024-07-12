@@ -8,7 +8,7 @@ INSERT INTO place (NAME, POSITION) VALUES
 INSERT INTO applicant (name, birth_date, gender, phone, address, email, interview_schedule_id) VALUES
     ('홍길동', '1990-01-01', '남', '010-1234-0001', '서울', 'hong1@gmail.com', null),
     ('김철수', '1982-02-02', '남', '010-1234-0002', '경기', 'kimcs2@naver.com', null),
-    ('이영희', '1985-03-03', '여', '010-1234-0003', '인천', 'leeyh3@gmail.com', null),
+    ('이영희', '1985-03-03', '여', '010-1234-0003', '인천', 'lee      yh3@gmail.com', null),
     ('박민수', '1993-04-04', '남', '010-1234-0004', '대전', 'parkms4@naver.com', null),
     ('최수정', '1994-05-05', '여', '010-1234-0005', '세종', 'choisj5@gmail.com', null),
     ('장미희', '1980-06-06', '여', '010-1234-0006', '충남', 'jangmh6@gmail.com', null),

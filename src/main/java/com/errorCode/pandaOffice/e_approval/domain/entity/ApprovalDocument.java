@@ -2,7 +2,7 @@ package com.errorCode.pandaOffice.e_approval.domain.entity;
 
 import com.errorCode.pandaOffice.e_approval.domain.type.ApprovalStatus;
 import com.errorCode.pandaOffice.e_approval.domain.type.converter.ApprovalStatusConverter;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.CreateApprovalDocumentRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.request.CreateApprovalDocumentRequest;
 import com.errorCode.pandaOffice.employee.domain.entity.Department;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import jakarta.persistence.*;
@@ -31,13 +31,12 @@ public class ApprovalDocument {
     @JoinColumn(nullable = false, name = "document_template_id")
     private DocumentTemplate documentTemplate;
     @ManyToOne
-//    @JoinColumn(nullable = false, name="draft_employee_id")
     @JoinColumn(nullable = false, name="draft_employee_id")
     /* 기안자 */
     private Employee draftEmployee;
     @Column(nullable = false)
     /* 기안일 */
-    private LocalDate approvalDate;
+    private LocalDate draftDate;
     /* 최근 결재일 */
     private LocalDate lastApprovalDate;
     /* 기안 당시 부서 */
@@ -64,7 +63,7 @@ public class ApprovalDocument {
         approvalDocument.title = documentRequest.getTitle();
         approvalDocument.documentTemplate = documentTemplate;
         approvalDocument.draftEmployee = draftEmployee;
-        approvalDocument.approvalDate = LocalDate.now();
+        approvalDocument.draftDate = LocalDate.now();
         approvalDocument.department = draftEmployee.getDepartment();
         approvalDocument.document = documentRequest.getDocument();
         approvalDocument.attachments = documentAttachedFileList;
@@ -72,7 +71,7 @@ public class ApprovalDocument {
         return approvalDocument;
     }
 
-    public void processApproval(ApprovalStatus status) {
-        this.status = status;
+    public void stateHandler(ApprovalStatus approvalStatus) {
+        this.status = approvalStatus;
     }
 }

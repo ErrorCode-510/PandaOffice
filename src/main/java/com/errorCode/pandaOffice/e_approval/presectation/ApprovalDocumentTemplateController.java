@@ -35,6 +35,7 @@ public class ApprovalDocumentTemplateController {
      */
     @GetMapping("approval-document-template-folders")
     public ResponseEntity<List<ApprovalDocumentFolderResponse>> getAllApprovalDocumentTemplateFolders() {
+        System.out.println(123);
         List<ApprovalDocumentFolderResponse> response = approvalDocumentTemplateService.getAllApprovalDocumentTemplateFolder();
         return ResponseEntity.ok(response);
     }
@@ -77,13 +78,12 @@ public class ApprovalDocumentTemplateController {
 
     @GetMapping("approval-document-template/{templateId}")
     public ResponseEntity<ApprovalDocumentTemplateResponse> getApprovalDocumentTemplate(@PathVariable int templateId){
-        /* 결재 템플릿에 대한 모든 정보 담기
-        * DB 에 저장된 사원 명시 or 직급, 부서 명시를 판단하여 사원을 순서대로 나열해놓은 AutoApprovalLine 리스트가 있음 */
         ApprovalDocumentTemplateResponse response = approvalDocumentTemplateService.getApprovalDocumentTemplate(templateId);
         return ResponseEntity.ok(response);
     }
     @PostMapping("approval-document-template")
     public ResponseEntity<Void> createApprovalDocumentTemplate(@RequestBody final CreateApprovalDocumentTemplateRequest request){
+        System.out.println(request);
         final int templateId = approvalDocumentTemplateService.createNewApprovalDocumentTemplate(request);
         return ResponseEntity.created(URI.create("approval-document-template/" + templateId)).build();
     }

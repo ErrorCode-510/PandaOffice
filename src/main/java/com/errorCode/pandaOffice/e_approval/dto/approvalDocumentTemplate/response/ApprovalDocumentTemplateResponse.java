@@ -1,109 +1,98 @@
 package com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response;
 
 import com.errorCode.pandaOffice.e_approval.domain.entity.DocumentTemplate;
+import com.errorCode.pandaOffice.e_approval.dto.DepartmentResponse;
+import com.errorCode.pandaOffice.e_approval.dto.EmployeeResponse;
+import com.errorCode.pandaOffice.e_approval.dto.JobResponse;
 import com.errorCode.pandaOffice.employee.domain.entity.Department;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.employee.domain.entity.Job;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @ToString
 @Getter
 @Builder
 public class ApprovalDocumentTemplateResponse {
-
     /* 템플릿 ID */
     private int id;
-    /* 템플릿 이름 */
+    /* 템플릿 별칭 */
+    private String name;
+    /* 기안자 */
+    private EmployeeResponse draftEmployee;
+    /* 템플릿 타이틀 */
     private String title;
     /* 템플릿 설명 */
     private String description;
-    /* 기안자 정보 */
-    private EmployeeResponse draftEmployee;
+    /* 최종 수정자 */
+    private EmployeeResponse lastEditor;
+    /* 최종 수정일 */
+    private LocalDate lastEditDate;
+    /* 수정 내용 */
+    private String editComment;
     /* 문서 내용 */
     private String document;
     /* 사용 상태 */
     private boolean status;
-    /* 생성된 결재선의 리스트 */
-    private List<AutoApprovalLine> autoApprovalLine;
+    /* 자동 결재선 */
+    private List<AutoApprovalLineResponse> autoApprovalLine;
+    /* 결재선 설정을 위한 사원 리스트 */
+    private List<EmployeeResponse> employeeList;
+    /* 결재선 설정을 위한 직급 리스트 */
+    private List<JobResponse> jobList;
+    /* 결재선 설정을 위한 부서 리스트 */
+    private List<DepartmentResponse> departmentList;
 
-
-    public static ApprovalDocumentTemplateResponse of(Employee draftEmployee, DocumentTemplate template, Map<Integer, Employee> approvalLineMap) {
+    public static ApprovalDocumentTemplateResponse of(DocumentTemplate entity,
+                                                      Employee draftEmployee,
+                                                      List<Employee> employeeList,
+                                                      List<Department> departmentList,
+                                                      List<Job> jobList) {
         return ApprovalDocumentTemplateResponse.builder()
-                .id(template.getId())
-                .title(template.getTitle())
-                .description(template.getDescription())
-                .document(template.getDocument())
-                .status(template.isStatus())
-                .draftEmployee(EmployeeResponse.builder()
-                        .employeeId(draftEmployee.getEmployeeId())
-                        .name(draftEmployee.getName())
-                        .job(EmployeeResponse.JobResponse.builder()
-                                .id(draftEmployee.getJob().getId())
-                                .title(draftEmployee.getJob().getTitle())
+                .id(entity.getId())
+                .name(entity.getName())
+                .draftEmployee(EmployeeResponse.of(draftEmployee))
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .lastEditDate(entity.getLastEditDate())
+                .lastEditor(EmployeeResponse.of(entity.getLastEditor()))
+                .editComment(entity.getLastEditComment())
+                .document(entity.getDocument())
+                .status(entity.isStatus())
+                .autoApprovalLine(entity
+                        .getAutoApprovalLines()
+                        .stream()
+                        .map(line->AutoApprovalLineResponse.builder()
+                                .order(line.getOrder())
+                                .employeeId(line.getEmployeeId())
+                                .jobId(line.getJobId())
+                                .departmentId(line.getDepartmentId())
                                 .build())
-                        .department(EmployeeResponse.DepartmentResponse.builder()
-                                .id(draftEmployee.getDepartment().getId())
-                                .name(draftEmployee.getDepartment().getName())
+                        .collect(Collectors.toList())
+                )
+                .employeeList(employeeList
+                        .stream()
+                        .map(emp->EmployeeResponse.of(emp))
+                        .toList())
+                .departmentList(departmentList
+                        .stream()
+                        .map(dept->DepartmentResponse.builder()
+                                .id(dept.getId())
+                                .name(dept.getName())
                                 .build())
-                        .build())
-                .autoApprovalLine(approvalLineMap.entrySet().stream().map(lineMap -> AutoApprovalLine.of(lineMap)).toList())
+                        .toList())
+                .jobList(jobList
+                        .stream()
+                        .map(job -> JobResponse.builder()
+                                .id(job.getId())
+                                .title(job.getTitle())
+                                .build())
+                        .toList())
                 .build();
-    }
-
-    @ToString
-    @Getter
-    @Builder
-    public static class AutoApprovalLine {
-        /* 사번 */
-        private int employeeId;
-        /* 이름 */
-        private String employeeName;
-        /* 부서명 */
-        private String departmentName;
-        /* 직급명 */
-        private String jobTitle;
-        /* 순서 */
-        private int order;
-
-
-        public static AutoApprovalLine of(Map.Entry<Integer, Employee> lineMap) {
-            return AutoApprovalLine.builder()
-                    .employeeId(lineMap.getValue().getEmployeeId())
-                    .employeeName(lineMap.getValue().getName())
-                    .departmentName(lineMap.getValue().getDepartment().getName())
-                    .jobTitle(lineMap.getValue().getJob().getTitle())
-                    .order(lineMap.getKey())
-                    .build();
-        }
-    }
-
-    @ToString
-    @Getter
-    @Builder
-    public static class EmployeeResponse {
-        private int employeeId;
-        private String name;
-        private JobResponse job;
-        private DepartmentResponse department;
-
-        @ToString
-        @Getter
-        @Builder
-        private static class JobResponse {
-            private int id;
-            private String title;
-        }
-
-        @ToString
-        @Getter
-        @Builder
-        private static class DepartmentResponse {
-            private int id;
-            private String name;
-        }
     }
 }

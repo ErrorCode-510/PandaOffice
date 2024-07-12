@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ApprovalStatus {
-    APPROVE(0, "진행중"),
-    IN_PROGRESS(1, "승인"),
+    IN_PROGRESS(0, "진행중"),
+    APPROVE(1, "승인"),
     DENY(2, "반려");
     private final int value;
     private final String description;
@@ -27,5 +27,14 @@ public enum ApprovalStatus {
         }
         /* 값이 return 되지 않을 경우 익셉션 발생 */
         throw new IllegalArgumentException("찾을 수 없는 값: " + value);
+    }
+    public static ApprovalStatus fromDescription(String  description) {
+        for (ApprovalStatus status : ApprovalStatus.values()) {
+            if (status.getDescription() == description) {
+                return status;
+            }
+        }
+        /* 값이 return 되지 않을 경우 익셉션 발생 */
+        throw new IllegalArgumentException("찾을 수 없는 값: " + description);
     }
 }

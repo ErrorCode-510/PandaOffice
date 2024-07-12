@@ -1,5 +1,5 @@
 use
-    officeerp;
+officeerp;
 
 -- department 테이블에 더미 데이터 삽입
 INSERT INTO `department` (`id`, `name`)
@@ -126,11 +126,13 @@ VALUES (501, '국민연금', 4.5),
        (502, '건강보험', 3.545),
        (503, '고용보험', 12.95),
        (504, '장기요양보험', 0.9);
-
+INSERT INTO approval_document_template_folder (id, name, ref_folder_id) values (1, '폴더', null);
 INSERT INTO department_box(department_id, `order`, `name`, last_editor_id, last_edit_date)
 values (11, 1, '부서함', 202311018, '2024-05-06');
-INSERT INTO approval_document_template(id, title, description, document, `status`, last_editor_id, folder_id, last_edit_date)
-VALUES (1, '템플릿 1', "템플릿 설명", '양식등록<div><table style="border: 1px solid black; border-collapse: collapse;"><tbody><tr><td style="border: 1px solid black; padding: 5px;">내용</td></tr></tbody></table>ㄴㅇㄹ</div>', 1, 202311018, 1, '2024-05-06');
+INSERT INTO approval_document_template(id, name, title, description, document, `status`, last_editor_id, last_edit_date, last_edit_comment, folder_id)
+VALUES (1, '첫 템플릿', '템플릿 타이틀', "템플릿 설명",
+        '양식등록<div><table style="border: 1px solid black; border-collapse: collapse;"><tbody><tr><td style="border: 1px solid black; padding: 5px;">내용</td></tr></tbody></table>ㄴㅇㄹ</div>',
+        true, 202311018, '2024-05-06', '수정사항 없음', 1);
 INSERT INTO approval_document (id, document_template_id, title, draft_employee_id, approval_date, last_approval_date,
                                department_id, document, `status`)
 VALUES (1, 1, 'Document 1', 202215017, '2023-01-01', '2023-01-05', 12, 'document1.pdf', 1), -- 승인

@@ -5,7 +5,7 @@ GET http://localhost:8001/approval-document?pageSize=10
 Content-Type: application/json
 
 ### get 요청 확인
-GET http://localhost:8001/approval-document-template/3
+GET http://localhost:8001/approval-document/8
 Access-Token: Bearer eyJkYXRlIjoxNzIwMzQ2MzU1NDQ4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM1MTIifQ.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImVtcGxveWVlSWQiOiIyMDEyMTEwMDEiLCJleHAiOjM2MDAwMTcyMDM0NjM1NX0.IS5QP8BkB_NDglz2jYqoIKTlHkYckjvB1_7Nd5_F5hon4oGzf5APKNoXPVRa_UVe8r6hrY7cxjP4Fsr2SzF7nQ
 
 ### 결재 서류 추가 확인

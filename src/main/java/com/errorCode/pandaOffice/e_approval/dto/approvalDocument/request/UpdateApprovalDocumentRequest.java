@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.e_approval.dto.approvalDocument;
+package com.errorCode.pandaOffice.e_approval.dto.approvalDocument.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class UpdateApprovalDocumentRequest {
     @NotBlank
     private final int documentId;
-    private final int approvalLineId;
+    private final int order;
     @Min(value = 2)
     @Max(value = 8)
     private final int type;

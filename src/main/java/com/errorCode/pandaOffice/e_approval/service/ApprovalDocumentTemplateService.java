@@ -36,45 +36,15 @@
 
 
         public ApprovalDocumentTemplateResponse getApprovalDocumentTemplate(int templateId) {
-            /* 결재 양식 가져오기 */
-            DocumentTemplate template = documentTemplateRepository.findById(templateId)
+            final Employee draftEmployee = employeeRepository.findById(TokenUtils.getEmployeeId())
                     .orElseThrow();
-            /* 현재 로그인한 사원 */
-            Employee draftEmployee = employeeRepository.findById(TokenUtils.getEmployeeId())
+            final DocumentTemplate entity = documentTemplateRepository.findById(templateId)
                     .orElseThrow();
-            /* 결재 양식 내 결재선 엔티티의 정보를 참고하여 결재선 + 사원 map 만들기 */
-            Map<Integer, Employee> approvalLineMap = new HashMap<>();
-            if(template.getAutoApprovalLines().size() != 0){
-                approvalLineMap = template.getAutoApprovalLines().stream()
-                        .collect(Collectors.toMap(
-                                /* key = 순서 */
-                                AutoApprovalLine::getOrder,
-                                line->{
-                                    if(line.getEmployeeId() != null){
-                                        /* EmployeeId 가 null 이 아닐경우 사번에 맞는 사원 할당 */
-                                        return employeeRepository.findById(line.getEmployeeId())
-                                                .orElseThrow();
-                                    } else if(line.getDepartmentId() == 0) {
-                                        /* 부서코드 0일 경우 로그인 직원의 부서에서 탐색 */
-                                        return employeeRepository.findFirstByDepartment_IdAndJob_IdOrderByHireDateDesc(
-                                                        draftEmployee.getDepartment().getId(),
-                                                        line.getJobId())
-                                                .orElseThrow();
-                                    } else if(line.getDepartmentId() != null && line.getJobId() != null){
-                                        return employeeRepository.findFirstByDepartment_IdAndJob_IdOrderByHireDateDesc(
-                                                line.getDepartmentId(),
-                                                line.getJobId())
-                                                .orElseThrow();
-                                    } else {
-                                        return employeeRepository.findFirstByJob_Title("사장");
-                                    }
-                                }
-                        ));
-            } else {
-                approvalLineMap = null;
-            }
-            /* 결재양식 entity 와 Map<Order, Employee> 형태의 map 을 전달하여 response 생성 및 반환 */
-            return ApprovalDocumentTemplateResponse.of(draftEmployee, template, approvalLineMap);
+            final List<Employee> employeeList = employeeRepository.findAll();
+            final List<Department> departmentList = departmentRepository.findAll();
+            final List<Job> jobList = jobRepository.findAll();
+            final ApprovalDocumentTemplateResponse response = ApprovalDocumentTemplateResponse.of(entity, draftEmployee, employeeList, departmentList, jobList);
+            return response;
         }
 
         /* ==================================================================================== */
