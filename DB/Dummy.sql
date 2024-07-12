@@ -124,8 +124,7 @@ VALUES
      'chulsu.lee@example.com', NULL, '재직', 57000000);
 
 /* 사원의 은행 정보 */
-INSERT INTO `account`
-    (employee_id, bank, account_number)
+INSERT INTO `account`(employee_id, bank, account_number)
 VALUES (201211001, '농합은행', '1234567890'),
        (201212002, '신항은행', '1234567891'),
        (201313003, '한하은행', '1234567892'),
