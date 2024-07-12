@@ -1,10 +1,6 @@
 package com.errorCode.pandaOffice.recruitment.dto.response;
 
-import com.errorCode.pandaOffice.common.paging.PagingResponse;
-import com.errorCode.pandaOffice.employee.domain.entity.Employee;
-import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
 import com.errorCode.pandaOffice.recruitment.domain.entity.InterviewSchedule;
-import com.errorCode.pandaOffice.recruitment.domain.entity.Place;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,12 +40,6 @@ public class InterviewScheduleResponse {
     /* 면접관들 */
     private final ScheduleEmployeeResponse employee;
 
-    /* 면접관들 2 */
-    private final ScheduleEmployeeResponse employee2;
-
-    /* 면접관들 3 */
-    private final ScheduleEmployeeResponse employee3;
-
     /* 면접자들 */
     private final List<ApplicantResponse> applicantList;
 
@@ -68,14 +58,6 @@ public class InterviewScheduleResponse {
                         .build())
                 .employee(ScheduleEmployeeResponse.builder()
                         .id(interviewSchedule.getEmployee().getEmployeeId())
-                        .name(interviewSchedule.getEmployee().getName())
-                        .build())
-                .employee2(ScheduleEmployeeResponse.builder()
-                        .id(interviewSchedule.getEmployee2().getEmployeeId())
-                        .name(interviewSchedule.getEmployee().getName())
-                        .build())
-                .employee3(ScheduleEmployeeResponse.builder()
-                        .id(interviewSchedule.getEmployee3().getEmployeeId())
                         .name(interviewSchedule.getEmployee().getName())
                         .build())
                 .applicantList(interviewSchedule.getApplicantsList().stream()

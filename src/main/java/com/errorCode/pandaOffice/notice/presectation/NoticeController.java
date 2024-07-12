@@ -35,14 +35,14 @@ public class NoticeController {
         return ResponseEntity.ok(pagingResponse);
     }
 
-    // 카테고리 별 공지사항 조회 (페이징 처리)
-    @GetMapping("/category/{category}/{subCategory}")
-    public ResponseEntity<PagingResponse> getNoticeByCategory(
-            @PathVariable String category,
-            @PathVariable String subCategory,
+    // 카테고리 서브카테고리 별 공지사항 조회 (페이징 처리)(사이드바)
+    @GetMapping("/category/filter")
+    public ResponseEntity<PagingResponse> getNoticesByCategoryAndSubCategory(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String subCategory,
             @RequestParam(defaultValue = "1") final Integer page
     ) {
-        final Page<NoticeResponseDTO> notices = noticeService.getNoticesByCategory(category, subCategory, page);
+        final Page<NoticeResponseDTO> notices = noticeService.getNoticesByCategoryAndSubCategory(category, subCategory, page);
         final PagingButtonInfo pagingButtonInfo = Pagination.getPagingButtonInfo(notices);
         final PagingResponse pagingResponse = PagingResponse.of(notices.getContent(), pagingButtonInfo);
 
@@ -69,25 +69,25 @@ public class NoticeController {
     // 공지사항 등록
     @PostMapping("/regist")
     public ResponseEntity<Void> createNotice(
-            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
-    ) {
+            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO) {
+
         final Integer noticeId = noticeService.createNotice(noticeRequestDTO);
         return ResponseEntity.created(URI.create("/notice/regist/" + noticeId)).build();
     }
 
     // 공지사항 수정
-    @PutMapping("/notices/{noticeId}")
-    public ResponseEntity<Void> modifyNotice(
-            @PathVariable final int noticeId,
-            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
-    ) {
-        try {
-            noticeService.modifyNotice(noticeId, noticeRequestDTO);
-            return ResponseEntity.noContent().build();  // 수정 성공 시 204 No Content 응답
-        } catch (NotFoundException e) {
-            return ResponseEntity.notFound().build();  // 공지사항을 찾을 수 없을 때 404 Not Found 응답
-        }
-    }
+//    @PutMapping("/notices/{noticeId}")
+//    public ResponseEntity<Void> modifyNotice(
+//            @PathVariable final int noticeId,
+//            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
+//    ) {
+//        try {
+//            noticeService.modifyNotice(noticeId, noticeRequestDTO);
+//            return ResponseEntity.noContent().build();  // 수정 성공 시 204 No Content 응답
+//        } catch (NotFoundException e) {
+//            return ResponseEntity.notFound().build();  // 공지사항을 찾을 수 없을 때 404 Not Found 응답
+//        }
+//    }
 
     // 공지사항 삭제
     @DeleteMapping("/notices/{noticeId}")

@@ -1,13 +1,15 @@
 use
-    officeerp;
+officeerp;
 
 -- department 테이블에 더미 데이터 삽입
 INSERT INTO `department` (`id`, `name`)
-VALUES (11, '인사'),
+VALUES (1, 'CEO'),
+       (11, '인사'),
        (12, '회계'),
        (13, '영업'),
        (14, '기획'),
        (15, '마케팅');
+
 -- job 테이블에 더미 데이터 삽입
 INSERT INTO `job` (`id`, `title`, `allowance`)
 VALUES
@@ -18,11 +20,23 @@ VALUES
     (25, '차장', 300000),
     (20, '부장', 400000),
     (11, '사장', 0);
+
+-- 새로운 사장 데이터를 삽입
+INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
+                        `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
+                        `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
+                        `employment_status`, `annual_salary`)
+VALUES
+    (1, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '권은지', 'Kwon Eun Ji', '權恩智', 1,
+     11, '010-1234-5678', '820101-1234567', '여', '2024-07-10', NULL, '서울특별시 종로구', '대한민국', '1982-01-01',
+     'eodlf333@gmail.com', NULL, '재직', 100000000);
+
 /* 사원 정보 - 임의 */
 INSERT INTO `employee` (`employee_id`, `password`, `name`, `english_name`, `hanja_name`, `department_id`,
                         `job_id`, `phone`, `personal_id`, `gender`, `hire_date`, `end_date`,
                         `address`, `nationality`, `birth_date`, `email`, `self_introduction`,
                         `employment_status`, `annual_salary`)
+
 VALUES
     -- Employees who joined in 2012
     (201211001, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김민수', 'Kim Min Su', '金民洙', 11,
@@ -110,6 +124,7 @@ VALUES
      50, '010-3550-1003', '20040303-3251567', '남', '2024-03-15', NULL, '서울특별시 강북구', '대한민국', '2004-03-03',
      'chulsu.lee@example.com', NULL, '재직', 57000000);
 
+
 /* 지급항목 - 고정 */
 INSERT INTO `earning_category` (`id`, `name`, `is_tax`)
 VALUES (101, '기본급여', 'Y'),
@@ -144,7 +159,6 @@ VALUES (1, 201911013, '2024-01-01', 1, 1, 2),
        (1, 202113015, null, 3, 3, 0);
 INSERT INTO department_document (document_template_id, department_box_id)
 VALUES (1, 1);
-
 
 INSERT INTO annual_leave_category (id, name, type)
 VALUES
@@ -482,4 +496,3 @@ VALUES
     (48, '휴일', '2024-01-14', '09:00:00', '13:00:00', NULL, 202312019),
     (49, '지각', '2024-02-16', '09:25:00', '09:25:00', NULL, 201511007),
     (50, '연장', '2024-06-30', '18:00:00', '21:00:00', NULL, 201211001);
-

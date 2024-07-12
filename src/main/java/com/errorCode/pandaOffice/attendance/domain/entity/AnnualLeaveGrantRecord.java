@@ -1,6 +1,10 @@
 package com.errorCode.pandaOffice.attendance.domain.entity;
 
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
+import com.errorCode.pandaOffice.payroll.domain.entity.DeductionRecord;
+import com.errorCode.pandaOffice.payroll.domain.entity.EarningRecord;
+import com.errorCode.pandaOffice.payroll.domain.entity.PayrollRecord;
+import com.errorCode.pandaOffice.payroll.dto.request.PayrollRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -8,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table
@@ -42,5 +47,10 @@ public class AnnualLeaveGrantRecord {
     @JoinColumn(name = "employee_id")
     /* 사번 */
     private Employee employee;
+
+
+
+    
+
 
 }

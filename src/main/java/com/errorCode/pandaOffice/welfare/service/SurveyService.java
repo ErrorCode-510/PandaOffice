@@ -14,10 +14,7 @@ import com.errorCode.pandaOffice.welfare.domain.repository.SurveyRepository;
 import com.errorCode.pandaOffice.welfare.dto.request.CreateSurveyRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.ReplyRecordRequest;
 import com.errorCode.pandaOffice.welfare.dto.request.UpdateSurveyQuestionRequest;
-import com.errorCode.pandaOffice.welfare.dto.response.ReplyRecordDTO;
-import com.errorCode.pandaOffice.welfare.dto.response.SurveyDetailsResponse;
-import com.errorCode.pandaOffice.welfare.dto.response.SurveyQuestionDTO;
-import com.errorCode.pandaOffice.welfare.dto.response.SurveyResponse;
+import com.errorCode.pandaOffice.welfare.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -41,7 +39,22 @@ public class SurveyService {
     private final ReplyRecordRepository replyRecordRepository;
     private  final EmployeeRepository employeeRepository;
 
+//    모든 설문 카테고리를 가져오는 메서드
+    public List<SurveyCategoryDTO> getAllCategories() {
+        List<SurveyCategory> categories = categoryRepository.findAll();
+        return categories.stream()
+            .map(category -> new SurveyCategoryDTO(category.getId(), category.getCategoryName()))
+            .collect(Collectors.toList());
+}
+
+// 설문 생성
     public int createSurvey(CreateSurveyRequest request) {
+        log.debug("Received request(외않된데): {}", request);
+
+        if (request.getQuestion() == null) {
+            throw new IllegalArgumentException("Questions must not be null(아니 왜??)");
+        }
+
         /* DTO(request)를 바탕으로 엔티티 작성 */
         List<SurveyQuestion> question = request.getQuestion().stream().map(
                 que -> SurveyQuestion.of(que)
@@ -59,8 +72,6 @@ public class SurveyService {
         return survey.getId();
     }
 
-
-
     //설문 조회
     public List<SurveyResponse> getAllSurvey() {
         List<Survey> surveys = surveyRepository.findAll();
@@ -69,23 +80,34 @@ public class SurveyService {
         ).toList();
     }
 
-//설문조회(질문, 문항 포함 차트 뿌려주기용)
-    public SurveyDetailsResponse getSurveyDetails(int surveyId) {
-        Survey survey = surveyRepository.findById(surveyId)
-                .orElseThrow(() -> new RuntimeException("Survey not found"));
 
-        List<SurveyQuestionDTO> questionDTOs = survey.getQuestion().stream()
-                .map(SurveyQuestionDTO::new)
-                .collect(Collectors.toList());
+//대시보드에서 사용
+public SurveyResponse getActiveSurvey() {
+    LocalDate today = LocalDate.now();
+    Survey survey = surveyRepository.findFirstByStartDateLessThanEqualAndEndDateGreaterThanEqual(today, today)
+            .orElseThrow(() -> new RuntimeException("No active survey found"));
+    return SurveyResponse.of(survey);
+}
 
-        List<ReplyRecordDTO> replyDTOs = survey.getReplyRecords().stream()
-                .map(ReplyRecordDTO::new)
-                .collect(Collectors.toList());
 
-        System.out.println("쳌: " + survey +"\n"+questionDTOs +"\n"+replyDTOs );
+//설문조회(질문, 문항 포함 차트 뿌려주기용, 설문 날짜 포함)
+public SurveyDetailsResponse getSurveyDetails(int surveyId) {
+    LocalDate today = LocalDate.now();
+    Survey survey = surveyRepository.findByIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(surveyId, today, today)
+            .orElseThrow(() -> new RuntimeException("Survey not found or not active"));
 
-        return new SurveyDetailsResponse(survey, questionDTOs, replyDTOs);
-    }
+    List<SurveyQuestionDTO> questionDTOs = survey.getQuestion().stream()
+            .map(SurveyQuestionDTO::new)
+            .collect(Collectors.toList());
+
+    List<ReplyRecordDTO> replyDTOs = survey.getReplyRecords().stream()
+            .map(ReplyRecordDTO::new)
+            .collect(Collectors.toList());
+
+    System.out.println("쳌: " + survey + "\n" + questionDTOs + "\n" + replyDTOs);
+
+    return new SurveyDetailsResponse(survey, questionDTOs, replyDTOs);
+}
 
 //    응답자 수 조회
     public int getSurveyRespondentCount(int surveyId) {
@@ -117,44 +139,36 @@ public class SurveyService {
     }
 
 
-/* 날짜를 체크해서 설문 열림 닫힘 체크 */
-//해당하는 설문조회(날짜)
-    public SurveyResponse getSurveyById(int id) {
-        Survey survey = surveyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Survey not found"));
-        return SurveyResponse.of(survey);
-    }
-
-
-//    설문 상태 체크(시작날짜 & 종료날짜)
-    public boolean isSurveyActive(int surveyId) {
-        Survey survey = surveyRepository.findById(surveyId)
-                .orElseThrow(() -> new RuntimeException("Survey not found"));
-        LocalDate today = LocalDate.now();
-        return !today.isBefore(survey.getStartDate()) && !today.isAfter(survey.getEndDate());
-    }
-
-
-
 
     // 질문 문항 응답 반환
-    public void saveSurveyReply(ReplyRecordRequest replyRecordDTO) {
-        Employee employee = employeeRepository.findById(replyRecordDTO.getEmployeeId())
+    public void saveSurveyReply(ReplyRecordRequest replyRecordRequest) {
+        Employee employee = employeeRepository.findById(replyRecordRequest.getEmployeeId())
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        Survey survey = surveyRepository.findById(replyRecordDTO.getSurveyId())
+        //        questionId값 확인
+        System.out.println("Received questionId: " + replyRecordRequest.getQuestionId());
+
+        Survey survey = surveyRepository.findById(replyRecordRequest.getSurveyId())
                 .orElseThrow(() -> new RuntimeException("Survey not found"));
 
-        SurveyQuestion question = surveyQuestionRepository.findById(replyRecordDTO.getQuestionId())
+
+        //원래코드임
+        SurveyQuestion question = surveyQuestionRepository.findById(replyRecordRequest.getQuestionId())
                 .orElseThrow(() -> new RuntimeException("Question not found"));
+
+        // 중복 참여 확인
+        boolean alreadyParticipated = replyRecordRepository.findBySurveyAndEmployeeAndQuestion(survey, employee, question).isPresent();
+        if (alreadyParticipated) {
+            throw new RuntimeException("참여한 설문입니다.");
+        }
 
         Job job = employee.getJob();
 
         ReplyRecord replyRecord = replyRecordRepository.findBySurveyAndEmployeeAndQuestion(survey, employee, question)
-                .orElse(new ReplyRecord(employee, job, survey, question, replyRecordDTO.getAnswer()));
+                .orElse(new ReplyRecord(employee, job, survey, question, replyRecordRequest.getAnswer()));
 
 
-        replyRecord.updateAnswer(replyRecordDTO.getAnswer());
+        replyRecord.updateAnswer(replyRecordRequest.getAnswer());
 
         replyRecordRepository.save(replyRecord);
 

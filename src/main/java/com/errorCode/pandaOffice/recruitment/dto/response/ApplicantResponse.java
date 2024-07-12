@@ -1,7 +1,6 @@
 package com.errorCode.pandaOffice.recruitment.dto.response;
 
 import com.errorCode.pandaOffice.recruitment.domain.entity.Applicant;
-import jakarta.persistence.Column;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
