@@ -57,7 +57,7 @@ VALUES
      25, '010-6400-1001', '960102-2234562', '여', '2016-01-02', NULL, '서울특별시 종로구', '대한민국', '1996-01-02',
      'jimin.han@example.com', NULL, '재직', 43000000),
     -- Employees who joined in 2017
-    (201713010, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '김동현', 'Kim Dong Hyun', '金東炫', 13,
+    (201713010, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '201713010', 'Kim Dong Hyun', '金東炫', 13,
      40, '010-6490-1001', '970425-1234563', '남', '2017-11-07', NULL, '서울특별시 강남구', '대한민국', '1997-04-25',
      'donghyun.kim@example.com', NULL, '재직', 41000000),
     (201714011, '$2a$10$GN.2fr75YrD6Q78pbgKF9eJEbQxoUn2qA5yTwTgTw/qJQEJb1KDwC', '송지우', 'Song Ji Woo', '宋智雨', 14,
@@ -124,8 +124,8 @@ VALUES (101, '기본급여', 'Y'),
 INSERT INTO deduction_category (`id`, `name`, `deduction_rate`)
 VALUES (501, '국민연금', 4.5),
        (502, '건강보험', 3.545),
-       (503, '고용보험', 12.95),
-       (504, '장기요양보험', 0.9);
+       (503, '고용보험', 0.9),
+       (504, '장기요양보험', 12.95);
 
 INSERT INTO department_box(department_id, `order`, `name`, last_editor_id, last_edit_date)
 values (11, 1, '부서함', 202311018, '2024-05-06');
