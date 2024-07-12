@@ -14,6 +14,7 @@ public class Job {
     @Id
     @Column(name="id")
     private int id;
+
     @Column
     private String title;
 
