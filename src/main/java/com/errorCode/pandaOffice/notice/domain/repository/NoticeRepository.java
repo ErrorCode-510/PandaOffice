@@ -29,7 +29,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     @NonNull
     Page<Notice> findAllNotices(Pageable pageable);
 
-    // 카테고리와 서브카테고리로 조   회 (페이징 및 정렬) (최신순으로 조회)
+    // 카테고리와 서브카테고리로 조회 (페이징 및 정렬) (최신순으로 조회)
     @EntityGraph(attributePaths = {"employee", "employee.job"})
     @NonNull
     Page<Notice> findByCategoryAndSubCategory(@NonNull String category,@NonNull String subCategory,@NonNull Pageable pageable);

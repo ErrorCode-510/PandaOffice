@@ -24,7 +24,7 @@ public class NoticeResponseDTO {
     private final String job;  // 사원 직급
 
 
-    // Notice 객체를 NoticeResponseDTO로 변환하는 메소드
+    // Notice 객체를 NoticeResponseDTO 로 변환하는 메소드
     public static NoticeResponseDTO from(Notice notice) {
 
         return new NoticeResponseDTO(

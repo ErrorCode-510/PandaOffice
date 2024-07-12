@@ -70,7 +70,7 @@ public class Notice {
         newNotice.category = noticeRequest.getCategory();
         newNotice.subCategory = noticeRequest.getSubCategory();
         newNotice.viewCount = noticeRequest.getViewCount();
-        newNotice.status = noticeRequest.getStatus() != '\0' ? noticeRequest.getStatus() : 'Y';
+        newNotice.status = noticeRequest.getStatus();
         newNotice.employee = employeeEntity;
 
         return newNotice;

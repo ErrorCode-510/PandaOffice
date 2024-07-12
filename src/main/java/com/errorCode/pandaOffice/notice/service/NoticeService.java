@@ -6,7 +6,6 @@ import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import com.errorCode.pandaOffice.notice.domain.repository.NoticeRepository;
 import com.errorCode.pandaOffice.notice.dto.request.NoticeRequestDTO;
 import com.errorCode.pandaOffice.notice.dto.response.NoticeResponseDTO;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
+
 
 // 공지사항 서비스 클래스
 @Service
@@ -77,10 +76,13 @@ public class NoticeService {
     // 공지사항 등록 메소드
     @Transactional
     public Integer createNotice(final NoticeRequestDTO noticeRequestDTO) {
-        /* 작성자 */
-        Employee employee = employeeRepository.findById(TokenUtils.getEmployeeId())
+
+        /* 작성자 정보 가져오기 */
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow();
 
+        /* 공지사항 생성 및 저장 */
         Notice newNotice = Notice.of(noticeRequestDTO, employee);
         Notice saveNotice = noticeRepository.save(newNotice);
 
