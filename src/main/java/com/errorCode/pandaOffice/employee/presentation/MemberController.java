@@ -112,7 +112,9 @@ public class MemberController {
     @PostMapping("/newEmployee")
     public ResponseEntity<Employee> addEmployee(@RequestBody EmployeeDTO employeeDTO) {
 
-        System.out.println(employeeDTO.getLicenses());
+
+        System.out.println(employeeDTO.getEmployee().getAccount().getAccountNumber());
+
 
         Employee savedEmployee = memberService.saveEmployee(employeeDTO);
         return ResponseEntity.ok(savedEmployee);

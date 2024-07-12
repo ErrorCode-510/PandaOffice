@@ -18,8 +18,8 @@ public class Account {
     @Column(name = "No")
     private int no;
 
-    @OneToOne
-    @JoinColumn(name = "employee_id", nullable = false)
+    @OneToOne(cascade =CascadeType.ALL)
+    @JoinColumn(name = "employee_id")
     private Employee employee;          // 사번
 
     @Column(name = "bank")
@@ -27,4 +27,20 @@ public class Account {
 
     @Column(name = "account_number")
     private String accountNumber;       // 계좌번호
+
+    public Account(String accountNumber, String bank) {
+        this.accountNumber = accountNumber;
+        this.bank = bank;
+    }
+
+    public void setEmployee(Employee savedEmployee) {
+        this.employee = savedEmployee;
+    }
+
+    public Account( Employee employee, String bank, String accountNumber) {
+
+        this.employee = employee;
+        this.bank = bank;
+        this.accountNumber = accountNumber;
+    }
 }

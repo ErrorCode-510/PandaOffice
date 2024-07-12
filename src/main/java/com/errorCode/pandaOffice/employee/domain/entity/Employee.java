@@ -1,7 +1,6 @@
 package com.errorCode.pandaOffice.employee.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -29,7 +28,7 @@ public class Employee {
     private Department department;
 
     /* 계좌정보 추가 */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="account_id")
     private Account account;
 
@@ -87,7 +86,7 @@ public class Employee {
     }
 
     // New constructor with employeeId
-    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, String address, String nationality, LocalDate birthDate, String email, String employmentStatus) {
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, String address, String nationality, LocalDate birthDate, String email, String employmentStatus,Account account) {
         this.employeeId = employeeId;
         this.name = name;
         this.englishName = englishName;
@@ -103,8 +102,9 @@ public class Employee {
         this.birthDate = birthDate;
         this.email = email;
         this.employmentStatus = employmentStatus;
+        this.account = account;
     }
-    public void update(String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, String address, String nationality, LocalDate birthDate, String email, String employmentStatus) {
+    public void update(String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, String address, String nationality, LocalDate birthDate, String email, String employmentStatus, Account account) {
         this.name = name;
         this.englishName = englishName;
         this.hanjaName = hanjaName;
@@ -119,6 +119,7 @@ public class Employee {
         this.birthDate = birthDate;
         this.email = email;
         this.employmentStatus = employmentStatus;
+        this.account = account;
     }
 
     // Method to change password
@@ -130,5 +131,13 @@ public class Employee {
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void formedEmployeeId(int newEmployeeId) {
+        this.employeeId=newEmployeeId;
+    }
+
+    public void setDefaultPwd(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }
