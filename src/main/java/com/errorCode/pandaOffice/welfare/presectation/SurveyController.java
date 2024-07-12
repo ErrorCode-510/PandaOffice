@@ -2,6 +2,7 @@ package com.errorCode.pandaOffice.welfare.presectation;
 
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.welfare.domain.entity.ReplyRecord;
+import com.errorCode.pandaOffice.welfare.domain.entity.Survey;
 import com.errorCode.pandaOffice.welfare.domain.entity.SurveyCategory;
 import com.errorCode.pandaOffice.welfare.domain.entity.SurveyQuestion;
 import com.errorCode.pandaOffice.welfare.domain.repository.ReplyRecordRepository;
@@ -101,6 +102,16 @@ public class SurveyController {
     public ResponseEntity<SurveyResponse> getActiveSurvey() {
         try {
             SurveyResponse response = surveyService.getActiveSurvey();
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
+    }
+    @GetMapping("/survey/most-recent-ended")
+    public ResponseEntity<SurveyResponse> getMostRecentEndedSurvey() {
+        try {
+            Survey survey = surveyService.getMostRecentEndedSurvey();
+            SurveyResponse response = SurveyResponse.of(survey);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);

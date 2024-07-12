@@ -55,6 +55,11 @@ public class SurveyService {
             throw new IllegalArgumentException("Questions must not be null(아니 왜??)");
         }
 
+        // startDate 중복 확인
+        if (surveyRepository.existsByStartDate(request.getStartDate())) {
+            throw new IllegalArgumentException("The start date is already taken.");
+        }
+
         /* DTO(request)를 바탕으로 엔티티 작성 */
         List<SurveyQuestion> question = request.getQuestion().stream().map(
                 que -> SurveyQuestion.of(que)
@@ -89,12 +94,22 @@ public SurveyResponse getActiveSurvey() {
     return SurveyResponse.of(survey);
 }
 
+    // 가장 최근에 종료된 설문을 반환하는 메서드
+    public Survey getMostRecentEndedSurvey() {
+        LocalDate today = LocalDate.now();
+        List<Survey> endedSurveys = surveyRepository.findMostRecentEndedSurvey(today);
+        if (endedSurveys.isEmpty()) {
+            throw new RuntimeException("No ended surveys found");
+        }
+        return endedSurveys.get(0); // 가장 최근에 종료된 설문 반환
+    }
 
-//설문조회(질문, 문항 포함 차트 뿌려주기용, 설문 날짜 포함)
+//설문조회(질문, 문항 포함 차트 뿌려주기용, 설문 날짜 체크(중복체크 포함))
 public SurveyDetailsResponse getSurveyDetails(int surveyId) {
     LocalDate today = LocalDate.now();
     Survey survey = surveyRepository.findByIdAndStartDateLessThanEqualAndEndDateGreaterThanEqual(surveyId, today, today)
-            .orElseThrow(() -> new RuntimeException("Survey not found or not active"));
+            .orElseGet(() -> surveyRepository.findMostRecentEndedSurvey(today).stream().findFirst()
+                    .orElseThrow(() -> new RuntimeException("Survey not found or not active")));
 
     List<SurveyQuestionDTO> questionDTOs = survey.getQuestion().stream()
             .map(SurveyQuestionDTO::new)
@@ -104,7 +119,7 @@ public SurveyDetailsResponse getSurveyDetails(int surveyId) {
             .map(ReplyRecordDTO::new)
             .collect(Collectors.toList());
 
-    System.out.println("쳌: " + survey + "\n" + questionDTOs + "\n" + replyDTOs);
+    System.out.println("테스트: " + survey + "\n" + questionDTOs + "\n" + replyDTOs);
 
     return new SurveyDetailsResponse(survey, questionDTOs, replyDTOs);
 }
