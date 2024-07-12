@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.net.URI;
 
 
@@ -26,8 +28,7 @@ public class NoticeController {
     // 전체 공지사항 조회
     @GetMapping("/notices")
     public ResponseEntity<PagingResponse> getAllNotices(
-            @RequestParam(defaultValue = "1") final Integer page
-    ) {
+            @RequestParam(defaultValue = "1") final Integer page) {
         final Page<NoticeResponseDTO> notices = noticeService.getAllNotices(page);
         final PagingButtonInfo pagingButtonInfo = Pagination.getPagingButtonInfo(notices);
         final PagingResponse pagingResponse = PagingResponse.of(notices.getContent(), pagingButtonInfo);
@@ -68,12 +69,18 @@ public class NoticeController {
 
     // 공지사항 등록
     @PostMapping("/regist")
-    public ResponseEntity<Void> createNotice(
-            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO) {
-
+    public ResponseEntity<Void> createNotice (
+            @RequestBody @Valid final NoticeRequestDTO noticeRequestDTO
+    ) {
         final Integer noticeId = noticeService.createNotice(noticeRequestDTO);
-        return ResponseEntity.created(URI.create("/notice/regist/" + noticeId)).build();
+
+        // 카테고리 및 서브카테고리별 목록 페이지로 리다이렉트
+        String redirectUrl = "/notice/category/filter?category=" + noticeRequestDTO.getCategory() +
+                "&subCategory=" + noticeRequestDTO.getSubCategory();
+
+        return ResponseEntity.created(URI.create(redirectUrl)).build();
     }
+
 
     // 공지사항 수정
 //    @PutMapping("/notices/{noticeId}")
