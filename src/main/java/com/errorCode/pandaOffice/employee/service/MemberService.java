@@ -244,7 +244,7 @@ public class MemberService {
         );
 
         // 사원 정보 저장 (이 부분이 없어야 합니다)
-         Employee savedEmployee = memberRepository.save(existingEmployee);
+        Employee savedEmployee = memberRepository.save(existingEmployee);
 
         // 사진 정보 업데이트
         EmployeePhoto employeePhoto = employeePhotoRepository.findByEmployeeEmployeeId(existingEmployee.getEmployeeId())
@@ -292,7 +292,7 @@ public class MemberService {
         return existingEmployee; // 업데이트된 객체 반환
     }
 
-    }
+}
 
 
 
