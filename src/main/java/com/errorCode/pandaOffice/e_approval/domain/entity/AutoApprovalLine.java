@@ -1,7 +1,7 @@
 package com.errorCode.pandaOffice.e_approval.domain.entity;
 
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.CreateApprovalDocumentTemplateRequest;
-import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.UpdateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.CreateApprovalDocumentTemplateRequest;
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.UpdateApprovalDocumentTemplateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

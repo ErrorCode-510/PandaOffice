@@ -57,4 +57,8 @@ public class ApprovalLine {
     public void changeStatus(ApproveType approveType) {
         this.status = approveType;
     }
+
+    public void changeHandling(LocalDate date) {
+        this.handlingDate = date;
+    }
 }

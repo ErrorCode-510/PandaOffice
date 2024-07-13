@@ -6,7 +6,10 @@
     import com.errorCode.pandaOffice.e_approval.domain.entity.DocumentTemplateFolder;
     import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateFolderRepository;
     import com.errorCode.pandaOffice.e_approval.domain.repository.DocumentTemplateRepository;
-    import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.*;
+    import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.request.*;
+    import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response.ApprovalDocumentFolderResponse;
+    import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response.ApprovalDocumentTemplateResponse;
+    import com.errorCode.pandaOffice.e_approval.dto.approvalDocumentTemplate.response.CreateTemplateResponse;
     import com.errorCode.pandaOffice.employee.domain.entity.Department;
     import com.errorCode.pandaOffice.employee.domain.entity.Employee;
     import com.errorCode.pandaOffice.employee.domain.entity.Job;
@@ -33,35 +36,15 @@
 
 
         public ApprovalDocumentTemplateResponse getApprovalDocumentTemplate(int templateId) {
-            /* 결재 양식 가져오기 */
-            DocumentTemplate template = documentTemplateRepository.findById(templateId)
+            final Employee draftEmployee = employeeRepository.findById(TokenUtils.getEmployeeId())
                     .orElseThrow();
-            /* 결재 양식 내 결재선 엔티티의 정보를 참고하여 결재선 + 사원 map 만들기 */
-            Map<Integer, Employee> approvalLineMap = new HashMap<>();
-            if(template.getAutoApprovalLines().size() != 0){
-                approvalLineMap = template.getAutoApprovalLines().stream()
-                        .collect(Collectors.toMap(
-                                /* key = 순서 */
-                                AutoApprovalLine::getOrder,
-                                line->{
-                                    if(line.getEmployeeId() != null){
-                                        /* EmployeeId 가 null 이 아닐경우 사번에 맞는 사원 할당 */
-                                        return employeeRepository.findById(line.getEmployeeId())
-                                                .orElseThrow();
-                                    } else {
-                                        /* null 일 경우 부서와 직급 코드에 맞는 사원 할당 */
-                                        return employeeRepository.findFirstByDepartment_IdAndJob_IdOrderByHireDateDesc(
-                                                        line.getDepartmentId(),
-                                                        line.getJobId())
-                                                .orElseThrow();
-                                    }
-                                }
-                        ));
-            } else {
-                approvalLineMap = null;
-            }
-            /* 결재양식 entity 와 Map<Order, Employee> 형태의 map 을 전달하여 response 생성 및 반환 */
-            return ApprovalDocumentTemplateResponse.of(template, approvalLineMap);
+            final DocumentTemplate entity = documentTemplateRepository.findById(templateId)
+                    .orElseThrow();
+            final List<Employee> employeeList = employeeRepository.findAll();
+            final List<Department> departmentList = departmentRepository.findAll();
+            final List<Job> jobList = jobRepository.findAll();
+            final ApprovalDocumentTemplateResponse response = ApprovalDocumentTemplateResponse.of(entity, draftEmployee, employeeList, departmentList, jobList);
+            return response;
         }
 
         /* ==================================================================================== */
@@ -72,43 +55,24 @@
             /* 모든 폴더, 템플릿 불러오기 */
             List<DocumentTemplate> templateEntityList = documentTemplateRepository.findAll();
             List<DocumentTemplateFolder> templateFolderEntityList = documentTemplateFolderRepository.findAll();
-
-
-            /* 폴더 map 형태로 저장 */
-            Map<Integer, ApprovalDocumentFolderResponse> folderMap = new HashMap<>();
-            for (DocumentTemplateFolder folderEntity : templateFolderEntityList){
-                ApprovalDocumentFolderResponse folderResponse = ApprovalDocumentFolderResponse.of(folderEntity);
-                folderMap.put(folderEntity.getId(), folderResponse);
-            }
-            // 모든 문서를 해당 폴더에 추가
-            for (DocumentTemplate documentEntity : templateEntityList) {
-                ApprovalDocumentFolderResponse folder = folderMap.get(documentEntity.getFolderId());
-                if (folder != null) {
-                    folder.getDocumentList().add(ApprovalDocumentFolderResponse.DocumentTemplateResponse.of(documentEntity));
-                }
-            }
-
-            /* 계층 구조로 정렬 */
-            List<ApprovalDocumentFolderResponse> rootFolders = new ArrayList<>();
-            for (DocumentTemplateFolder folderEntity : templateFolderEntityList) {
-                ApprovalDocumentFolderResponse folder = folderMap.get(folderEntity.getId());
-                if (folderEntity.getRefFolderId() == null) {
-                    rootFolders.add(folder);
-                } else {
-                    ApprovalDocumentFolderResponse refFolder = folderMap.get(folderEntity.getRefFolderId());
-                    if (refFolder != null) {
-                        refFolder.getSubFolderList().add(folder);
-                    }
-                }
-            }
-
-            return rootFolders;
+            List<ApprovalDocumentFolderResponse> response = templateFolderEntityList
+                    .stream()
+                    .map(folderEntity->{
+                        List<DocumentTemplate> templates = templateEntityList
+                                .stream()
+                                .filter(tempEntity->tempEntity.getFolderId() == folderEntity.getId())
+                                .collect(Collectors.toList());
+                        return ApprovalDocumentFolderResponse.of(folderEntity, templates);
+                    })
+                    .collect(Collectors.toList());
+            return response;
         }
 
-        public int createNewFolder(CreateApprovalDocumentFolderRequest request) {
+        public ApprovalDocumentFolderResponse createNewFolder(CreateApprovalDocumentFolderRequest request) {
             DocumentTemplateFolder newFolder = DocumentTemplateFolder.of(request);
             documentTemplateFolderRepository.save(newFolder);
-            return newFolder.getId();
+            List<DocumentTemplate> templateList = documentTemplateRepository.findByFolderId(newFolder.getId());
+            return ApprovalDocumentFolderResponse.of(newFolder, templateList);
         }
 
         public ApprovalDocumentFolderResponse modifyFolder(int folderId, String newName) {
@@ -116,7 +80,7 @@
                     .orElseThrow();
             currenFolder.modifyName(newName);
             documentTemplateFolderRepository.save(currenFolder);
-            return ApprovalDocumentFolderResponse.of(currenFolder);
+            return null;
         }
 
         public void deleteFolder(int folderId) {
@@ -159,12 +123,16 @@
         }
 
 
-        public void updateTemplateStatus(UpdateDocumentTemplateStatusRequest requests) {
+        public ApprovalDocumentFolderResponse updateTemplateStatus(UpdateDocumentTemplateStatusRequest requests) {
             List<DocumentTemplate> templateEntityList = documentTemplateRepository.findAllById(requests.getDocumentIdList());
             Employee lastEditor = employeeRepository.findById(TokenUtils.getEmployeeId())
                     .orElseThrow();
             templateEntityList.forEach(entity -> entity.updateStatus(requests.isStatus(), lastEditor));
             documentTemplateRepository.saveAll(templateEntityList);
+            DocumentTemplateFolder folder = documentTemplateFolderRepository.findById(requests.getFolderId())
+                    .orElseThrow();
+            List<DocumentTemplate> templates = documentTemplateRepository.findByFolderId(requests.getFolderId());
+            return ApprovalDocumentFolderResponse.of(folder, templates);
         }
 
         public CreateTemplateResponse getInformationForNewTemplate() {
@@ -175,5 +143,15 @@
             List<Employee> employeeEntityList = employeeRepository.findAll();
             CreateTemplateResponse response = CreateTemplateResponse.of(draftEmployee, jobEntityList, departmentEntityList, employeeEntityList);
             return response;
+        }
+
+        public ApprovalDocumentFolderResponse updateTemplateRefFolder(UpdateDocumentTemplateRefFolderRequest request) {
+            List<DocumentTemplate> templateEntityList = documentTemplateRepository.findAllById(request.getTemplateIdList());
+            templateEntityList.stream().forEach(entity->entity.updateRefFolder(request.getAfterFolderId()));
+            documentTemplateRepository.saveAll(templateEntityList);
+            DocumentTemplateFolder folder = documentTemplateFolderRepository.findById(request.getBeforeFolderId())
+                    .orElseThrow();
+            List<DocumentTemplate> templates = documentTemplateRepository.findByFolderId(request.getBeforeFolderId());
+            return ApprovalDocumentFolderResponse.of(folder, templates);
         }
     }

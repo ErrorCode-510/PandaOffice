@@ -14,11 +14,34 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PayrollResponse {
 
+    /* 사번 */
     private final int employeeId;
-    private final String name;
+
+    /* 사원명 */
+    private final String employeeName;
+
+    /* 사원 직급 */
+    private final String jobTitle;
+
+    /* 사원 부서 */
+    private final String departmentName;
+
+    /* 은행명 */
+    private final String bankName;
+
+    /* 계좌번호 */
+    private final String accountNumber;
+
+    /* 급여일 */
     private final LocalDate payrollDate;
+
+    /* 경로 */
     private final String payStubPath;
+
+    /* 급여 지급 */
     private final List<EarningResponse> earningRecordList;
+
+    /* 급여 공제 */
     private final List<DeductionResponse> deductionRecordList;
 
     public static PayrollResponse from(PayrollRecord payroll) {
@@ -32,6 +55,10 @@ public class PayrollResponse {
         return new PayrollResponse(
                 payroll.getEmployee().getEmployeeId(),
                 payroll.getEmployee().getName(),
+                payroll.getEmployee().getJob().getTitle(),
+                payroll.getEmployee().getDepartment().getName(),
+                payroll.getEmployee().getAccount().getBank(),
+                payroll.getEmployee().getAccount().getAccountNumber(),
                 payroll.getPayrollDate(),
                 payroll.getPayStubPath(),
                 earningResponses,

@@ -1,11 +1,11 @@
 package com.errorCode.pandaOffice.notice.service;
+import com.errorCode.pandaOffice.auth.util.TokenUtils;
 import com.errorCode.pandaOffice.employee.domain.entity.Employee;
 import com.errorCode.pandaOffice.employee.domain.repository.EmployeeRepository;
 import com.errorCode.pandaOffice.notice.domain.entity.Notice;
 import com.errorCode.pandaOffice.notice.domain.repository.NoticeRepository;
 import com.errorCode.pandaOffice.notice.dto.request.NoticeRequestDTO;
 import com.errorCode.pandaOffice.notice.dto.response.NoticeResponseDTO;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
+
 
 // 공지사항 서비스 클래스
 @Service
@@ -76,14 +76,13 @@ public class NoticeService {
     // 공지사항 등록 메소드
     @Transactional
     public Integer createNotice(final NoticeRequestDTO noticeRequestDTO) {
-        Employee employee = employeeRepository.findById(noticeRequestDTO.getEmployeeId())
-                .orElseThrow(() -> new EntityNotFoundException("Notice NotFound" + noticeRequestDTO.getEmployeeId()));
 
-        char status = 'Y';
-        if (noticeRequestDTO.getStatus() != '\0' && noticeRequestDTO.getStatus() == 'N') {
-            status = noticeRequestDTO.getStatus();
-        }
+        /* 작성자 정보 가져오기 */
+        int employeeId = TokenUtils.getEmployeeId();
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow();
 
+        /* 공지사항 생성 및 저장 */
         Notice newNotice = Notice.of(noticeRequestDTO, employee);
         Notice saveNotice = noticeRepository.save(newNotice);
 
@@ -117,24 +116,6 @@ public class NoticeService {
     public void deleteNotice(final int noticeId) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(NoSuchElementException::new);
         noticeRepository.delete(notice);
-    }
-
-    // Notice 엔티티를 NoticeResponseDTO로 변환하는 메소드
-    private NoticeResponseDTO convertToDto(Notice notice) {
-        Employee employee = employeeRepository.findById(notice.getEmployeeId()).orElseThrow();
-        return new NoticeResponseDTO(
-                notice.getNoticeId(),
-                notice.getTitle(),
-                notice.getContent(),
-                notice.getCategory(),
-                notice.getSubCategory(),
-                notice.getPostedDate(),
-                notice.getViewCount(),
-                notice.getStatus(),
-                employee.getEmployeeId(),
-                employee.getName(),
-                employee.getJob().getTitle()
-        );
     }
 
 }

@@ -13,13 +13,12 @@ Access-Token: Bearer eyJkYXRlIjoxNzIwNTg2MDc2MjE2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFM
 Content-Type:application/json
 
 {
-  "title": "그룹회식안내",
-  "content": "장소 : 하남돼지집 본점\n시간 : 금일 오후5시",
+  "title": "그룹회의안내",
+  "content": "장소 : 하남집 본점\n시간 : 금일 오후7시",
   "category": "group",
   "subCategory": "sales",
   "viewCount": 0,
-  "status": "Y",
-  "employeeId": 201211001
+  "status": "Y"
 }
 
 ### PUT 요청 확인

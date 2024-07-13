@@ -55,7 +55,7 @@ public class OverTimeAndLatenessRecordRequestResponse {
             String approvalDate = null;
             String status = null;
             if (record.getApprovalDocument() != null) {
-                approvalDate = record.getApprovalDocument().getApprovalDate().toString();
+                approvalDate = record.getApprovalDocument().getDraftDate().toString();
                 status = record.getApprovalDocument().getStatus().toString();
             }
 
@@ -96,7 +96,7 @@ public class OverTimeAndLatenessRecordRequestResponse {
             String approvalDate = null;
             String status = null;
             if (record.getApprovalDocument() != null) {
-                approvalDate = record.getApprovalDocument().getApprovalDate().toString();
+                approvalDate = record.getApprovalDocument().getDraftDate().toString();
                 status = record.getApprovalDocument().getStatus().toString();
             }
 

@@ -28,7 +28,7 @@ public class Employee {
     private Department department;
 
     /* 계좌정보 추가 */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "employee")
     @JoinColumn(name="account_id")
     private Account account;
 
@@ -63,13 +63,14 @@ public class Employee {
     private String refreshToken;
     public Employee(){}
 
-    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password, int annualSalary) {
+    public Employee(int employeeId, String name, String englishName, String hanjaName, Department department, Job job, Account account, String phone, String personalId, String gender, LocalDate hireDate, LocalDate endDate, String address, String nationality, LocalDate birthDate, String email, String selfIntroduction, String employmentStatus, String password, int annualSalary) {
         this.employeeId = employeeId;
         this.name = name;
         this.englishName = englishName;
         this.hanjaName = hanjaName;
         this.department = department;
         this.job = job;
+        this.account = account;
         this.phone = phone;
         this.personalId = personalId;
         this.gender = gender;
@@ -93,6 +94,7 @@ public class Employee {
         this.hanjaName = hanjaName;
         this.department = department;
         this.job = job;
+        this.account = account;
         this.phone = phone;
         this.personalId = personalId;
         this.gender = gender;

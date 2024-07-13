@@ -1,6 +1,10 @@
 package com.errorCode.pandaOffice.e_approval.domain.type;
 
+import com.errorCode.pandaOffice.e_approval.dto.approvalDocument.response.ApprovalDocumentDetailResponse;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public enum ApproveType {
@@ -12,7 +16,8 @@ public enum ApproveType {
     ALL_APPROVE(5, "전결"),
     DENY(6, "반려"),
     DENY_AFTER(7, ""),
-    CONFIRM_ONLY(8, "후열");
+    NEED_APPROVE(8, "후열"),
+    AFTER_APPROVE(9, "후결");
 
     private final int value;
     private final String description;
@@ -29,5 +34,13 @@ public enum ApproveType {
             }
         }
         throw new IllegalArgumentException("찾을 수 없는 값: " + value);
+    }
+    public static ApproveType fromDescription(String description){
+        for(ApproveType type : ApproveType.values()){
+            if(type.getDescription() == description){
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("찾을 수 없는 값: " + description);
     }
 }

@@ -30,4 +30,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Modifying
     @Query("UPDATE Employee e SET e.selfIntroduction = :selfIntroduction WHERE e.employeeId = :employeeId")
     void updateSelfIntroduction(int employeeId, String selfIntroduction);
+
+
+    Employee findFirstByJob_Title(String jobTitle);
 }

@@ -1,4 +1,4 @@
-package com.errorCode.pandaOffice.e_approval.dto.approvalDocument;
+package com.errorCode.pandaOffice.e_approval.dto.approvalDocument.response;
 
 import com.errorCode.pandaOffice.e_approval.domain.entity.ApprovalDocument;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ public class ApprovalDocumentListResponse {
                 approvalDocument.getTitle(),
                 approvalDocument.getDocumentTemplate().getTitle(),
                 approvalDocument.getDraftEmployee().getName(),
-                approvalDocument.getApprovalDate(),
+                approvalDocument.getDraftDate(),
                 approvalDocument.getLastApprovalDate(),
                 approvalDocument.getDepartment().getName(),
                 approvalDocument.getStatus().getDescription()

@@ -4,18 +4,19 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
-@Table(name = "approval_line_template_folder")
+@Table(name = "approval_integrate_feature")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-/* 결재선 템플릿의 폴더 */
-public class ApprovalLineTemplateFolder {
+@ToString
+public class ApprovalIntegrateFeature {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    /* 결재선 폴더명 */
-    @Column(nullable = false)
     private String name;
-    /* 상위 폴더 */
-    private int refFolderId;}
+    private String description;
+    private String path;
+    private String tableBlock;
+}
