@@ -48,7 +48,7 @@ public class OverTimeAndLatenessRecordRequestResponse {
                 throw new IllegalArgumentException("Start time or end time is null for record: " + record);
             }
 
-            String dateRange = record.getDate() + " " + record.getStartTime() + " ~ " + record.getEndTime();
+            String dateRange = "날짜 : " + record.getDate() + ", 시간: " + record.getStartTime() + " ~ " + record.getEndTime();
             Duration duration = Duration.between(record.getStartTime(), record.getEndTime());
             String formattedDuration = formatDuration(duration);
 
