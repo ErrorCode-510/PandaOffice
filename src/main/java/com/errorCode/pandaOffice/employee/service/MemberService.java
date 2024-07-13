@@ -236,7 +236,14 @@ public class MemberService {
                 employeeDTO.setPhotoName(photo.getName());
                 employeeDTO.setPhotoPath(photo.getPath());
             }
+            Optional<Account> accountOptional = accountRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
+            if (accountOptional.isPresent()) {
+                System.out.println("ddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+                Account account = accountOptional.get();
+                employeeDTO.setAccount(account);
 
+            }
+            System.out.println(employeeDTO.getAccount().getAccountNumber());
             // Fetch and set family members
             List<FamilyMember> familyMembers = familyMemberRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
             employeeDTO.setFamilyMember(familyMembers);
@@ -252,7 +259,7 @@ public class MemberService {
             employeeDTO.setLicenses(licenses);
 
 
-            System.out.println(employeeDTO.getEmployee().getName());
+            System.out.println(employeeDTO.getEmployee().getName()+"ddd");
             return employeeDTO;
         } else {
             throw new EntityNotFoundException("Employee not found");
@@ -301,6 +308,9 @@ public class MemberService {
         employeePhotoRepository.save(employeePhoto);
 
 
+        Account account = employeeDTO.getAccount();
+        account.setEmployee(existingEmployee);
+        accountRepository.save(account);
         // 가족 구성원 정보 업데이트
         List<FamilyMember> familyMembers = employeeDTO.getFamilyMember();
         familyMemberRepository.deleteByEmployeeEmployeeId(existingEmployee.getEmployeeId());
