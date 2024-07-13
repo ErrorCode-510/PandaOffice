@@ -15,5 +15,6 @@ public class EmployeeDTO {
     private List<License> licenses;
     private String photoName;
     private String photoPath;
+//    private Account account;
 
 }

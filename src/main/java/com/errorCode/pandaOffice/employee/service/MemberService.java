@@ -13,6 +13,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,9 @@ public class MemberService {
     private CareerHistoryRepository careerHistoryRepository;
     @Autowired
     private LicenseRepository licenseRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+
 
     @Autowired
     private EducationHistoryRepository educationHistoryRepository;
@@ -145,8 +149,40 @@ public class MemberService {
     }
 
     public Employee saveEmployee(EmployeeDTO employeeDTO) {
+
+        int hiredYear = employeeDTO.getEmployee().getHireDate().getYear();
+        int depId = employeeDTO.getEmployee().getDepartment().getId();
+
+// 전체 사원 수 조회
+        Long totalEmployees = memberRepository.count();
+        System.out.println(totalEmployees);
+
+// 새 아이디 생성
+        int newEmployeeId;
+        if (totalEmployees != null && totalEmployees > 0) {
+            newEmployeeId = Integer.parseInt(String.format("%04d%02d%03d", hiredYear, depId, totalEmployees + 1));
+        } else {
+            newEmployeeId = Integer.parseInt(String.format("%04d%02d001", hiredYear, depId));
+        }
+
+
+// 사원 객체에 아이디 설정
         Employee employee = employeeDTO.getEmployee();
+
+        employee.formedEmployeeId(newEmployeeId);
+        String defaultPwd = employee.getPhone().substring(employee.getPhone().length() - 4);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String encodedPassword = encoder.encode(defaultPwd);
+        employee.setDefaultPwd(encodedPassword);
+        System.out.println(employee.getEmployeeId());
+        Account emptyAccount =employeeDTO.getEmployee().getAccount();
+
+//        System.out.println(employee.getAccount().getEmployee().getEmployeeId());
         Employee savedEmployee = memberRepository.save(employee);
+        employeeDTO.setEmployee(savedEmployee);
+        emptyAccount.setEmployee(savedEmployee);
+        accountRepository.save(emptyAccount);
         System.out.println(employeeDTO.getPhotoPath());
         // Save photo
         EmployeePhoto employeePhoto = new EmployeePhoto(employeeDTO.getEmployee().getEmployeeId(), savedEmployee, employeeDTO.getPhotoName(), employeeDTO.getPhotoPath());
@@ -179,15 +215,20 @@ public class MemberService {
             licenseRepository.save(license);
         }
 
+        System.out.println(employeeDTO.getEmployee().getEmployeeId()+"=========================================");
+
+
+
         return savedEmployee;
     }
     public EmployeeDTO getEmployeeById(Long id) {
         Optional<Employee> employeeOptional = memberRepository.findById(id);
+
         if (employeeOptional.isPresent()) {
             Employee employee = employeeOptional.get();
             EmployeeDTO employeeDTO = new EmployeeDTO();
             employeeDTO.setEmployee(employee);
-
+            System.out.println(employee.getAccount());
             // Fetch and set the photo
             Optional<EmployeePhoto> photoOptional = employeePhotoRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
             if (photoOptional.isPresent()) {
@@ -210,6 +251,8 @@ public class MemberService {
             List<License> licenses = licenseRepository.findByEmployeeEmployeeId(employee.getEmployeeId());
             employeeDTO.setLicenses(licenses);
 
+
+            System.out.println(employeeDTO.getEmployee().getName());
             return employeeDTO;
         } else {
             throw new EntityNotFoundException("Employee not found");
@@ -240,10 +283,11 @@ public class MemberService {
                 employeeDTO.getEmployee().getNationality(),
                 employeeDTO.getEmployee().getBirthDate(),
                 employeeDTO.getEmployee().getEmail(),
-                employeeDTO.getEmployee().getEmploymentStatus()
+                employeeDTO.getEmployee().getEmploymentStatus(),
+                employeeDTO.getEmployee().getAccount()
         );
 
-        // 사원 정보 저장 (이 부분이 없어야 합니다)
+
          Employee savedEmployee = memberRepository.save(existingEmployee);
 
         // 사진 정보 업데이트
