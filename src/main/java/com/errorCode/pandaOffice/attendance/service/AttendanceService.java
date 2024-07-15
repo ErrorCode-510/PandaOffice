@@ -263,9 +263,14 @@ public class AttendanceService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "출근 시간이 없습니다. 출근하지 않고 퇴근할 수 없습니다.");
         }
 
+        if (existingRecord.getCheckOutTime() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 퇴근하셨습니다.");
+        }
+
         // DTO를 통해 엔티티 수정
         AttendanceRecord updatedRecord = AttendanceRecord.updateCheckOutTime(existingRecord, checkOutTime);
         final AttendanceRecord savedRecord = attendanceRecordRepository.save(updatedRecord);
         return savedRecord.getId();
     }
+
 }
