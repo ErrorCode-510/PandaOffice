@@ -6,7 +6,7 @@ spring:
     password : panda
   mail:
     username: mydogduri@naver.com
-    password: "!k04030228"
+    password: ""
     host: smtp.naver.com
     port: 587
     protocol: smtp
